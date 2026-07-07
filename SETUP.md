@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Over MMD — Maurice Meijer Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #1F497D;
+    --primary-dark: #163A63;
+    --primary-light: #2E5F9E;
+    --accent: #C9943E;
+    --accent-dark: #AD7C2E;
+    --accent-light: #DBAE63;
+    --surface: #F5F6F8;
+    --ease: cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Roboto', sans-serif;
+    background: var(--surface);
+    color: var(--primary);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 { font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; }
+  a { text-decoration: none; color: inherit; }
+  img { max-width: 100%; display: block; }
+  ::selection { background: var(--accent); color: #fff; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  .wrap { max-width: 1152px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- Header ---------- */
+  header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    background: transparent;
+    transition: background-color .5s var(--ease), backdrop-filter .5s var(--ease), box-shadow .5s var(--ease), border-color .5s var(--ease);
+    animation: headerIn .6s var(--ease);
+  }
+  header.scrolled {
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 2px 12px -2px rgba(31,73,125,0.06);
+    border-bottom: 1px solid rgba(31,73,125,0.05);
+  }
+  @keyframes headerIn { from { transform: translateY(-80px); } to { transform: translateY(0); } }
+
+  .header-inner { display: flex; align-items: center; justify-content: space-between; height: 80px; }
+  .logo { font-size: 18px; font-weight: 600; letter-spacing: -0.03em; }
+
+  nav.main-nav { display: flex; align-items: center; gap: 32px; }
+  nav.main-nav a {
+    position: relative; font-size: 14px; font-weight: 500;
+    color: rgba(31,73,125,0.7); padding: 8px 0;
+    transition: color .3s var(--ease);
+  }
+  nav.main-nav a:hover { color: var(--primary); }
+  nav.main-nav a.active { color: var(--primary); }
+  nav.main-nav a .underline {
+    position: absolute; left: 0; right: 0; bottom: -1px; height: 2px;
+    background: var(--accent); border-radius: 999px;
+    transform: scaleX(0); transform-origin: center;
+    transition: transform .4s var(--ease);
+  }
+  nav.main-nav a.active .underline { transform: scaleX(1); }
+
+  nav.main-nav .has-dropdown { position: relative; display: flex; align-items: center; }
+  nav.main-nav .dropdown {
+    position: absolute; top: 100%; left: 0; margin-top: 14px;
+    background: #fff; border-radius: 14px; box-shadow: 0 16px 40px -10px rgba(31,73,125,0.22);
+    padding: 8px; min-width: 240px;
+    opacity: 0; visibility: hidden; transform: translateY(8px);
+    transition: opacity .25s var(--ease), transform .25s var(--ease), visibility .25s;
+    z-index: 50;
+  }
+  nav.main-nav .has-dropdown:hover .dropdown,
+  nav.main-nav .has-dropdown:focus-within .dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+  nav.main-nav .dropdown a {
+    display: block; padding: 11px 14px; border-radius: 9px;
+    font-size: 14px; font-weight: 500; color: rgba(31,73,125,0.7); white-space: nowrap;
+  }
+  nav.main-nav .dropdown a:hover { background: rgba(31,73,125,0.06); color: var(--primary); }
+  nav.main-nav .dropdown-trigger {
+    position: relative; font-size: 14px; font-weight: 500;
+    color: rgba(31,73,125,0.7); padding: 8px 0; cursor: default;
+    display: inline-flex; align-items: center;
+  }
+  nav.main-nav .has-dropdown:hover .dropdown-trigger { color: var(--primary); }
+
+  /* ---------- Simple Hero ---------- */
+  .simple-hero { padding: 160px 0 80px; }
+  .simple-hero .eyebrow { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-dark); background: rgba(201,148,62,0.10); border-radius: 999px; padding: 6px 16px; margin-bottom: 24px; }
+  .simple-hero h1 { font-size: 48px; margin-bottom: 24px; }
+  .simple-hero p { font-size: 18px; color: rgba(31,73,125,0.6); line-height: 1.7; margin-top: 16px; }
+  .simple-hero p:first-of-type { font-style: italic; font-size: 16px; }
+  @media (min-width: 1024px) { .simple-hero h1 { font-size: 64px; } }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 999px; font-size: 14px; font-weight: 600;
+    transition: transform .3s var(--ease), box-shadow .3s var(--ease), background-color .3s var(--ease);
+    cursor: pointer; border: none;
+  }
+  .btn-primary {
+    background: var(--primary); color: #fff; padding: 10px 24px;
+    box-shadow: 0 4px 24px -4px rgba(31,73,125,0.10);
+  }
+  .btn-primary:hover { background: var(--primary-dark); box-shadow: 0 12px 32px -8px rgba(31,73,125,0.18); }
+  .btn-accent {
+    background: var(--accent); color: #fff; padding: 14px 32px;
+    box-shadow: 0 8px 20px -6px rgba(201,148,62,0.45);
+  }
+  .btn-accent:hover { background: var(--accent-dark); transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent; color: var(--primary); padding: 14px 32px;
+    border: 1px solid rgba(31,73,125,0.15);
+  }
+  .btn-outline:hover { background: rgba(31,73,125,0.05); }
+
+  .burger {
+    display: none; flex-direction: column; gap: 6px;
+    width: 28px; height: 28px; align-items: center; justify-content: center;
+    background: none; border: none; cursor: pointer;
+  }
+  .burger span {
+    display: block; width: 24px; height: 2px; background: var(--primary);
+    border-radius: 999px; transition: transform .3s var(--ease), opacity .3s var(--ease);
+  }
+  .burger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+  .burger.open span:nth-child(2) { opacity: 0; }
+  .burger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+  .mobile-menu {
+    overflow: hidden; max-height: 0; opacity: 0;
+    background: rgba(255,255,255,0.97); backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(31,73,125,0.05);
+    transition: max-height .4s var(--ease), opacity .4s var(--ease);
+  }
+  .mobile-menu.open { max-height: 420px; opacity: 1; }
+  .mobile-menu-inner { display: flex; flex-direction: column; padding: 16px 24px; gap: 4px; }
+  .mobile-menu-inner a {
+    padding: 12px 0; font-size: 14px; font-weight: 500; color: rgba(31,73,125,0.8);
+    border-bottom: 1px solid rgba(31,73,125,0.05);
+  }
+  .mobile-menu-inner a:last-of-type { border-bottom: none; }
+  .mobile-menu-inner .mobile-label {
+    display: block; padding: 12px 0 4px; font-size: 14px; font-weight: 500; color: rgba(31,73,125,0.5);
+  }
+  .mobile-menu-inner .btn-primary { margin-top: 12px; color: #fff; border-bottom: none; }
+
+  /* ---------- Fade-up reveal ---------- */
+  .reveal { opacity: 0; transform: translateY(32px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+  .reveal.in-view { opacity: 1; transform: translateY(0); }
+  .d1 { transition-delay: .08s; } .d2 { transition-delay: .16s; } .d3 { transition-delay: .24s; }
+
+  /* ---------- Hero ---------- */
+  .hero { position: relative; padding: 160px 0 112px; overflow: hidden; }
+  .hero-blob-1 { position: absolute; top: -160px; right: -160px; width: 576px; height: 576px; background: rgba(31,73,125,0.05); border-radius: 999px; filter: blur(64px); pointer-events: none; }
+  .hero-blob-2 { position: absolute; bottom: -128px; left: -128px; width: 448px; height: 448px; background: rgba(201,148,62,0.10); border-radius: 999px; filter: blur(64px); pointer-events: none; }
+  .hero-grid { position: relative; display: grid; grid-template-columns: 1fr; gap: 64px; align-items: center; }
+  .eyebrow {
+    display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent-dark); background: rgba(201,148,62,0.10); border-radius: 999px; padding: 6px 16px; margin-bottom: 24px;
+  }
+  .hero h1 { font-size: 40px; margin-bottom: 24px; }
+  .hero p.sub { font-size: 18px; color: rgba(31,73,125,0.6); line-height: 1.6; max-width: 540px; margin-bottom: 40px; }
+  .hero-ctas { display: flex; flex-wrap: wrap; gap: 16px; }
+  .hero-image {
+    aspect-ratio: 4 / 5; width: 100%; border-radius: 32px;
+    background: linear-gradient(135deg, rgba(31,73,125,0.10), rgba(31,73,125,0.05), rgba(201,148,62,0.10));
+    border: 1px solid rgba(31,73,125,0.05);
+    box-shadow: 24px 32px 64px -8px rgba(31,73,125,0.28), 8px 12px 24px -4px rgba(31,73,125,0.16);
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(31,73,125,0.3); font-size: 14px; font-weight: 500;
+    overflow: hidden;
+  }
+  .hero-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* ---------- Collab section ---------- */
+  .collab-section { padding: 96px 0; background: var(--surface); }
+  .collab-top { display: grid; grid-template-columns: 1fr; gap: 32px; margin-bottom: 64px; }
+  .collab-heading h2 { font-size: 36px; color: var(--primary); }
+  .collab-intro p { font-size: 16px; color: rgba(31,73,125,0.6); line-height: 1.75; max-width: 540px; margin-bottom: 28px; }
+  .collab-actions { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .social-icons { display: flex; gap: 12px; }
+  .social-icon { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: #fff; color: var(--primary); border: 1px solid rgba(31,73,125,0.1); box-shadow: 0 2px 8px -2px rgba(31,73,125,0.08); transition: transform .2s, box-shadow .2s; }
+  .social-icon:hover { transform: translateY(-2px); box-shadow: 0 6px 16px -4px rgba(31,73,125,0.16); }
+  .collab-fulltext { margin-top: 48px; padding: 48px; background: #fff; border-radius: 24px; border: 1px solid rgba(31,73,125,0.07); }
+  .collab-fulltext p { font-size: 16px; color: rgba(31,73,125,0.6); line-height: 1.75; }
+  .collab-fulltext p + p { margin-top: 14px; }
+  .collab-photo-row { display: grid; grid-template-columns: 1fr; gap: 40px; margin-top: 40px; align-items: center; }
+  .collab-photo-row.reverse { direction: ltr; }
+  .collab-photo-text .section-label { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-dark); background: rgba(201,148,62,0.10); border-radius: 999px; padding: 6px 16px; margin-bottom: 16px; }
+  .collab-photo-text h2 { font-size: 24px; color: var(--primary); margin-bottom: 16px; }
+  .collab-photo-text p { font-size: 16px; color: rgba(31,73,125,0.6); line-height: 1.75; }
+  @media (min-width: 768px) {
+    .collab-photo-row { grid-template-columns: 1fr 1fr; gap: 56px; }
+    .collab-photo-row.reverse { grid-template-columns: 1fr 1fr; }
+    .collab-photo-row.reverse .collab-photo-text { order: 1; }
+    .collab-photo-row.reverse .photo-placeholder { order: 2; }
+  }
+  .collab-photos { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 32px; }
+  .collab-bottom { display: grid; grid-template-columns: 1fr; gap: 40px; align-items: start; }
+  .collab-kennis h2 { font-size: 28px; color: var(--primary); margin-bottom: 16px; }
+  .collab-kennis p { font-size: 16px; color: rgba(31,73,125,0.6); line-height: 1.75; margin-bottom: 24px; }
+  .photo-placeholder { background: rgba(31,73,125,0.05); border: 2px dashed rgba(31,73,125,0.15); border-radius: 20px; display: flex; align-items: center; justify-content: center; color: rgba(31,73,125,0.3); font-size: 14px; font-weight: 500; cursor: pointer; transition: background .2s; }
+  .photo-placeholder:hover { background: rgba(31,73,125,0.08); }
+  .photo-placeholder.large { height: 360px; width: 100%; }
+  .photo-placeholder.small { height: 280px; width: 100%; border-radius: 16px; }
+  @media (min-width: 768px) {
+    .collab-top { grid-template-columns: 1fr 2fr; gap: 64px; }
+    .collab-bottom { grid-template-columns: 1fr 1fr; gap: 56px; }
+    .collab-heading h2 { font-size: 44px; }
+  }
+
+  /* ---------- Story section ---------- */
+  .story-section { padding: 96px 0; background: #fff; border-top: 1px solid rgba(31,73,125,0.05); border-bottom: 1px solid rgba(31,73,125,0.05); }
+  .story-grid { display: grid; grid-template-columns: 1fr; gap: 56px; padding: 0 24px; max-width: 100%; }
+  .story-block .section-label { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-dark); background: rgba(201,148,62,0.10); border-radius: 999px; padding: 6px 16px; margin-bottom: 16px; }
+  .story-block.story-top { display: grid; grid-template-columns: 1fr; gap: 32px; }
+  .story-left .section-label { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-dark); background: rgba(201,148,62,0.10); border-radius: 999px; padding: 6px 16px; margin-bottom: 16px; }
+  .story-left h2 { font-size: 32px; color: var(--primary); }
+  .story-right p { font-size: 16px; color: rgba(31,73,125,0.6); line-height: 1.75; }
+  .story-right p + p { margin-top: 14px; }
+  @media (min-width: 768px) { .story-block.story-top { grid-template-columns: 1fr 2fr; gap: 64px; align-items: start; } }
+
+  .story-block h2 { font-size: 24px; margin-bottom: 16px; color: var(--primary); }
+  .story-block h3.story-h3 { font-size: 18px; font-weight: 600; color: var(--primary); margin: 28px 0 10px; }
+  .story-list { padding-left: 20px; margin: 8px 0 12px; display: flex; flex-direction: column; gap: 4px; }
+  .story-list li { font-size: 16px; color: rgba(31,73,125,0.65); line-height: 1.6; }
+  .collab-photo-text h3.story-h3 { margin-top: 20px; }
+  .story-block p + p { margin-top: 14px; }
+  .story-block p { font-size: 16px; color: rgba(31,73,125,0.6); line-height: 1.75; max-width: 100%; }
+  @media (min-width: 768px) { .story-grid { grid-template-columns: 1fr; gap: 64px; padding: 0 48px; } }
+  @media (min-width: 1024px) { .story-grid { padding: 0 80px; } }
+
+  /* ---------- Stats ---------- */
+  .stats { padding: 80px 0; border-top: 1px solid rgba(31,73,125,0.05); border-bottom: 1px solid rgba(31,73,125,0.05); background: #fff; }
+  .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; }
+  .stat { text-align: center; }
+  .stat .number { font-size: 40px; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 8px; }
+  .stat .label { font-size: 14px; color: rgba(31,73,125,0.5); font-weight: 500; }
+
+  /* ---------- Text section ---------- */
+  .text-section { padding: 96px 0; background: #fff; border-top: 1px solid rgba(31,73,125,0.05); border-bottom: 1px solid rgba(31,73,125,0.05); }
+  .text-section-inner .section-label { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-dark); background: rgba(201,148,62,0.10); border-radius: 999px; padding: 6px 16px; margin-bottom: 20px; }
+  .text-section-inner h2 { font-size: 32px; color: var(--primary); margin-bottom: 20px; }
+  .text-section-inner p { font-size: 17px; color: rgba(31,73,125,0.6); line-height: 1.75; margin-top: 20px; }
+  .checkmarks { display: flex; flex-wrap: wrap; gap: 12px 32px; margin-top: 24px; }
+  .checkmarks span { font-size: 15px; font-weight: 500; color: var(--primary); white-space: nowrap; }
+
+  /* ---------- CTA ---------- */
+  .cta-section { padding: 112px 0; }
+  .cta-box {
+    position: relative; overflow: hidden; border-radius: 32px;
+    background: var(--primary); padding: 64px 32px; text-align: center;
+    box-shadow: 0 12px 32px -8px rgba(31,73,125,0.18);
+  }
+  .cta-blob { position: absolute; top: -96px; right: -96px; width: 288px; height: 288px; background: rgba(201,148,62,0.20); border-radius: 999px; filter: blur(64px); }
+  .cta-box h2 { position: relative; font-size: 32px; color: #fff; max-width: 560px; margin: 0 auto; }
+  .cta-box p { position: relative; color: rgba(255,255,255,0.6); margin-top: 20px; max-width: 480px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+  .cta-box strong { color: rgba(255,255,255,0.9); }
+  .cta-box .hero-ctas { position: relative; justify-content: center; margin-top: 40px; }
+
+  /* ---------- Footer ---------- */
+  footer { background: var(--surface); border-top: 1px solid rgba(31,73,125,0.05); padding: 56px 0; }
+  .footer-inner { display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center; }
+  .footer-logo { font-size: 16px; font-weight: 600; }
+  .footer-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; }
+  .footer-nav a { font-size: 14px; color: rgba(31,73,125,0.5); transition: color .3s var(--ease); }
+  .footer-nav a:hover { color: var(--primary); }
+  .footer-nav .footer-label { font-size: 14px; color: rgba(31,73,125,0.5); }
+  .footer-copy { font-size: 12px; color: rgba(31,73,125,0.4); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  }
+
+  @media (min-width: 768px) {
+    .stats-grid { grid-template-columns: repeat(4, 1fr); }
+    .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+  }
+  @media (min-width: 1024px) {
+    nav.main-nav { display: flex; }
+    .burger { display: none; }
+    .mobile-menu { display: none; }
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero { padding: 192px 0 144px; }
+    .hero h1 { font-size: 54px; }
+    .cta-box h2 { font-size: 36px; }
+    .cta-box { padding: 80px; }
+  }
+  @media (max-width: 1023px) {
+    nav.main-nav { display: none; }
+    .burger { display: flex; }
+  }
+</style>
+</head>
+<body>
+
+<header id="site-header">
+  <div class="wrap header-inner">
+    <a href="index.html" class="logo">Maurice Meijer Digital</a>
+    <nav class="main-nav" id="main-nav">
+      <a href="index.html#hero">Uitdaging<span class="underline"></span></a>
+      <a href="index.html#probleem">Aanpak<span class="underline"></span></a>
+      <a href="index.html#resultaten">Resultaten<span class="underline"></span></a>
+      <div class="has-dropdown">
+        <span class="dropdown-trigger">Succesverhalen<span class="underline"></span></span>
+        <div class="dropdown">
+          <a href="anso-lift-en-roltrapreinigingen.html">Anso Lift- en Roltrapreiniging</a>
+          <a href="besselink-electro.html">Besselink Electro</a>
+        </div>
+      </div>
+      <a href="over-mmd.html" class="active">Over MMD<span class="underline"></span></a>
+      <a href="contact.html">Contact<span class="underline"></span></a>
+    </nav>
+    <button class="burger" id="burger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobile-menu">
+    <div class="mobile-menu-inner">
+      <a href="index.html#hero">Uitdaging</a>
+      <a href="index.html#probleem">Aanpak</a>
+      <a href="index.html#resultaten">Resultaten</a>
+      <span class="mobile-label">Succesverhalen</span>
+      <a href="anso-lift-en-roltrapreinigingen.html" style="padding-left: 24px; font-size: 14px; opacity: 0.75;">↳ Anso Lift- en Roltrapreiniging</a>
+      <a href="besselink-electro.html" style="padding-left: 24px; font-size: 14px; opacity: 0.75;">↳ Besselink Electro</a>
+      <a href="over-mmd.html">Over MMD</a>
+      <a href="contact.html">Contact</a>
+      <a href="https://calendly.com/mauricemeijerdigital-info/30min" target="_blank" rel="noopener" class="btn btn-primary">Plan een gesprek</a>
+    </div>
+  </div>
+</header>
+
+<section class="simple-hero">
+  <div class="wrap">
+    <span class="eyebrow reveal in-view">18+ jaar digitale recruitment</span>
+    <h1 class="reveal in-view d1">Over MMD</h1>
+    <p class="reveal in-view d2">"AI vervangt recruiters niet. AI zorgt ervoor dat recruiters weer kunnen doen waar ze het beste in zijn: de juiste mensen aannemen."</p>
+    <p class="reveal in-view d2">&nbsp;</p>
+    <p class="reveal in-view d3">MMD helpt organisaties sneller en slimmer de juiste mensen aan te nemen. Met een team van AI-recruiters automatiseren we het volledige recruitmentproces: van het vinden en benaderen van kandidaten tot het kwalificeren van de beste matches.</p>
+    <p class="reveal in-view d3">Wij geloven dat traditioneel recruitment niet meer voldoet in een arbeidsmarkt waarin de beste kandidaten niet actief zoeken. Daarom zetten we AI in om proactief talent te bereiken, 24 uur per dag, 7 dagen per week.</p>
+    <p class="reveal in-view d3">Onze aanpak vermindert handmatig werk, verkort de doorlooptijd van vacatures en maakt organisaties minder afhankelijk van externe recruitmentbureaus. Zo houd jij tijd over voor de gesprekken die er écht toe doen.</p>
+    <p class="reveal in-view d3">Bij MMD draait het niet om technologie, maar om resultaat. Sneller de juiste mensen aannemen, minder tijd kwijt aan recruitment en een blijvende voorsprong op de concurrent.</p>
+  </div>
+</section>
+
+
+
+<section class="collab-section">
+  <div class="wrap">
+
+    <!-- Ook samenwerken? -->
+    <div class="collab-top reveal">
+      <div class="collab-heading">
+        <span class="section-label" style="display:inline-block; font-size:11px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent-dark); background:rgba(201,148,62,0.10); border-radius:999px; padding:6px 16px; margin-bottom:16px;">Mijn verhaal</span>
+        <h2>Waarom ik MMD gestart ben</h2>
+      </div>
+      <div class="collab-intro">
+        <p>Recruitment draait al lang niet meer om het binnenhalen van vacatures alleen. Alles draait nu om de juiste kandidaten bereiken voordat iemand anders dat doet. AI is daarbij niet het uiteindelijke doel, maar een deel van de oplossing. De technologie neemt het handmatige, tijdrovende en repetitieve werk over, zodat managers zich kunnen richten op echte gesprekken met potentiële kandidaten. Ook blijft er door de inzet van technologie veel meer tijd over voor andere taken die door de werkdruk worden uitgesteld.<br><br>Ik zag dat ik significant meer vacatures als uitzendondernemer invulde in 80% minder tijd! Door deze verandering ontstond de missie om bedrijven, bureaus en interim recruiters te helpen met het optimaliseren van hun wervingsprocessen. Sneller en efficiënter vinden en binden van kandidaten door middel van AI en algoritmes.</p>
+      </div>
+    </div>
+
+    <!-- Foto rij 1: placeholder links, tekst rechts -->
+    <div class="collab-photo-row reveal d2">
+      <div>
+        <div style="border-radius: 20px; overflow: hidden; box-shadow: 24px 32px 64px -8px rgba(31,73,125,0.20);">
+          <img src="images/maurice-suit.jpg" alt="Maurice Meijer" style="width:100%; height:100%; object-fit:cover; display:block;">
+        </div>
+        <p style="font-size: 13px; font-weight: 600; color: rgba(31,73,125,0.6); text-align: center; margin-top: 12px;">Maurice Meijer - Oprichter van MMD | Specialist in AI Recruitment</p>
+      </div>
+      <div class="collab-photo-text">
+        <span class="section-label">De aanleiding</span>
+        <h2>Wat er mis was met traditioneel recruitment</h2>
+        <p>Traditioneel recruitment is jarenlang vooral een reactief systeem geweest. De basis ervan is simpel: je plaatst een vacature en wacht op sollicitanten of schakelt een bureau in om kandidaten aan te leveren. Dat model werkt steeds minder goed in een arbeidsmarkt waarin de beste professionals vaak niet actief op zoek zijn.</p>
+
+        <h3 class="story-h3">Het grootste probleem</h3>
+        <p>Het uitgangspunt van traditioneel recruitment is passieve instroom. Je bent afhankelijk van mensen die zelf reageren, terwijl een groot deel van de doelgroep — de beste kandidaten — helemaal niet reageert op vacatures.</p>
+        <p>Daarnaast is het proces vaak:</p>
+        <ul class="story-list">
+          <li><strong>Traag</strong> — vacatures staan lang open en werving is afhankelijk van timing.</li>
+          <li><strong>Duur</strong> — hoge kosten van bureaus of langdurige interne inzet.</li>
+          <li><strong>Beperkt in bereik</strong> — alleen actieve werkzoekenden worden bereikt.</li>
+          <li><strong>Arbeidsintensief</strong> — teams moeten recruitment "erbij" doen.</li>
+          <li><strong>Inconsistent</strong> — succes is afhankelijk van marktomstandigheden en toeval.</li>
+        </ul>
+        <p><strong>Het gevolg: vacatures blijven open, de werkdruk stijgt en bedrijven lopen structureel kandidaten mis die ze nooit hebben bereikt.</strong></p>
+      </div>
+    </div>
+
+    <!-- Foto rij 2: tekst links, placeholder rechts -->
+    <div class="collab-photo-row reveal d3">
+      <div class="collab-photo-text">
+        <h2>Hoe MMD dit oplost</h2>
+        <p>MMD doorbreekt dit model door recruitment te verschuiven van wachten naar actief werven. In plaats van te vertrouwen op sollicitaties, zet MMD AI-recruiters in die:</p>
+        <ul class="story-list">
+          <li>continu op zoek gaan naar relevante kandidaten,</li>
+          <li>deze proactief benaderen,</li>
+          <li>en automatisch kwalificeren op basis van profiel en fit.</li>
+        </ul>
+        <p>Hierdoor wordt recruitment:</p>
+        <ul class="story-list">
+          <li>proactief in plaats van reactief,</li>
+          <li>continu actief (24/7),</li>
+          <li>en gericht op kandidaten die je via traditionele vacatures niet bereikt.</li>
+        </ul>
+        <p>Het resultaat is dat organisaties niet langer afhankelijk zijn van wie er toevallig reageert, maar structureel toegang krijgen tot de volledige arbeidsmarkt — inclusief de passieve kandidaten die normaal buiten beeld blijven.</p>
+        <p>&nbsp;</p>
+        <p><strong>Kort gezegd: traditioneel recruitment wacht op kandidaten — MMD gaat ze halen voordat de concurrent dat doet.</strong></p>
+      </div>
+      <div style="border-radius: 20px; overflow: hidden; box-shadow: 24px 32px 64px -8px rgba(31,73,125,0.20);">
+        <img src="images/ai-recruiter.jpg" alt="AI Recruiter" style="width:100%; height:100%; object-fit:cover; display:block;">
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<section class="text-section">
+  <div class="wrap">
+    <div class="text-section-inner reveal">
+      <span class="section-label">Visie & expertise</span>
+      <h2>Niet méér recruitment. Slimmer recruitment.</h2>
+      <p>Technologie is eenvoudig te kopiëren. Een doordachte digitale recruitmentstrategie niet. Daarom combineren wij AI, marketing en recruitment tot één volledige en slimme aanpak die altijd resultaat oplevert. Of je nou 1 vacature hebt of 50, de focus ligt niet op méér en harder werven. Het gaat om slimmer inzetten van huidige technologieën die werven efficiënt en kostenbesparend maken.<br><br>Samen stellen we een doordachte strategie op en zetten we AI en algoritmes in. Zo helpen wij organisaties de juiste en gekwalificeerde kandidaten sneller te bereiken tegen minimale investeringen en zo jouw vacatures in te vullen. Dit is de visie achter MMD.</p>
+      <div class="checkmarks reveal">
+        <span>✅ 18+ jaar digitale recruitment</span>
+        <span>✅ 9+ jaar Recruitment ondernemer</span>
+        <span>✅ 350+ bedrijven geholpen</span>
+        <span>✅ 1200+ succesvolle hires</span>
+        <span>✅ 700+ succesvolle recruitment marketing campagnes</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+  <div class="wrap">
+    <div class="cta-box reveal">
+      <div class="cta-blob"></div>
+      <h2>Ontdek hoe slimmere recruitment er voor jou uit kan zien.</h2>
+      <p>In dit strategiegesprek analyseren we waar de grootste recruitmentkansen liggen en hoe we de strategie moeten opzetten om sneller jouw ideale kandidaat te vinden, te activeren en aan tafel te krijgen.</p>
+      <div class="hero-ctas">
+        <a href="https://calendly.com/mauricemeijerdigital-info/30min" target="_blank" rel="noopener" class="btn btn-accent">Plan hier jouw strategiegesprek.</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-inner">
+    <div class="footer-logo">Maurice Meijer Digital</div>
+    <nav class="footer-nav">
+      <a href="index.html#hero">Uitdaging</a>
+      <a href="index.html#probleem">Aanpak</a>
+      <a href="index.html#resultaten">Resultaten</a>
+      <a href="over-mmd.html">Over MMD</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="footer-copy">[© Jaar Naam praktijk — alle rechten voorbehouden]</div>
+  </div>
+</footer>
+
+<script>
+  const header = document.getElementById('site-header');
+  function onScroll() {
+    if (window.scrollY > 24) header.classList.add('scrolled');
+    else header.classList.remove('scrolled');
+  }
+  window.addEventListener('scroll', onScroll);
+  onScroll();
+
+  const burger = document.getElementById('burger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  burger.addEventListener('click', () => {
+    burger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      burger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+    });
+  });
+
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -80px 0px' });
+  document.querySelectorAll('.reveal:not(.in-view)').forEach(el => revealObserver.observe(el));
+</script>
+</body>
+</html>
