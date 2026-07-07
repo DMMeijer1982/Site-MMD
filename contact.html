@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Besselink Electro B.V. — Succesverhaal — Maurice Meijer Digital</title>
+<title>Contact — Maurice Meijer Digital</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -20,398 +20,738 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
-  body { font-family: 'Roboto', sans-serif; background: var(--surface); color: var(--primary); -webkit-font-smoothing: antialiased; }
-  h1, h2, h3, h4 { font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; }
-  a { text-decoration: none; color: inherit; }
-  img { max-width: 100%; display: block; }
+  body {
+    font-family: 'Roboto', sans-serif;
+    background: var(--surface);
+    color: var(--primary);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+  h1, h2 { font-weight: 600; letter-spacing: -0.03em; line-height: 1.08; }
+  a { text-decoration: none; }
   ::selection { background: var(--accent); color: #fff; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
-  .wrap { max-width: 1152px; margin: 0 auto; padding: 0 24px; }
+  .topbar { padding: 28px 24px; }
+  .topbar .wrap { max-width: 1120px; margin: 0 auto; }
+  .logo { font-size: 17px; font-weight: 600; letter-spacing: -0.03em; color: var(--primary); }
 
-  /* Header */
-  header { position: fixed; top: 0; left: 0; right: 0; z-index: 50; background: transparent; transition: background-color .5s var(--ease), backdrop-filter .5s var(--ease), box-shadow .5s var(--ease); animation: headerIn .6s var(--ease); }
-  header.scrolled { background: rgba(255,255,255,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: 0 2px 12px -2px rgba(31,73,125,0.06); border-bottom: 1px solid rgba(31,73,125,0.05); }
-  @keyframes headerIn { from { transform: translateY(-80px); } to { transform: translateY(0); } }
-  .header-inner { display: flex; align-items: center; justify-content: space-between; height: 80px; }
-  .logo { font-size: 18px; font-weight: 600; letter-spacing: -0.03em; }
-  nav.main-nav { display: flex; align-items: center; gap: 32px; }
-  nav.main-nav a { position: relative; font-size: 14px; font-weight: 500; color: rgba(31,73,125,0.7); padding: 8px 0; transition: color .3s var(--ease); }
-  nav.main-nav a:hover, nav.main-nav a.active { color: var(--primary); }
-  nav.main-nav a .underline { position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--accent); border-radius: 999px; transform: scaleX(0); transition: transform .4s var(--ease); }
-  nav.main-nav a.active .underline { transform: scaleX(1); }
-
-  nav.main-nav .has-dropdown { position: relative; display: flex; align-items: center; }
-  nav.main-nav .dropdown {
-    position: absolute; top: 100%; left: 0; margin-top: 14px;
-    background: #fff; border-radius: 14px; box-shadow: 0 16px 40px -10px rgba(31,73,125,0.22);
-    padding: 8px; min-width: 240px;
-    opacity: 0; visibility: hidden; transform: translateY(8px);
-    transition: opacity .25s var(--ease), transform .25s var(--ease), visibility .25s;
-    z-index: 50;
+  .page {
+    min-height: calc(100vh - 84px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 40px 24px 80px;
   }
-  nav.main-nav .has-dropdown:hover .dropdown,
-  nav.main-nav .has-dropdown:focus-within .dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
-  nav.main-nav .dropdown a {
-    display: block; padding: 11px 14px; border-radius: 9px;
-    font-size: 14px; font-weight: 500; color: rgba(31,73,125,0.7); white-space: nowrap;
+  .layout {
+    width: 100%; max-width: 1120px;
+    display: grid; grid-template-columns: 1fr; gap: 56px; align-items: center;
   }
-  nav.main-nav .dropdown a:hover { background: rgba(31,73,125,0.06); color: var(--primary); }
-  nav.main-nav .dropdown-trigger {
-    position: relative; font-size: 14px; font-weight: 500;
-    color: rgba(31,73,125,0.7); padding: 8px 0; cursor: default;
-    display: inline-flex; align-items: center;
-  }
-  nav.main-nav .has-dropdown:hover .dropdown-trigger { color: var(--primary); }
-  .burger { display: none; flex-direction: column; gap: 6px; width: 28px; height: 28px; align-items: center; justify-content: center; background: none; border: none; cursor: pointer; }
-  .burger span { display: block; width: 24px; height: 2px; background: var(--primary); border-radius: 999px; transition: transform .3s var(--ease), opacity .3s var(--ease); }
-  .burger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
-  .burger.open span:nth-child(2) { opacity: 0; }
-  .burger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
-  .mobile-menu { overflow: hidden; max-height: 0; opacity: 0; background: rgba(255,255,255,0.97); backdrop-filter: blur(20px); border-top: 1px solid rgba(31,73,125,0.05); transition: max-height .4s var(--ease), opacity .4s var(--ease); }
-  .mobile-menu.open { max-height: 420px; opacity: 1; }
-  .mobile-menu-inner { display: flex; flex-direction: column; padding: 16px 24px; gap: 4px; }
-  .mobile-menu-inner a { padding: 12px 0; font-size: 14px; font-weight: 500; color: rgba(31,73,125,0.8); border-bottom: 1px solid rgba(31,73,125,0.05); }
-  .mobile-menu-inner a:last-of-type { border-bottom: none; }
-  .mobile-menu-inner .mobile-label {
-    display: block; padding: 12px 0 4px; font-size: 14px; font-weight: 500; color: rgba(31,73,125,0.5);
-  }
-  .mobile-menu-inner .btn-primary { margin-top: 12px; color: #fff !important; background: var(--primary); padding: 10px 20px; border-radius: 999px; text-align: center; border-bottom: none !important; }
 
-  /* Buttons */
-  .btn { display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; font-size: 14px; font-weight: 600; transition: transform .3s var(--ease), box-shadow .3s var(--ease); cursor: pointer; border: none; }
-  .btn-accent { background: var(--accent); color: #fff; padding: 14px 32px; box-shadow: 0 8px 20px -6px rgba(201,148,62,0.45); }
-  .btn-accent:hover { background: var(--accent-dark); transform: translateY(-2px); }
-  .btn-outline { background: transparent; color: var(--primary); padding: 14px 32px; border: 1px solid rgba(31,73,125,0.15); }
-  .btn-outline:hover { background: rgba(31,73,125,0.05); }
-
-  /* Reveal */
-  .reveal { opacity: 0; transform: translateY(32px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
   .reveal.in-view { opacity: 1; transform: translateY(0); }
   .d1 { transition-delay: .08s; } .d2 { transition-delay: .16s; } .d3 { transition-delay: .24s; }
 
-  /* Section label */
-  .section-label { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-dark); background: rgba(201,148,62,0.10); border-radius: 999px; padding: 6px 16px; }
-
-  /* ── CASE STUDY HERO ── */
-  .cs-hero { padding: 140px 0 80px; background: #fff; border-bottom: 1px solid rgba(31,73,125,0.06); }
-  .cs-breadcrumb { font-size: 13px; color: rgba(31,73,125,0.4); margin-bottom: 20px; }
-  .cs-breadcrumb a { color: var(--accent-dark); }
-  .cs-breadcrumb a:hover { text-decoration: underline; }
-  .cs-hero-grid { display: grid; grid-template-columns: 1fr; gap: 48px; align-items: center; }
-  .cs-tags { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-  .cs-tag { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 12px; border-radius: 999px; border: 1px solid rgba(31,73,125,0.15); color: rgba(31,73,125,0.6); }
-  .cs-hero h1 { font-size: 36px; margin-bottom: 16px; line-height: 1.05; }
-  .cs-hero-image { border-radius: 24px; overflow: hidden; box-shadow: 0 16px 48px -8px rgba(31,73,125,0.16); background: rgba(31,73,125,0.05); aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; color: rgba(31,73,125,0.3); font-size: 14px; }
-  .cs-hero-image img { width: 100%; height: 100%; object-fit: cover; }
-
-  /* ── BIG STAT HIGHLIGHT ── */
-  .cs-highlight { padding: 72px 0; background: var(--surface); }
-  .cs-highlight-inner { border-left: 4px solid var(--accent); padding-left: 32px; }
-  .cs-highlight h2 { font-size: 28px; color: var(--primary); margin-bottom: 16px; }
-  .cs-highlight p { font-size: 17px; color: rgba(31,73,125,0.6); line-height: 1.75; margin-top: 12px; }
-
-  /* ── QUOTE ── */
-  .cs-quote { padding: 72px 0; background: #fff; }
-  .cs-quote-inner { display: flex; gap: 32px; align-items: flex-start; max-width: 800px; }
-  .cs-quote-photo { width: 64px; height: 64px; border-radius: 50%; overflow: hidden; flex-shrink: 0; background: rgba(31,73,125,0.08); display: flex; align-items: center; justify-content: center; font-size: 12px; color: rgba(31,73,125,0.4); }
-  .cs-quote-photo img { width: 100%; height: 100%; object-fit: cover; }
-  .cs-quote-text blockquote { font-size: 18px; font-style: italic; color: var(--primary); line-height: 1.65; margin-bottom: 16px; }
-  .cs-quote-text cite { font-size: 14px; font-weight: 600; color: rgba(31,73,125,0.5); font-style: normal; }
-
-  /* ── DOELSTELLING ── */
-  .cs-doel { padding: 72px 0; background: var(--surface); }
-  .cs-doel h3 { font-size: 22px; margin: 12px 0 16px; }
-  .cs-doel p { font-size: 16px; color: rgba(31,73,125,0.6); line-height: 1.75; }
-
-  /* ── STATS ROW ── */
-  .cs-stats { padding: 64px 0; background: #fff; border-top: 1px solid rgba(31,73,125,0.05); border-bottom: 1px solid rgba(31,73,125,0.05); }
-  .cs-stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; }
-  .cs-stat { text-align: center; }
-  .cs-stat .number { font-size: 44px; font-weight: 700; color: var(--primary); letter-spacing: -0.04em; }
-  .cs-stat .label { font-size: 14px; color: rgba(31,73,125,0.5); margin-top: 6px; font-weight: 500; }
-
-  /* ── UITDAGING & AANPAK ── */
-  .cs-section { padding: 80px 0; }
-  .cs-section:nth-of-type(even) { background: var(--surface); }
-  .cs-section-grid { display: grid; grid-template-columns: 1fr; gap: 48px; align-items: start; }
-  .cs-section h2 { font-size: 28px; margin: 12px 0 20px; }
-  .cs-section p { font-size: 16px; color: rgba(31,73,125,0.6); line-height: 1.75; margin-bottom: 16px; }
-  .cs-section ul { padding-left: 20px; display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
-  .cs-section ul li { font-size: 16px; color: rgba(31,73,125,0.6); line-height: 1.6; }
-  .cs-section-image { border-radius: 20px; overflow: hidden; box-shadow: 0 12px 32px -8px rgba(31,73,125,0.14); background: rgba(31,73,125,0.05); aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; color: rgba(31,73,125,0.3); font-size: 14px; }
-  .cs-section-image img { width: 100%; height: 100%; object-fit: cover; }
-
-  /* ── CTA ── */
-  .cta-section { padding: 112px 0; }
-  .cta-box { position: relative; overflow: hidden; border-radius: 32px; background: var(--primary); padding: 64px 32px; text-align: center; box-shadow: 0 12px 32px -8px rgba(31,73,125,0.18); }
-  .cta-blob { position: absolute; top: -96px; right: -96px; width: 288px; height: 288px; background: rgba(201,148,62,0.20); border-radius: 999px; filter: blur(64px); }
-  .cta-box h2 { position: relative; font-size: 32px; color: #fff; max-width: 560px; margin: 0 auto 20px; }
-  .cta-box p { position: relative; color: rgba(255,255,255,0.6); max-width: 480px; margin: 0 auto 40px; line-height: 1.6; }
-  .hero-ctas { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
-
-  /* ── FOOTER ── */
-  footer { background: var(--surface); border-top: 1px solid rgba(31,73,125,0.05); padding: 56px 0; }
-  .footer-inner { display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center; }
-  .footer-logo { font-size: 16px; font-weight: 600; }
-  .footer-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; }
-  .footer-nav a { font-size: 14px; color: rgba(31,73,125,0.5); transition: color .3s var(--ease); }
-  .footer-nav a:hover { color: var(--primary); }
-  .footer-nav .footer-label { font-size: 14px; color: rgba(31,73,125,0.5); }
-  .footer-copy { font-size: 12px; color: rgba(31,73,125,0.4); }
-
-  @media (min-width: 768px) {
-    .cs-stats-grid { gap: 48px; grid-template-columns: repeat(4, 1fr); }
-    .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+  .eyebrow {
+    display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent-dark); background: rgba(201,148,62,0.10); border-radius: 999px; padding: 6px 16px; margin-bottom: 24px;
   }
+  .headline { font-size: 36px; margin-bottom: 20px; }
+  .headline .highlight { color: var(--accent); }
+  .sub { font-size: 16px; color: rgba(31,73,125,0.6); line-height: 1.65; max-width: 480px; margin-bottom: 8px; }
+
+  .panel {
+    background: #fff; border-radius: 24px; padding: 36px;
+    box-shadow: 0 4px 24px -4px rgba(31,73,125,0.10);
+    border: 1px solid rgba(31,73,125,0.05);
+  }
+
+  .form-note { font-size: 12px; color: rgba(31,73,125,0.4); margin-top: 16px; text-align: center; }
+
+  .cover {
+    aspect-ratio: 3 / 4; width: 100%; max-width: 320px; margin: 0 auto;
+    border-radius: 24px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    box-shadow: 0 12px 32px -8px rgba(31,73,125,0.25);
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(255,255,255,0.4); font-size: 13px; font-weight: 500; text-align: center; padding: 24px;
+  }
+
   @media (min-width: 1024px) {
-    nav.main-nav { display: flex; }
-    .burger { display: none; }
-    .mobile-menu { display: none; }
-    .cs-hero-grid { grid-template-columns: 1fr 1fr; }
-    .cs-hero h1 { font-size: 48px; }
-    .cs-section-grid { grid-template-columns: 1fr 1fr; gap: 64px; }
-    .cta-box { padding: 80px; }
+    .layout { grid-template-columns: 1fr 1fr; gap: 80px; }
+    .headline { font-size: 46px; }
+    .cover { margin: 0; max-width: 380px; }
   }
-  @media (max-width: 1023px) {
-    nav.main-nav { display: none; }
-    .burger { display: flex; }
+
+  /* ── ActiveCampaign / Mailblue formulier: eigen stijl ── */
+  @import url(https://fonts.bunny.net/css?family=sans-serif:400);
+  #_form_5_{font-size:14px;line-height:1.6;font-family:arial, helvetica, sans-serif;margin:0;box-shadow:none}._form_hide{display:none;visibility:hidden}._form_show{display:block;visibility:visible}#_form_5_._form-top{top:0}#_form_5_._form-bottom{bottom:0}#_form_5_._form-left{left:0}#_form_5_._form-right{right:0}#_form_5_ input[type="text"],#_form_5_ input[type="tel"],#_form_5_ input[type="date"],#_form_5_ textarea{padding:8px;height:auto;border:#979797 1px solid;border-radius:4px;color:#000 !important;font-size:14px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}#_form_5_ textarea{resize:none}#_form_5_ input::placeholder{color:#142341}#_form_5_ ._submit{cursor:pointer;font-family:arial, sans-serif;font-size:14px;text-align:center;background:#004cff !important;border:0 !important;-moz-border-radius:4px !important;-webkit-border-radius:4px !important;border-radius:4px !important;color:#ffffff !important;padding:10px !important}#_form_5_ ._submit:disabled{cursor:not-allowed;opacity:0.4}#_form_5_ ._submit.processing{position:relative}#_form_5_ ._submit.processing::before{content:"";width:1em;height:1em;position:absolute;z-index:1;top:50%;left:50%;border:double 3px transparent;border-radius:50%;background-image:linear-gradient(#004cff, #004cff), conic-gradient(#004cff, #ffffff);background-origin:border-box;background-clip:content-box, border-box;animation:1200ms ease 0s infinite normal none running _spin}#_form_5_ ._submit.processing::after{content:"";position:absolute;top:0;bottom:0;left:0;right:0}@keyframes _spin{0%{transform:translate(-50%, -50%) rotate(90deg)}100%{transform:translate(-50%, -50%) rotate(450deg)}}#_form_5_ ._close-icon{cursor:pointer;background-image:url("https://d226aj4ao1t61q.cloudfront.net/esfkyjh1u_forms-close-dark.png");background-repeat:no-repeat;background-size:14.2px 14.2px;position:absolute;display:block;top:11px;right:9px;overflow:hidden;width:16.2px;height:16.2px}#_form_5_ ._close-icon:before{position:relative}#_form_5_ ._form-body{font-family:sans-serif;font-size:14px;font-weight:400;color:black;margin-bottom:30px}#_form_5_ ._form-image-left{width:150px;float:left}#_form_5_ ._form-content-right{margin-left:164px}#_form_5_ ._form-branding{color:#fff;font-size:10px;clear:both;text-align:left;margin-top:30px;font-weight:100}#_form_5_ ._form-branding ._logo{display:block;width:130px;height:14px;margin-top:6px;background-image:url("https://d226aj4ao1t61q.cloudfront.net/hh9ujqgv5_aclogo_li.png");background-size:130px auto;background-repeat:no-repeat}#_form_5_ .form-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0, 0, 0, 0);border:0}#_form_5_ ._form-label,#_form_5_ ._form_element ._form-label{font-weight:bold;margin-bottom:5px;display:block}#_form_5_._dark ._form-branding{color:#333}#_form_5_._dark ._form-branding ._logo{background-image:url("https://d226aj4ao1t61q.cloudfront.net/jftq2c8s_aclogo_dk.png")}#_form_5_ ._form_element{position:relative;margin-bottom:10px;max-width:100%}#_form_5_ ._form_element *{font-size:14px}#_form_5_ ._form_element._clear{clear:both;width:100%;float:none}#_form_5_ ._form_element._clear:after{clear:left}#_form_5_ ._form_element :is(textarea, select, input[type="text"], input[type="date"], input[type="phone"], input[type="email"]),#_form_5_ ._form-element :is(textarea, select, input[type="text"], input[type="date"], input[type="phone"], input[type="email"]){background:white;color:#142341 !important;border-top:1px solid #cccccc;border-left:1px solid #cccccc;border-right:1px solid #cccccc;border-bottom:1px solid #cccccc;border-radius:0px}#_form_5_ ._form_element input[type="text"],#_form_5_ ._form_element input[type="date"],#_form_5_ ._form_element select,#_form_5_ ._form_element textarea:not(.g-recaptcha-response){display:block;width:100%;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;font-family:inherit}#_form_5_ ._field-wrapper{position:relative}#_form_5_ ._inline-style{float:left}#_form_5_ ._inline-style input[type="text"]{width:150px}#_form_5_ ._inline-style:not(._clear){margin-right:20px}#_form_5_ ._form_element img._form-image{max-width:100%}#_form_5_ ._form_element ._form-fieldset{border:0;padding:0.01em 0 0 0;margin:0;min-width:0}#_form_5_ ._clear-element{clear:left}#_form_5_ ._full_width{width:100%}#_form_5_ ._form_full_field{display:block;width:100%;margin-bottom:10px}#_form_5_ input[type="text"]._has_error,#_form_5_ textarea._has_error{border:#F37C7B 1px solid}#_form_5_ input[type="checkbox"]._has_error{outline:#F37C7B 1px solid}#_form_5_ ._show_be_error{float:left}#_form_5_ ._error{display:block;position:absolute;font-size:14px;z-index:10000001}#_form_5_ ._error._above{padding-bottom:4px;bottom:39px;right:0}#_form_5_ ._error._below{padding-top:8px;top:100%;right:0}#_form_5_ ._error._above ._error-arrow{bottom:-4px;right:15px;border-left:8px solid transparent;border-right:8px solid transparent;border-top:8px solid #FFDDDD}#_form_5_ ._error._below ._error-arrow{top:0;right:15px;border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:8px solid #FFDDDD}#_form_5_ ._error-inner{padding:12px 12px 12px 36px;background-color:#FFDDDD;background-image:url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M16 8C16 12.4183 12.4183 16 8 16C3.58172 16 0 12.4183 0 8C0 3.58172 3.58172 0 8 0C12.4183 0 16 3.58172 16 8ZM9 3V9H7V3H9ZM9 13V11H7V13H9Z' fill='%23CA0000'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:12px center;font-size:14px;font-family:arial, sans-serif;font-weight:600;line-height:16px;color:#000;text-align:center;text-decoration:none;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;box-shadow:0 1px 4px rgba(31, 33, 41, 0.298295)}@media only screen and (max-width:319px){#_form_5_ ._error-inner{padding:7px 7px 7px 25px;font-size:12px;line-height:12px;background-position:4px center;max-width:100px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}#_form_5_ ._error-inner._form_error{margin-bottom:5px;text-align:left}#_form_5_ ._button-wrapper ._error-inner._form_error{position:static}#_form_5_ ._error-inner._no_arrow{margin-bottom:10px}#_form_5_ ._error-arrow{position:absolute;width:0;height:0}#_form_5_ ._error-html{margin-bottom:10px}.pika-single{z-index:10000001 !important}#_form_5_ input[type="text"].datetime_date{width:69%;display:inline}#_form_5_ select.datetime_time{width:29%;display:inline;height:32px}#_form_5_ input[type="date"].datetime_date{width:69%;display:inline-flex}#_form_5_ input[type="time"].datetime_time{width:29%;display:inline-flex}#_form_5_ ._form-title,#_form_5_ ._html-code :is(h1, h2, h3, h4, h5, h6){font-family:sans-serif;font-size:24px;font-weight:400;color:black}@media (min-width:320px) and (max-width:667px){::-webkit-scrollbar{display:none}#_form_5_{margin:0;width:100%;min-width:100%;max-width:100%;box-sizing:border-box}#_form_5_ *{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;font-size:1em}#_form_5_ ._form-content{margin:0;width:100%}#_form_5_ ._form-inner{display:block;min-width:100%}#_form_5_ ._form-title,#_form_5_ ._inline-style{margin-top:0;margin-right:0;margin-left:0}#_form_5_ ._form-title{font-size:1.2em}#_form_5_ ._form_element{margin:0 0 20px;padding:0;width:100%}#_form_5_ ._form-element,#_form_5_ ._inline-style,#_form_5_ input[type="text"],#_form_5_ label,#_form_5_ p,#_form_5_ textarea:not(.g-recaptcha-response){float:none;display:block;width:100%}#_form_5_ ._row._checkbox-radio label{display:inline}#_form_5_ ._row,#_form_5_ p,#_form_5_ label{margin-bottom:0.7em;width:100%}#_form_5_ ._row input[type="checkbox"],#_form_5_ ._row input[type="radio"]{margin:0 !important;vertical-align:middle !important}#_form_5_ ._row input[type="checkbox"]+span label{display:inline}#_form_5_ ._row span label{margin:0 !important;width:initial !important;vertical-align:middle !important}#_form_5_ ._form-image{max-width:100%;height:auto !important}#_form_5_ input[type="text"]{padding-left:10px;padding-right:10px;font-size:16px;line-height:1.3em}#_form_5_ input[type="radio"],#_form_5_ input[type="checkbox"]{display:inline-block;width:1.3em;height:1.3em;font-size:1em;margin:0 0.3em 0 0;vertical-align:baseline}#_form_5_ button[type="submit"]{padding:20px;font-size:1.5em}#_form_5_ ._inline-style{margin:20px 0 0 !important}#_form_5_ ._inline-style input[type="text"]{width:100%}}#_form_5_ .sms_consent_checkbox{position:relative;width:100%;display:flex;align-items:flex-start;padding:20px 0}#_form_5_ .sms_consent_checkbox input[type="checkbox"]{float:left;margin:5px 10px 10px 0}#_form_5_ .sms_consent_checkbox .sms_consent_message{display:inline;float:left;text-align:left;margin-bottom:10px;font-size:14px;color:#7D8799}#_form_5_ .sms_consent_checkbox .sms_consent_message.sms_consent_mini{width:90%}#_form_5_ .sms_consent_checkbox ._error._above{right:auto;bottom:0}#_form_5_ .sms_consent_checkbox ._error._above ._error-arrow{right:auto;left:5px}@media (min-width:320px) and (max-width:667px){#_form_5_ .sms_consent_checkbox ._error._above{top:-30px;left:0;bottom:auto}}#_form_5_ .field-required{color:#FF0000}#_form_5_{position:relative;text-align:left;margin:0 auto;padding:0;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;background:transparent !important;border:0 !important;max-width:100%;-moz-border-radius:0px !important;-webkit-border-radius:0px !important;border-radius:0px !important;color:#000000}#_form_5_ ._show_be_error{min-width:100%}#_form_5_._inline-form,#_form_5_._inline-form ._form-content{font-family:sans-serif;font-size:14px;font-weight:400}#_form_5_._inline-form ._row span:not(.field-required),#_form_5_._inline-form ._row label{font-family:sans-serif;font-size:14px;font-weight:400;line-height:1.6em;color:black}#_form_5__inlineform input[type="text"],#_form_5__inlineform input[type="date"],#_form_5__inlineform input[type="tel"],#_form_5__inlineform select,#_form_5__inlineform textarea:not(.g-recaptcha-response){font-family:sans-serif;font-size:14px;font-weight:400;font-color:#000000;line-height:1.6em}#_form_5_._inline-form ._html-code,#_form_5_._inline-form .sms_consent_message,#_form_5_._inline-form ._form-thank-you{font-family:sans-serif;font-size:14px;font-weight:400;color:black}#_form_5_._inline-form ._form-label,#_form_5_._inline-form ._form-emailidentifier,#_form_5_._inline-form ._form-checkbox-option-label{font-family:sans-serif;font-size:14px;font-weight:700;line-height:1.6em;color:black}#_form_5_._inline-form ._submit{margin-top:12px;font-family:sans-serif;font-size:14px;font-weight:400}#_form_5_._inline-form ._html-code h1,#_form_5_._inline-form ._html-code h2,#_form_5_._inline-form ._html-code h3,#_form_5_._inline-form ._html-code h4,#_form_5_._inline-form ._html-code h5,#_form_5_._inline-form ._html-code h6,#_form_5_._inline-form ._form-title{margin-bottom:0;display:block}#_form_5_._inline-form ._form-branding{font-family:"IBM Plex Sans", Helvetica, sans-serif;font-size:13px;font-weight:100;font-style:normal;text-decoration:none}#_form_5_:before,#_form_5_:after{content:" ";display:table}#_form_5_:after{clear:both}#_form_5_._inline-style{width:auto;display:inline-block}#_form_5_._inline-style input[type="text"],#_form_5_._inline-style input[type="date"]{padding:10px 12px}#_form_5_._inline-style button._inline-style{position:relative;top:27px}#_form_5_._inline-style p{margin:0}#_form_5_._inline-style ._button-wrapper{position:relative;margin:16px 12.5px 0 20px}#_form_5_._inline-style ._button-wrapper:not(._clear){margin-left:0}#_form_5_ ._form-thank-you{position:relative;left:0;right:0;text-align:center;font-size:18px}#_form_5_ ._form-pc-confirmation ._submit{margin-top:16px}@media (min-width:320px) and (max-width:667px){#_form_5_._inline-form._inline-style ._inline-style._button-wrapper{margin-top:20px !important;margin-left:0 !important}}#_form_5_ .iti{width:100%}#_form_5_ .iti.iti--allow-dropdown.iti--separate-dial-code{width:100%}#_form_5_ .iti input{width:100%;border:#979797 1px solid;border-radius:4px}#_form_5_ .iti--separate-dial-code .iti__selected-flag{background-color:#FFFFFF;border-radius:4px}#_form_5_ .iti--separate-dial-code .iti__selected-flag:hover{background-color:rgba(0, 0, 0, 0.05)}#_form_5_ .iti__country-list{border-radius:4px;margin-top:4px;min-width:460px}#_form_5_ .iti__country-list--dropup{margin-bottom:4px}#_form_5_ .phone-error-hidden{display:none}#_form_5_ .phone-error{color:#E40E49}#_form_5_ .phone-input-error{border:1px solid #E40E49 !important}#_form_5_._inline-form ._form-content ._form-list-subscriptions-field fieldset{margin:0;margin-bottom:1.1428571429em;border:none;padding:0}#_form_5_._inline-form ._form-content ._form-list-subscriptions-field fieldset:last-child{margin-bottom:0}#_form_5_._inline-form ._form-content ._form-list-subscriptions-field legend{margin-bottom:1.1428571429em}#_form_5_._inline-form ._form-content ._form-list-subscriptions-field label{display:flex;align-items:flex-start;justify-content:flex-start;margin-bottom:0.8571428571em}#_form_5_._inline-form ._form-content ._form-list-subscriptions-field label:last-child{margin-bottom:0}#_form_5_._inline-form ._form-content ._form-list-subscriptions-field input{margin:0;margin-right:8px}#_form_5_._inline-form ._form-content ._form-list-subscriptions-field ._form-checkbox-option-label{display:block;font-weight:400;margin-top:-4px}#_form_5_._inline-form ._form-content ._form-list-subscriptions-field ._form-checkbox-option-label-with-description{display:block;font-weight:700;margin-top:-4px}#_form_5_._inline-form ._form-content ._form-list-subscriptions-field ._form-checkbox-option-description{margin:0;font-size:0.8571428571em}#_form_5_._inline-form ._form-content ._form-list-subscriptions-field ._form-subscriptions-unsubscribe-all-description{line-height:normal;margin-top:-2px}
+
+  /* MMD-huisstijl overrides — na de AC-stijl geladen zodat deze wint */
+  #_form_5_ ._field_header, #_form_5_ ._field_html { display: none !important; }
+  #_form_5_ ._form-branding { display: none !important; }
+  #_form_5_ ._form-label { font-family: 'Roboto', sans-serif !important; font-size: 13px !important; font-weight: 500 !important; color: rgba(31,73,125,0.6) !important; text-transform: none; margin-bottom: 8px !important; }
+  #_form_5_ input[type="text"], #_form_5_ textarea {
+    font-family: 'Roboto', sans-serif !important; font-size: 15px !important; color: var(--primary) !important;
+    background: var(--surface) !important; border: 1px solid rgba(31,73,125,0.12) !important;
+    padding: 14px 20px !important; transition: border-color .3s var(--ease), box-shadow .3s var(--ease);
   }
+  #_form_5_ input[type="text"] { border-radius: 999px !important; }
+  #_form_5_ textarea { border-radius: 16px !important; min-height: 120px; }
+  #_form_5_ input::placeholder, #_form_5_ textarea::placeholder { color: rgba(31,73,125,0.35) !important; }
+  #_form_5_ input[type="text"]:focus, #_form_5_ textarea:focus {
+    outline: none; border-color: var(--primary-light) !important; box-shadow: 0 0 0 4px rgba(31,73,125,0.08);
+  }
+  #_form_5_ ._submit {
+    width: 100%; background: var(--accent) !important; color: #fff !important;
+    font-family: 'Roboto', sans-serif !important; font-size: 15px !important; font-weight: 600 !important;
+    border-radius: 999px !important; padding: 16px 24px !important;
+    box-shadow: 0 8px 20px -6px rgba(201,148,62,0.45);
+    transition: background-color .3s var(--ease), transform .3s var(--ease), box-shadow .3s var(--ease);
+  }
+  #_form_5_ ._submit:hover:not(:disabled) { background: var(--accent-dark) !important; }
+  #_form_5_ ._form-thank-you { font-family: 'Roboto', sans-serif; color: var(--primary); }
 </style>
 </head>
 <body>
 
-<header id="site-header">
-  <div class="wrap header-inner">
-    <a href="index.html" class="logo">Maurice Meijer Digital</a>
-    <nav class="main-nav">
-      <a href="index.html#hero">Uitdaging<span class="underline"></span></a>
-      <a href="index.html#probleem">Aanpak<span class="underline"></span></a>
-      <a href="index.html#resultaten">Resultaten<span class="underline"></span></a>
-      <div class="has-dropdown">
-        <span class="dropdown-trigger">Succesverhalen<span class="underline"></span></span>
-        <div class="dropdown">
-          <a href="anso-lift-en-roltrapreinigingen.html">Anso Lift- en Roltrapreiniging</a>
-          <a href="besselink-electro.html">Besselink Electro</a>
-        </div>
-      </div>
-      <a href="over-mmd.html">Over MMD<span class="underline"></span></a>
-      <a href="contact.html">Contact<span class="underline"></span></a>
-    </nav>
-    <button class="burger" id="burger" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-  <div class="mobile-menu" id="mobile-menu">
-    <div class="mobile-menu-inner">
-      <a href="index.html#hero">Uitdaging</a>
-      <a href="index.html#probleem">Aanpak</a>
-      <a href="index.html#resultaten">Resultaten</a>
-      <span class="mobile-label">Succesverhalen</span>
-      <a href="anso-lift-en-roltrapreinigingen.html" style="padding-left: 24px; font-size: 14px; opacity: 0.75;">↳ Anso Lift- en Roltrapreiniging</a>
-      <a href="besselink-electro.html" style="padding-left: 24px; font-size: 14px; opacity: 0.75;">↳ Besselink Electro</a>
-      <a href="over-mmd.html">Over MMD</a>
-      <a href="contact.html">Contact</a>
-      <a href="https://calendly.com/mauricemeijerdigital-info/30min" target="_blank" rel="noopener" class="btn-primary">Plan een gesprek</a>
-    </div>
-  </div>
-</header>
+<div class="topbar">
+  <div class="wrap"><a href="index.html" class="logo">Maurice Meijer Digital</a></div>
+</div>
 
-<!-- ── CASE STUDY HERO ── -->
-<section class="cs-hero">
-  <div class="wrap">
-    <p class="cs-breadcrumb reveal in-view">
-      Succesverhalen › Besselink Electro B.V.
-    </p>
-    <div class="cs-hero-grid">
-      <div>
-        <div class="cs-tags reveal in-view">
-          <span class="cs-tag">Elektrotechnische Groothandel</span>
-          <span class="cs-tag">AI recruitmentteam</span>
-        </div>
-        <h1 class="reveal in-view d1">20+ relevante kandidaten binnen 30 dagen.</h1>
-      </div>
-      <div class="reveal in-view d2">
-        <div class="cs-hero-image" style="position: relative; aspect-ratio: 16/9;">
-          <img src="images/besli-pand.jpg" alt="Besli pand" style="width:100%; height:100%; object-fit:cover; display:block;">
-          <div style="position: absolute; bottom: 16px; right: 16px; background: #fff; border-radius: 12px; padding: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.15);">
-            <img src="images/besli-logo.png" alt="Besselink Elektrotechnische Groothandel logo" style="width: 96px; height: auto; object-fit: contain; display: block;">
+<main class="page">
+  <div class="layout">
+    <div class="cover reveal in-view d1" style="background:none; padding:0;">
+      <img src="images/contact-brievenbus.png" alt="Contact Maurice Meijer Digital" style="width:100%; height:100%; object-fit:cover; border-radius:24px; display:block;">
+    </div>
+
+    <div>
+      <h1 class="headline reveal in-view d1">Welke <span class="highlight">AI recruitment</span> vraag heb je voor MMD?</h1>
+      <p class="sub reveal in-view d2">Alleen serieuze vragen en aanvragen over AI recruitmentteams worden in behandeling genomen.</p>
+
+      <div class="reveal in-view d3" style="margin-top: 32px;">
+        <div class="panel">
+          <form method="POST" action="https://mauricemeijer3.activehosted.com/proc.php" id="_form_5_" class="_form _form_5 _inline-form  _dark" novalidate data-styles-version="5">
+            <input type="hidden" name="u" value="5" />
+            <input type="hidden" name="f" value="5" />
+            <input type="hidden" name="s" />
+            <input type="hidden" name="c" value="0" />
+            <input type="hidden" name="m" value="0" />
+            <input type="hidden" name="act" value="sub" />
+            <input type="hidden" name="v" value="2" />
+            <input type="hidden" name="or" value="2334e38e-6828-4a8e-97ee-21fc01a30263" />
+            <div class="_form-content">
+              <div class="_form_element _field_name _full_width " >
+                <label for="fullname" class="_form-label">
+                  Voornaam
+                </label>
+                <div class="_field-wrapper">
+                  <input type="text" id="fullname" name="fullname" placeholder="Wie doet de aanvraag?" />
+                </div>
+              </div>
+              <div class="_form_element _field_email _full_width " >
+                <label for="email" class="_form-label">
+                  Email<span class="field-required">
+                  *
+                </span>
+              </label>
+              <div class="_field-wrapper">
+                <input type="text" id="email" name="email" placeholder="Wat is jouw directe mailadres?" required/>
+              </div>
+            </div>
+            <div class="_form_element _x76925325 _full_width " >
+              <label for="field[13]" class="_form-label">
+                Jouw bericht aan MMD.
+              </label>
+              <div class="_field-wrapper">
+                <textarea id="field[13]" name="field[13]" placeholder=""  ></textarea>
+              </div>
+            </div>
+            <div class="_button-wrapper _full_width">
+              <button id="_form_5_submit" class="_submit" type="submit">
+                Verstuur je vraag
+              </button>
+            </div>
+            <div class="_clear-element">
+            </div>
           </div>
+          <div class="_form-thank-you" style="display:none;">
+          </div>
+          </form>
         </div>
+        <p class="form-note">We reageren doorgaans binnen 2 uur tijdens kantoortijden. We respecteren je privacy.</p>
       </div>
     </div>
   </div>
-</section>
-
-<!-- ── BIG HIGHLIGHT ── -->
-<section class="cs-highlight">
-  <div class="wrap">
-    <div class="cs-highlight-inner reveal">
-      <h2>1 Senior Salesmanager in 5 dagen en 4 verkopers binnendienst</h2>
-      <p>Voor de gerenommeerde regionale groothandel voor elektrotechnische materialen ontstond de vacature van Teamleider Verkoop of Senior Salesmanager en meerdere vacatures voor de verkoop binnendienst.</p>
-      <p>Na betaalde pogingen gedaan te hebben op verschillende jobboards en een intern referral systeem opgezet te hebben, meldde de geschikte kandidaat zich maar niet. De AI recruitment oplossing van MMD zorgde ervoor dat binnen 5 werkdagen 10 kandidaten zich gemeld hadden, waarvan uiteindelijk de salesmanager aangenomen is — Erwin Mulder en nog 4 nieuwe collega's op de verkoop binnendienst.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ── QUOTE ── -->
-<section class="cs-quote">
-  <div class="wrap">
-    <div class="cs-quote-inner reveal">
-      <div class="cs-quote-photo">
-        <img src="images/erwin.png" alt="Erwin Mulder">
-      </div>
-      <div class="cs-quote-text">
-        <blockquote>"Maurice heeft op zijn effectieve manier via social media contact met mij gekregen. Na een fijn telefoongesprek ben ik bij hem op gesprek geweest en ben ik enthousiast geworden voor mijn huidige functie. Het was altijd fijn samenwerken. Maurice weet iedereen in beweging te krijgen."</blockquote>
-        <cite>Erwin Mulder — Salesmanager bij Besselink Import / Export B.V. Heteren</cite>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── DOELSTELLING ── -->
-<section class="cs-doel">
-  <div class="wrap">
-    <div class="reveal">
-      <span class="section-label">Doelstelling</span>
-      <h3>Met spoed een vervangende Senior Salesmanager en verkopers vinden.</h3>
-      <p>Door de ad-hoc gecreëerde functies was snel schakelen aan de orde. Het AI recruitmentteam moest dus ook ad-hoc opgezet en getraind worden om in een zo kort mogelijke tijd een nieuw MT-lid en collega's voor de afdeling te vinden. Dit was via hun reguliere recruitment strategieën nooit gelukt, maar mijn AI recruiters vonden Erwin diezelfde week nog en nog 4 andere collega's binnen enkele weken daaropvolgend.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ── STATS ROW ── -->
-<section class="cs-stats">
-  <div class="wrap cs-stats-grid">
-    <div class="cs-stat reveal">
-      <div class="number">8</div>
-      <div class="label">AI agents</div>
-    </div>
-    <div class="cs-stat reveal d1">
-      <div class="number">30</div>
-      <div class="label">Dagen werven</div>
-    </div>
-    <div class="cs-stat reveal d2">
-      <div class="number">20+</div>
-      <div class="label">Relevante kandidaten voor 2 functies</div>
-    </div>
-    <div class="cs-stat reveal d2">
-      <div class="number">5</div>
-      <div class="label">Hires. 1 manager en 4 verkopers</div>
-    </div>
-  </div>
-</section>
-
-<!-- ── DE UITDAGING ── -->
-<section class="cs-section">
-  <div class="wrap">
-    <div class="cs-section-grid">
-      <div class="reveal">
-        <span class="section-label">De uitdaging</span>
-        <h2>Harde groei in klanten en het vertrek van de salesmanager en 2 verkopers binnendienst...</h2>
-        <p>De Wet van Murphy. Alles viel tegelijk. De snelle groei van het bedrijf in klanten (80+ per maand), het vertrek van de salesmanager en 2 verkopers... Dit was een echte uitdaging!</p>
-        <p>De druk liep flink op binnen de afdeling verkoop binnendienst door de toenemende telefoongesprekken en vertrekkende collega's.</p>
-      </div>
-      <div class="reveal d1" style="align-self: stretch;">
-        <div class="cs-section-image" style="aspect-ratio: unset; height: 100%; min-height: 300px;">
-          <img src="images/besli-uitdaging.png" alt="Facebook advertentieresultaten vacatures Besli" style="width:100%; height:100%; object-fit:cover; object-position: right center; display:block;">
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── DE AANPAK ── -->
-<section class="cs-section" style="background: var(--surface);">
-  <div class="wrap">
-    <div class="cs-section-grid">
-      <div class="reveal d1" style="align-self: stretch;">
-        <div class="cs-section-image" style="aspect-ratio: unset; height: 100%; min-height: 300px;">
-          <img src="images/anso-aanpak.jpg" alt="AI recruitment aanpak" style="width:100%; height:100%; object-fit:cover; display:block;">
-        </div>
-      </div>
-      <div class="reveal">
-        <span class="section-label">De aanpak</span>
-        <h2>De aanpak is in grote lijnen nagenoeg altijd hetzelfde. Dit komt doordat hetzelfde doel nagestreefd wordt. Vinden en matchen van kandidaten.</h2>
-        <p>Hoewel we altijd maatwerk oplossingen bieden, werken we altijd aan een strategie waar we het AI recruitment team op kunnen trainen en laten focussen. Hieronder zie je de stappen die wij doorlopen om een project volledig in kaart te brengen.</p>
-        <ul>
-          <li>Stap 1 — Demografische kandidaat profiel herkenning</li>
-          <li>Stap 2 — Per vacature 3-5 AI recruiters opstellen met andere manier van benaderen</li>
-          <li>Stap 3 — Trainen van de AI recruiters op de kwalificatie criteria</li>
-          <li>Stap 4 — Geautomatiseerde kwalificatie en afwijzing criteria segmentaties</li>
-          <li>Stap 5 — Notificaties automatiseren bij gekwalificeerde kandidaten</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── CONCLUSIE ── -->
-<section class="cs-doel" style="padding-bottom: 24px;">
-  <div class="wrap">
-    <div class="reveal">
-      <h3 style="font-size: 32px; margin-bottom: 16px;">Conclusie</h3>
-      <p>Deze case van Besli laat zien dat recruitment niet langer draait om wachten op sollicitaties, maar om het pro-actief en strategisch bereiken van de juiste kandidaten. Organisaties die dat proces automatiseren, bouwen structureel een voorsprong op in de arbeidsmarkt en zijn in staat door AI recruiters direct en sneller te anticiperen op dit soort situaties.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ── CTA ── -->
-<section class="cta-section" id="contact" style="padding-top: 40px;">
-  <div class="wrap">
-    <div class="cta-box reveal">
-      <div class="cta-blob"></div>
-      <h2>Ontdek jouw recruitmentvoorsprong.</h2>
-      <p>Ontdek hoe jouw organisatie door de inzet van een AI recruitmentteam slimmer werft en de beste kandidaten bereikt en benaderd, voordat je concurrent dat doet.</p>
-      <div class="hero-ctas">
-        <a href="https://calendly.com/mauricemeijerdigital-info/30min" target="_blank" rel="noopener" class="btn btn-accent">Plan een vrijblijvend strategiegesprek</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <div class="wrap footer-inner">
-    <div class="footer-logo">Maurice Meijer Digital</div>
-    <nav class="footer-nav">
-      <a href="index.html#hero">Uitdaging</a>
-      <a href="index.html#probleem">Aanpak</a>
-      <a href="index.html#resultaten">Resultaten</a>
-      <span class="footer-label">Succesverhalen</span>
-      <a href="over-mmd.html">Over MMD</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-    <div class="footer-copy">[© Jaar Maurice Meijer Digital — alle rechten voorbehouden]</div>
-  </div>
-</footer>
+</main>
 
 <script>
-  const header = document.getElementById('site-header');
-  window.addEventListener('scroll', () => {
-    header.classList.toggle('scrolled', window.scrollY > 24);
-  });
+  document.querySelectorAll('.reveal').forEach(el => el.classList.add('in-view'));
+</script>
 
-  const burger = document.getElementById('burger');
-  const mobileMenu = document.getElementById('mobile-menu');
-  burger.addEventListener('click', () => {
-    burger.classList.toggle('open');
-    mobileMenu.classList.toggle('open');
-  });
-  mobileMenu.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => {
-      burger.classList.remove('open');
-      mobileMenu.classList.remove('open');
-    });
-  });
+<script>
+window.cfields = {"13":"jouw_bericht_aan_mmd"};
+window._show_thank_you = function(id, message, trackcmp_url, email) {
+    var form = document.getElementById('_form_' + id + '_'), thank_you = form.querySelector('._form-thank-you');
+    form.querySelector('._form-content').style.display = 'none';
+    thank_you.innerHTML = message;
+    thank_you.style.display = 'block';
+    const vgoAlias = typeof visitorGlobalObjectAlias === 'undefined' ? 'vgo' : visitorGlobalObjectAlias;
+    var visitorObject = window[vgoAlias];
+    if (email && typeof visitorObject !== 'undefined') {
+        visitorObject('setEmail', email);
+        visitorObject('update');
+    } else if (typeof(trackcmp_url) != 'undefined' && trackcmp_url) {
+        // Site tracking URL to use after inline form submission.
+        _load_script(trackcmp_url);
+    }
+    if (typeof window._form_callback !== 'undefined') window._form_callback(id);
+    thank_you.setAttribute('tabindex', '-1');
+    thank_you.focus();
+};
+window._show_unsubscribe = function(id, message, trackcmp_url, email) {
+    var form = document.getElementById('_form_' + id + '_'), unsub = form.querySelector('._form-thank-you');
+    var branding = form.querySelector('._form-branding');
+    if (branding) {
+        branding.style.display = 'none';
+    }
+    form.querySelector('._form-content').style.display = 'none';
+    unsub.style.display = 'block';
+    form.insertAdjacentHTML('afterend', message)
+    const vgoAlias = typeof visitorGlobalObjectAlias === 'undefined' ? 'vgo' : visitorGlobalObjectAlias;
+    var visitorObject = window[vgoAlias];
+    if (email && typeof visitorObject !== 'undefined') {
+        visitorObject('setEmail', email);
+        visitorObject('update');
+    } else if (typeof(trackcmp_url) != 'undefined' && trackcmp_url) {
+        // Site tracking URL to use after inline form submission.
+        _load_script(trackcmp_url);
+    }
+    if (typeof window._form_callback !== 'undefined') window._form_callback(id);
+};
+window._show_error = function(id, message, html) {
+    var form = document.getElementById('_form_' + id + '_'),
+        err = document.createElement('div'),
+        button = form.querySelector('button[type="submit"]'),
+        old_error = form.querySelector('._form_error');
+    if (old_error) old_error.parentNode.removeChild(old_error);
+    err.innerHTML = message;
+    err.className = '_error-inner _form_error _no_arrow';
+    var wrapper = document.createElement('div');
+    wrapper.className = '_form-inner _show_be_error';
+    wrapper.appendChild(err);
+    button.parentNode.insertBefore(wrapper, button);
+    var submitButton = form.querySelector('[id^="_form"][id$="_submit"]');
+    submitButton.disabled = false;
+    submitButton.classList.remove('processing');
+    if (html) {
+        var div = document.createElement('div');
+        div.className = '_error-html';
+        div.innerHTML = html;
+        err.appendChild(div);
+    }
+};
+window._show_pc_confirmation = function(id, header, detail, show, email) {
+    var form = document.getElementById('_form_' + id + '_'), pc_confirmation = form.querySelector('._form-pc-confirmation');
+    if (pc_confirmation.style.display === 'none') {
+        form.querySelector('._form-content').style.display = 'none';
+        pc_confirmation.innerHTML = "<div class='_form-title'>" + header + "</div>" + "<p>" + detail + "</p>" +
+        "<button class='_submit' id='hideButton'>Manage preferences</button>";
+        pc_confirmation.style.display = 'block';
+        var mp = document.querySelector('input[name="mp"]');
+        mp.value = '0';
+    } else {
+        form.querySelector('._form-content').style.display = 'inline';
+        pc_confirmation.style.display = 'none';
+    }
 
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in-view');
-        revealObserver.unobserve(entry.target);
-      }
+    var hideButton = document.getElementById('hideButton');
+    // Add event listener to the button
+    hideButton.addEventListener('click', function() {
+        var submitButton = document.querySelector('#_form_5_submit');
+        submitButton.disabled = false;
+        submitButton.classList.remove('processing');
+        var mp = document.querySelector('input[name="mp"]');
+        mp.value = '1';
+        const cacheBuster = new URL(window.location.href);
+        cacheBuster.searchParams.set('v', new Date().getTime());
+        window.location.href = cacheBuster.toString();
     });
-  }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
-  document.querySelectorAll('.reveal:not(.in-view)').forEach(el => revealObserver.observe(el));
+
+    const vgoAlias = typeof visitorGlobalObjectAlias === 'undefined' ? 'vgo' : visitorGlobalObjectAlias;
+    var visitorObject = window[vgoAlias];
+    if (email && typeof visitorObject !== 'undefined') {
+        visitorObject('setEmail', email);
+        visitorObject('update');
+    } else if (typeof(trackcmp_url) != 'undefined' && trackcmp_url) {
+        // Site tracking URL to use after inline form submission.
+        _load_script(trackcmp_url);
+    }
+    if (typeof window._form_callback !== 'undefined') window._form_callback(id);
+};
+window._load_script = function(url, callback, isSubmit) {
+    var head = document.querySelector('head'), script = document.createElement('script'), r = false;
+    var submitButton = document.querySelector('#_form_5_submit');
+    script.charset = 'utf-8';
+    script.src = url;
+    if (callback) {
+        script.onload = script.onreadystatechange = function() {
+            if (!r && (!this.readyState || this.readyState == 'complete')) {
+                r = true;
+                callback();
+            }
+        };
+    }
+    script.onerror = function() {
+        if (isSubmit) {
+            if (script.src.length > 10000) {
+                _show_error("5", "Sorry, your submission failed. Please shorten your responses and try again.");
+            } else {
+                _show_error("5", "Sorry, your submission failed. Please try again.");
+            }
+            submitButton.disabled = false;
+            submitButton.classList.remove('processing');
+        }
+    }
+
+    head.appendChild(script);
+};
+(function() {
+    var iti;
+    if (window.location.search.search("excludeform") !== -1) return false;
+    var getCookie = function(name) {
+        var match = document.cookie.match(new RegExp('(^|; )' + name + '=([^;]+)'));
+        return match ? match[2] : localStorage.getItem(name);
+    }
+    var setCookie = function(name, value) {
+        var now = new Date();
+        var time = now.getTime();
+        var expireTime = time + 1000 * 60 * 60 * 24 * 365;
+        now.setTime(expireTime);
+        document.cookie = name + '=' + value + '; expires=' + now + ';path=/; Secure; SameSite=Lax;';
+        localStorage.setItem(name, value);
+    }
+    var addEvent = function(element, event, func) {
+        if (element.addEventListener) {
+            element.addEventListener(event, func);
+        } else {
+            var oldFunc = element['on' + event];
+            element['on' + event] = function() {
+                oldFunc.apply(this, arguments);
+                func.apply(this, arguments);
+            };
+        }
+    }
+    var _removed = false;
+        var form_to_submit = document.getElementById('_form_5_');
+    var allInputs = form_to_submit.querySelectorAll('input, select, textarea'), tooltips = [], submitted = false;
+
+    var getUrlParam = function(name) {
+        if (name.toLowerCase() !== 'email') {
+            var params = new URLSearchParams(window.location.search);
+            return params.get(name) || false;
+        }
+        // email is a special case because a plus is valid in the email address
+        var qString = window.location.search;
+        if (!qString) {
+            return false;
+        }
+        var parameters = qString.substr(1).split('&');
+        for (var i = 0; i < parameters.length; i++) {
+            var parameter = parameters[i].split('=');
+            if (parameter[0].toLowerCase() === 'email') {
+                return parameter[1] === undefined ? true : decodeURIComponent(parameter[1]);
+            }
+        }
+        return false;
+    };
+
+    var acctDateFormat = "%d/%m/%Y";
+    var getNormalizedDate = function(date, acctFormat) {
+        var decodedDate = decodeURIComponent(date);
+        if (acctFormat && acctFormat.match(/(%d|%e).*%m/gi) !== null) {
+            return decodedDate.replace(/(\d{2}).*(\d{2}).*(\d{4})/g, '$3-$2-$1');
+        } else if (Date.parse(decodedDate)) {
+            var dateObj = new Date(decodedDate);
+            var year = dateObj.getFullYear();
+            var month = dateObj.getMonth() + 1;
+            var day = dateObj.getDate();
+            return `${year}-${month < 10 ? `0${month}` : month}-${day < 10 ? `0${day}` : day}`;
+        }
+        return false;
+    };
+
+    var getNormalizedTime = function(time) {
+        var hour, minutes;
+        var decodedTime = decodeURIComponent(time);
+        var timeParts = Array.from(decodedTime.matchAll(/(\d{1,2}):(\d{1,2})\W*([AaPp][Mm])?/gm))[0];
+        if (timeParts[3]) { // 12 hour format
+            var isPM = timeParts[3].toLowerCase() === 'pm';
+            if (isPM) {
+                hour = parseInt(timeParts[1]) === 12 ? '12' : `${parseInt(timeParts[1]) + 12}`;
+            } else {
+                hour = parseInt(timeParts[1]) === 12 ? '0' : timeParts[1];
+            }
+        } else { // 24 hour format
+            hour = timeParts[1];
+        }
+        var normalizedHour = parseInt(hour) < 10 ? `0${parseInt(hour)}` : hour;
+        var minutes = timeParts[2];
+        return `${normalizedHour}:${minutes}`;
+    };
+
+    for (var i = 0; i < allInputs.length; i++) {
+        var regexStr = "field\\[(\\d+)\\]";
+        var results = new RegExp(regexStr).exec(allInputs[i].name);
+        if (results != undefined) {
+            allInputs[i].dataset.name = allInputs[i].name.match(/\[time\]$/)
+                ? `${window.cfields[results[1]]}_time`
+                : window.cfields[results[1]];
+        } else {
+            allInputs[i].dataset.name = allInputs[i].name;
+        }
+        var fieldVal = getUrlParam(allInputs[i].dataset.name);
+
+        if (fieldVal) {
+            if (allInputs[i].dataset.autofill === "false") {
+                continue;
+            }
+            if (allInputs[i].type == "radio" || allInputs[i].type == "checkbox") {
+                if (allInputs[i].value == fieldVal) {
+                    allInputs[i].checked = true;
+                }
+            } else if (allInputs[i].type == "date") {
+                allInputs[i].value = getNormalizedDate(fieldVal, acctDateFormat);
+            } else if (allInputs[i].type == "time") {
+                allInputs[i].value = getNormalizedTime(fieldVal);
+            } else {
+                allInputs[i].value = fieldVal;
+            }
+        }
+    }
+
+    var remove_tooltips = function() {
+        for (var i = 0; i < tooltips.length; i++) {
+            tooltips[i].tip.parentNode.removeChild(tooltips[i].tip);
+        }
+        tooltips = [];
+    };
+    var remove_tooltip = function(elem) {
+        for (var i = 0; i < tooltips.length; i++) {
+            if (tooltips[i].elem === elem) {
+                tooltips[i].tip.parentNode.removeChild(tooltips[i].tip);
+                tooltips.splice(i, 1);
+                return;
+            }
+        }
+    };
+    var create_tooltip = function(elem, text) {
+        var tooltip = document.createElement('div'),
+            arrow = document.createElement('div'),
+            inner = document.createElement('div'), new_tooltip = {};
+        tooltip.id = `${elem.id}-error`;
+        tooltip.setAttribute('role', 'alert')
+        if (elem.type != 'radio' && (elem.type != 'checkbox' || elem.name === 'sms_consent')) {
+            tooltip.className = '_error';
+            arrow.className = '_error-arrow';
+            inner.className = '_error-inner';
+            inner.innerHTML = text;
+            tooltip.appendChild(arrow);
+            tooltip.appendChild(inner);
+            elem.parentNode.appendChild(tooltip);
+        } else {
+            tooltip.className = '_error-inner _no_arrow';
+            tooltip.innerHTML = text;
+            elem.parentNode.insertBefore(tooltip, elem);
+            new_tooltip.no_arrow = true;
+        }
+        new_tooltip.tip = tooltip;
+        new_tooltip.elem = elem;
+        tooltips.push(new_tooltip);
+        return new_tooltip;
+    };
+    var resize_tooltip = function(tooltip) {
+        var rect = tooltip.elem.getBoundingClientRect();
+        var doc = document.documentElement,
+            scrollPosition = rect.top - ((window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0));
+        if (scrollPosition < 40) {
+            tooltip.tip.className = tooltip.tip.className.replace(/ ?(_above|_below) ?/g, '') + ' _below';
+        } else {
+            tooltip.tip.className = tooltip.tip.className.replace(/ ?(_above|_below) ?/g, '') + ' _above';
+        }
+    };
+    var resize_tooltips = function() {
+        if (_removed) return;
+        for (var i = 0; i < tooltips.length; i++) {
+            if (!tooltips[i].no_arrow) resize_tooltip(tooltips[i]);
+        }
+    };
+    var validate_field = function(elem, remove) {
+        var tooltip = null, value = elem.value, no_error = true;
+        remove ? remove_tooltip(elem) : false;
+        elem.removeAttribute('aria-invalid');
+        elem.removeAttribute('aria-describedby');
+        if (elem.type != 'checkbox') elem.className = elem.className.replace(/ ?_has_error ?/g, '');
+        if (elem.getAttribute('required') !== null) {
+            if (elem.type == 'radio' || (elem.type == 'checkbox' && /any/.test(elem.className))) {
+                var elems = form_to_submit.elements[elem.name];
+                if (!(elems instanceof NodeList || elems instanceof HTMLCollection) || elems.length <= 1) {
+                    no_error = elem.checked;
+                }
+                else {
+                    no_error = false;
+                    for (var i = 0; i < elems.length; i++) {
+                        if (elems[i].checked) no_error = true;
+                    }
+                }
+                if (!no_error) {
+                    tooltip = create_tooltip(elem, "Please select an option.");
+                }
+            } else if (elem.type =='checkbox') {
+                var elems = form_to_submit.elements[elem.name], found = false, err = [];
+                no_error = true;
+                for (var i = 0; i < elems.length; i++) {
+                    if (elems[i].getAttribute('required') === null) continue;
+                    if (!found && elems[i] !== elem) return true;
+                    found = true;
+                    elems[i].className = elems[i].className.replace(/ ?_has_error ?/g, '');
+                    if (!elems[i].checked) {
+                        no_error = false;
+                        elems[i].className = elems[i].className + ' _has_error';
+                        err.push("Checking %s is required".replace("%s", elems[i].value));
+                    }
+                }
+                if (!no_error) {
+                    tooltip = create_tooltip(elem, err.join('<br/>'));
+                }
+            } else if (elem.tagName == 'SELECT') {
+                var selected = true;
+                if (elem.multiple) {
+                    selected = false;
+                    for (var i = 0; i < elem.options.length; i++) {
+                        if (elem.options[i].selected) {
+                            selected = true;
+                            break;
+                        }
+                    }
+                } else {
+                    for (var i = 0; i < elem.options.length; i++) {
+                        if (elem.options[i].selected
+                            && (!elem.options[i].value
+                            || (elem.options[i].value.match(/\n/g)))
+                        ) {
+                            selected = false;
+                        }
+                    }
+                }
+                if (!selected) {
+                    elem.className = elem.className + ' _has_error';
+                    no_error = false;
+                    tooltip = create_tooltip(elem, "Please select an option.");
+                }
+            } else if (value === undefined || value === null || value === '') {
+                elem.className = elem.className + ' _has_error';
+                no_error = false;
+                tooltip = create_tooltip(elem, "This field is required.");
+            }
+        }
+        if (no_error && elem.name == 'email') {
+            if (!value.match(/^[\+_a-z0-9-'&=]+(\.[\+_a-z0-9-']+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/i)) {
+                elem.className = elem.className + ' _has_error';
+                no_error = false;
+                tooltip = create_tooltip(elem, "Enter a valid email address.");
+            }
+        }
+        if (no_error && (elem.id == 'phone')) {
+            if (elem.value.trim() && typeof iti != 'undefined' && !iti.isValidNumber()) {
+                elem.className = elem.className + ' _has_error';
+                no_error = false;
+                tooltip = create_tooltip(elem, "Enter a valid phone number.");
+            }
+        }
+        if (no_error && /date_field/.test(elem.className)) {
+            if (!value.match(/^\d\d\d\d-\d\d-\d\d$/)) {
+                elem.className = elem.className + ' _has_error';
+                no_error = false;
+                tooltip = create_tooltip(elem, "Enter a valid date.");
+            }
+        }
+
+        if (no_error && elem.name === 'sms_consent') {
+            const showError = !!elem.attributes.required && !elem.checked;
+            if (showError) {
+                elem.className = elem.className + ' _has_error';
+                no_error = false;
+                tooltip = create_tooltip(elem, "Please check this box to continue");
+            } else {
+                elem.className = elem.className.replace(/ ?_has_error ?/g, '');
+            }
+        }
+        tooltip ? resize_tooltip(tooltip) : false;
+        if (!no_error && elem.hasAttribute('id')) {
+            elem.setAttribute('aria-invalid', 'true');
+            elem.setAttribute('aria-describedby', `${elem.id}-error`);
+        }
+        return no_error;
+    };
+    var needs_validate = function(el) {
+        if(el.getAttribute('required') !== null){
+            return true;
+        }
+        if((el.name === 'email' || el.name === 'phone' || el.id === 'sms_consent') && el.value !== ""){
+            return true;
+        }
+
+        return false;
+    };
+    var validate_email_or_phone_required = function() {
+        var emailInput = form_to_submit.querySelector('input[name="email"]');
+        var phoneInput = form_to_submit.querySelector('input[name="phone"]');
+        if (!emailInput && !phoneInput) {
+            return true;
+        }
+        var hasEmailValue = emailInput && emailInput.value.trim() !== '';
+        var hasPhoneValue = phoneInput && phoneInput.value.trim() !== '';
+        if (hasEmailValue || hasPhoneValue) {
+            return true;
+        }
+        var errorField = emailInput || phoneInput;
+        errorField.className = errorField.className.replace(/ ?_has_error ?/g, '') + ' _has_error';
+        var tooltip = create_tooltip(
+            errorField,
+            "Forms must have an email field or a phone field present"
+        );
+        resize_tooltip(tooltip);
+        errorField.setAttribute('aria-invalid', 'true');
+        if (errorField.hasAttribute('id')) {
+            errorField.setAttribute('aria-describedby', errorField.id + '-error');
+        }
+        return false;
+    };
+    var validate_form = function(e) {
+        var err = form_to_submit.querySelector('._form_error'), no_error = true;
+        if (!submitted) {
+            submitted = true;
+            for (var i = 0, len = allInputs.length; i < len; i++) {
+                var input = allInputs[i];
+                if (needs_validate(input)) {
+                    if (input.type == 'text' || input.type == 'number' || input.type == 'time' || input.type == 'tel') {
+                        addEvent(input, 'blur', function() {
+                            this.value = this.value.trim();
+                            validate_field(this, true);
+                        });
+                        addEvent(input, 'input', function() {
+                            validate_field(this, true);
+                        });
+                    } else if (input.type == 'radio' || input.type == 'checkbox') {
+                        (function(el) {
+                            function getElementsArray(name){
+                                const value =  form_to_submit.elements[name];
+                                if (Array.isArray(value)){
+                                    return value;
+                                }
+                                return [value];
+                            }
+                            var radios = getElementsArray(el.name);
+                            for (var i = 0; i < radios.length; i++) {
+                                addEvent(radios[i], 'change', function() {
+                                    validate_field(el, true);
+                                });
+                            }
+                        })(input);
+                    } else if (input.tagName == 'SELECT') {
+                        addEvent(input, 'change', function() {
+                            validate_field(this, true);
+                        });
+                    } else if (input.type == 'textarea'){
+                        addEvent(input, 'input', function() {
+                            validate_field(this, true);
+                        });
+                    }
+                }
+            }
+        }
+        remove_tooltips();
+        for (var i = 0, len = allInputs.length; i < len; i++) {
+            var elem = allInputs[i];
+            if (needs_validate(elem)) {
+                if (elem.tagName.toLowerCase() !== "select") {
+                    elem.value = elem.value.trim();
+                }
+                validate_field(elem) ? true : no_error = false;
+            }
+        }
+        if (!validate_email_or_phone_required()) {
+            no_error = false;
+        }
+        if (!no_error && e) {
+            e.preventDefault();
+        }
+        if (!no_error) {
+            const firstFocusableError = form_to_submit.querySelector('._has_error:not([disabled])');
+            if (firstFocusableError && typeof firstFocusableError.focus === 'function') {
+                firstFocusableError.focus();
+            }
+        }
+        resize_tooltips();
+        return no_error;
+    };
+    addEvent(window, 'resize', resize_tooltips);
+    addEvent(window, 'scroll', resize_tooltips);
+
+    var _form_serialize = function(form){if(!form||form.nodeName!=="FORM"){return }var i,j,q=[];for(i=0;i<form.elements.length;i++){if(form.elements[i].name===""){continue}switch(form.elements[i].nodeName){case"INPUT":switch(form.elements[i].type){case"tel":q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].previousSibling.querySelector('div.iti__selected-dial-code').innerText)+encodeURIComponent(" ")+encodeURIComponent(form.elements[i].value));break;case"text":case"number":case"date":case"time":case"hidden":case"password":case"button":case"reset":case"submit":q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value));break;case"checkbox":case"radio":if(form.elements[i].checked){q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value))}break;case"file":break}break;case"TEXTAREA":q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value));break;case"SELECT":switch(form.elements[i].type){case"select-one":q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value));break;case"select-multiple":for(j=0;j<form.elements[i].options.length;j++){if(form.elements[i].options[j].selected){q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].options[j].value))}}break}break;case"BUTTON":switch(form.elements[i].type){case"reset":case"submit":case"button":q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value));break}break}}return q.join("&")};
+
+    const formSupportsPost = false;
+    var form_submit = function(e) {
+
+        e.preventDefault();
+        if(form_to_submit.querySelector('input[name="phone"]') && typeof iti != 'undefined') {
+            form_to_submit.querySelector('input[name="phone"]').value = iti.getNumber();
+        }
+        if (validate_form()) {
+            // use this trick to get the submit button & disable it using plain javascript
+            var submitButton = e.target.querySelector('#_form_5_submit');
+            submitButton.disabled = true;
+            submitButton.classList.add('processing');
+                    var serialized = _form_serialize(document.getElementById('_form_5_')).replace(/%0A/g, '\n');
+            var err = form_to_submit.querySelector('._form_error');
+            err ? err.parentNode.removeChild(err) : false;
+            async function submitForm() {
+                var formData = new FormData();
+                const searchParams = new URLSearchParams(serialized);
+                searchParams.forEach((value, key) => {
+                    if (key !== 'hideButton') {
+                        formData.append(key, value);
+                    }
+                });
+                let request = {
+                    headers: {
+                        "Accept": "application/json"
+                    },
+                    body: formData,
+                    method: "POST"
+                };
+
+                let pageUrlParams = new URLSearchParams(window.location.search);
+                if (pageUrlParams.has('t')) {
+                    request.headers.Authorization = 'Bearer ' + pageUrlParams.get('t');
+                }
+                const response = await fetch('https://mauricemeijer3.activehosted.com/proc.php?jsonp=true', request);
+
+                return response.json();
+            }
+            if (formSupportsPost) {
+                submitForm().then((data) => {
+                    eval(data.js);
+                }).catch(() => {
+                    _show_error("5", "Sorry, your submission failed. Please try again.");
+                });
+            } else {
+                _load_script('https://mauricemeijer3.activehosted.com/proc.php?' + serialized + '&jsonp=true', null, true);
+            }
+        }
+        return false;
+    };
+    addEvent(form_to_submit, 'submit', form_submit);
+})();
 </script>
 </body>
 </html>
