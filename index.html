@@ -674,19 +674,12 @@
 
   function renderPagination() {
     if (totalItems <= 1) { tPagination.innerHTML = ''; return; }
-    const page = realPage(trackIndex);
     let html = `<button class="page-btn nav-btn" id="t-prev" aria-label="Vorige">&larr; Vorige</button>`;
-    for (let p = 1; p <= totalItems; p++) {
-      html += `<button class="page-btn ${p === page ? 'active' : ''}" data-page="${p}" aria-current="${p === page ? 'page' : 'false'}">${p}</button>`;
-    }
     html += `<button class="page-btn nav-btn" id="t-next" aria-label="Volgende">Volgende &rarr;</button>`;
     tPagination.innerHTML = html;
 
     document.getElementById('t-prev').addEventListener('click', () => slide(-1));
     document.getElementById('t-next').addEventListener('click', () => slide(1));
-    tPagination.querySelectorAll('[data-page]').forEach(btn => {
-      btn.addEventListener('click', () => goToPage(parseInt(btn.getAttribute('data-page'), 10)));
-    });
   }
 
   function slide(direction) {

@@ -626,19 +626,12 @@
 
   function renderLogoPagination() {
     if (totalLogos <= 1) { lPagination.innerHTML = ''; return; }
-    const page = realLogoPage(logoTrackIndex);
     let html = `<button class="page-btn nav-btn" id="l-prev" aria-label="Vorige">&larr; Vorige</button>`;
-    for (let p = 1; p <= totalLogos; p++) {
-      html += `<button class="page-btn ${p === page ? 'active' : ''}" data-page="${p}" aria-current="${p === page ? 'page' : 'false'}">${p}</button>`;
-    }
     html += `<button class="page-btn nav-btn" id="l-next" aria-label="Volgende">Volgende &rarr;</button>`;
     lPagination.innerHTML = html;
 
     document.getElementById('l-prev').addEventListener('click', () => slideLogo(-1));
     document.getElementById('l-next').addEventListener('click', () => slideLogo(1));
-    lPagination.querySelectorAll('[data-page]').forEach(btn => {
-      btn.addEventListener('click', () => goToLogoPage(parseInt(btn.getAttribute('data-page'), 10)));
-    });
   }
 
   function slideLogo(direction) {
