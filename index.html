@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 <title>Maurice Meijer Digital</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -353,6 +357,9 @@
     nav.main-nav { display: none; }
     .burger { display: flex; }
   }
+  @media (max-width: 640px) {
+    .testimonials .section-head h2 { white-space: normal; }
+  }
 </style>
 </head>
 <body>
@@ -365,6 +372,13 @@
       <a href="#hero" data-nav>Uitdaging<span class="underline"></span></a>
       <a href="#probleem" data-nav>Aanpak<span class="underline"></span></a>
       <a href="#resultaten" data-nav>Resultaten<span class="underline"></span></a>
+      <div class="has-dropdown">
+        <a href="diensten.html" style="display: inline-flex; align-items: center; gap: 4px;">Diensten<svg width="10" height="10" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:0.6;"><path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="underline"></span></a>
+        <div class="dropdown">
+          <a href="extern-ai-recruitmentteam.html">Extern AI recruitmentteam</a>
+          <a href="eigen-ai-recruitmentteam.html">Eigen AI recruitmentteam</a>
+        </div>
+      </div>
       <div class="has-dropdown">
         <span class="dropdown-trigger">Succesverhalen<span class="underline"></span></span>
         <div class="dropdown">
@@ -386,6 +400,9 @@
       <a href="#hero">Uitdaging</a>
       <a href="#probleem">Aanpak</a>
       <a href="#resultaten">Resultaten</a>
+      <a href="diensten.html">Diensten</a>
+      <a href="extern-ai-recruitmentteam.html" style="padding-left: 24px; font-size: 14px; opacity: 0.75;">↳ Extern AI recruitmentteam</a>
+      <a href="eigen-ai-recruitmentteam.html" style="padding-left: 24px; font-size: 14px; opacity: 0.75;">↳ Eigen AI recruitmentteam</a>
       <span class="mobile-label">Succesverhalen</span>
       <a href="anso-lift-en-roltrapreinigingen.html" style="padding-left: 24px; font-size: 14px; opacity: 0.75;">↳ Anso Lift- en Roltrapreiniging</a>
       <a href="besselink-electro.html" style="padding-left: 24px; font-size: 14px; opacity: 0.75;">↳ Besselink Electro</a>
@@ -486,9 +503,9 @@
 
 <section class="testimonials" id="verhalen">
   <div class="wrap">
-    <div class="section-head reveal" id="resultaten">
+    <div class="section-head reveal" id="resultaten" style="max-width: 900px;">
       <span class="section-label">Het alternatief voor traditionele recruitment</span>
-      <h2>Wat klanten & kandidaten zeggen over de methode van MMD</h2>
+      <h2 style="white-space: nowrap;">Wat klanten & kandidaten zeggen over de methode van MMD</h2>
     </div>
 
     <div class="t-carousel" id="t-carousel">
@@ -518,6 +535,7 @@
       <a href="#hero">Uitdaging</a>
       <a href="#probleem">Aanpak</a>
       <a href="#resultaten">Resultaten</a>
+      <a href="diensten.html">Diensten</a>
       <a href="contact.html">Contact</a>
     </nav>
     <div class="footer-copy">[© Jaar Naam praktijk — alle rechten voorbehouden]</div>

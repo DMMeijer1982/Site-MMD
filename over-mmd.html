@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 <title>Over MMD — Maurice Meijer Digital</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -94,10 +98,10 @@
   nav.main-nav .has-dropdown:hover .dropdown-trigger { color: var(--primary); }
 
   /* ---------- Simple Hero ---------- */
-  .simple-hero { padding: 160px 0 80px; }
+  .simple-hero { padding: 160px 0 48px; }
   .simple-hero .eyebrow { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-dark); background: rgba(201,148,62,0.10); border-radius: 999px; padding: 6px 16px; margin-bottom: 24px; }
   .simple-hero h1 { font-size: 48px; margin-bottom: 24px; }
-  .simple-hero p { font-size: 18px; color: rgba(31,73,125,0.6); line-height: 1.7; margin-top: 16px; }
+  .simple-hero p { font-size: 18px; color: rgba(31,73,125,0.6); line-height: 1.7; margin-top: 10px; }
   .simple-hero p:first-of-type { font-style: italic; font-size: 16px; }
   @media (min-width: 1024px) { .simple-hero h1 { font-size: 64px; } }
 
@@ -183,7 +187,7 @@
   .hero-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
   /* ---------- Collab section ---------- */
-  .collab-section { padding: 96px 0; background: var(--surface); }
+  .collab-section { padding: 48px 0; background: var(--surface); }
   .collab-top { display: grid; grid-template-columns: 1fr; gap: 32px; margin-bottom: 64px; }
   .collab-heading h2 { font-size: 36px; color: var(--primary); }
   .collab-intro p { font-size: 16px; color: rgba(31,73,125,0.6); line-height: 1.75; max-width: 540px; margin-bottom: 28px; }
@@ -220,7 +224,7 @@
   }
 
   /* ---------- Story section ---------- */
-  .story-section { padding: 96px 0; background: #fff; border-top: 1px solid rgba(31,73,125,0.05); border-bottom: 1px solid rgba(31,73,125,0.05); }
+  .story-section { padding: 48px 0; background: #fff; border-top: 1px solid rgba(31,73,125,0.05); border-bottom: 1px solid rgba(31,73,125,0.05); }
   .story-grid { display: grid; grid-template-columns: 1fr; gap: 56px; padding: 0 24px; max-width: 100%; }
   .story-block .section-label { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-dark); background: rgba(201,148,62,0.10); border-radius: 999px; padding: 6px 16px; margin-bottom: 16px; }
   .story-block.story-top { display: grid; grid-template-columns: 1fr; gap: 32px; }
@@ -241,14 +245,14 @@
   @media (min-width: 1024px) { .story-grid { padding: 0 80px; } }
 
   /* ---------- Stats ---------- */
-  .stats { padding: 80px 0; border-top: 1px solid rgba(31,73,125,0.05); border-bottom: 1px solid rgba(31,73,125,0.05); background: #fff; }
+  .stats { padding: 48px 0; border-top: 1px solid rgba(31,73,125,0.05); border-bottom: 1px solid rgba(31,73,125,0.05); background: #fff; }
   .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; }
   .stat { text-align: center; }
   .stat .number { font-size: 40px; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 8px; }
   .stat .label { font-size: 14px; color: rgba(31,73,125,0.5); font-weight: 500; }
 
   /* ---------- Text section ---------- */
-  .text-section { padding: 96px 0; background: #fff; border-top: 1px solid rgba(31,73,125,0.05); border-bottom: 1px solid rgba(31,73,125,0.05); }
+  .text-section { padding: 48px 0; background: #fff; border-top: 1px solid rgba(31,73,125,0.05); border-bottom: 1px solid rgba(31,73,125,0.05); }
   .text-section-inner .section-label { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-dark); background: rgba(201,148,62,0.10); border-radius: 999px; padding: 6px 16px; margin-bottom: 20px; }
   .text-section-inner h2 { font-size: 32px; color: var(--primary); margin-bottom: 20px; }
   .text-section-inner p { font-size: 17px; color: rgba(31,73,125,0.6); line-height: 1.75; margin-top: 20px; }
@@ -256,7 +260,7 @@
   .checkmarks span { font-size: 15px; font-weight: 500; color: var(--primary); white-space: nowrap; }
 
   /* ---------- CTA ---------- */
-  .cta-section { padding: 112px 0; }
+  .cta-section { padding: 64px 0; }
   .cta-box {
     position: relative; overflow: hidden; border-radius: 32px;
     background: var(--primary); padding: 64px 32px; text-align: center;
@@ -300,6 +304,47 @@
     nav.main-nav { display: none; }
     .burger { display: flex; }
   }
+  /* ---------- Logo carousel ("Bedrijven die ik geholpen heb") ---------- */
+  .pagination {
+    display: flex; align-items: center; justify-content: center;
+    gap: 8px; margin-top: 48px; flex-wrap: wrap;
+  }
+  .page-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 40px; height: 40px; padding: 0 14px;
+    border-radius: 999px; border: 1px solid rgba(31,73,125,0.12);
+    background: #fff; color: rgba(31,73,125,0.6);
+    font-size: 14px; font-weight: 500; cursor: pointer;
+    transition: background-color .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease), transform .2s var(--ease);
+  }
+  .page-btn:hover:not(:disabled) { background: rgba(31,73,125,0.05); color: var(--primary); }
+  .page-btn:active:not(:disabled) { transform: scale(0.95); }
+  .page-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .page-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .page-btn.nav-btn { font-size: 13px; gap: 6px; padding: 0 18px; }
+
+  .logo-carousel-section { padding: 48px 0; background: var(--surface); }
+  .logo-carousel-section .section-label { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-dark); background: rgba(201,148,62,0.10); border-radius: 999px; padding: 6px 16px; margin-bottom: 12px; }
+  .logo-carousel-section .section-head { max-width: 640px; margin-bottom: 48px; }
+  .logo-carousel-section .section-head h2 { font-size: 28px; margin-top: 12px; }
+  .l-carousel { overflow: hidden; }
+  .l-track { display: flex; gap: 24px; align-items: stretch; transition: transform .55s var(--ease); }
+  .l-track > .logo-card { flex: 0 0 100%; }
+  .logo-card {
+    display: flex; align-items: center; justify-content: center;
+    background: #fff; border-radius: 20px; border: 1px solid rgba(31,73,125,0.08);
+    padding: 32px; min-height: 100px;
+    transition: box-shadow .3s var(--ease), transform .3s var(--ease);
+  }
+  .logo-card:hover { box-shadow: 0 4px 24px -4px rgba(31,73,125,0.10); transform: translateY(-4px); }
+  .logo-card img { max-width: 100%; max-height: 42px; width: auto; height: auto; object-fit: contain; }
+
+  @media (min-width: 768px) {
+    .l-track > .logo-card { flex: 0 0 calc((100% - 48px) / 3); }
+  }
+  @media (min-width: 1024px) {
+    .l-track > .logo-card { flex: 0 0 calc((100% - 72px) / 4); }
+  }
 </style>
 </head>
 <body>
@@ -311,6 +356,13 @@
       <a href="index.html#hero">Uitdaging<span class="underline"></span></a>
       <a href="index.html#probleem">Aanpak<span class="underline"></span></a>
       <a href="index.html#resultaten">Resultaten<span class="underline"></span></a>
+      <div class="has-dropdown">
+        <a href="diensten.html" style="display: inline-flex; align-items: center; gap: 4px;">Diensten<svg width="10" height="10" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:0.6;"><path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="underline"></span></a>
+        <div class="dropdown">
+          <a href="extern-ai-recruitmentteam.html">Extern AI recruitmentteam</a>
+          <a href="eigen-ai-recruitmentteam.html">Eigen AI recruitmentteam</a>
+        </div>
+      </div>
       <div class="has-dropdown">
         <span class="dropdown-trigger">Succesverhalen<span class="underline"></span></span>
         <div class="dropdown">
@@ -330,6 +382,9 @@
       <a href="index.html#hero">Uitdaging</a>
       <a href="index.html#probleem">Aanpak</a>
       <a href="index.html#resultaten">Resultaten</a>
+      <a href="diensten.html">Diensten</a>
+      <a href="extern-ai-recruitmentteam.html" style="padding-left: 24px; font-size: 14px; opacity: 0.75;">↳ Extern AI recruitmentteam</a>
+      <a href="eigen-ai-recruitmentteam.html" style="padding-left: 24px; font-size: 14px; opacity: 0.75;">↳ Eigen AI recruitmentteam</a>
       <span class="mobile-label">Succesverhalen</span>
       <a href="anso-lift-en-roltrapreinigingen.html" style="padding-left: 24px; font-size: 14px; opacity: 0.75;">↳ Anso Lift- en Roltrapreiniging</a>
       <a href="besselink-electro.html" style="padding-left: 24px; font-size: 14px; opacity: 0.75;">↳ Besselink Electro</a>
@@ -345,7 +400,6 @@
     <span class="eyebrow reveal in-view">18+ jaar digitale recruitment</span>
     <h1 class="reveal in-view d1">Over MMD</h1>
     <p class="reveal in-view d2">"AI vervangt recruiters niet. AI zorgt ervoor dat recruiters weer kunnen doen waar ze het beste in zijn: de juiste mensen aannemen."</p>
-    <p class="reveal in-view d2">&nbsp;</p>
     <p class="reveal in-view d3">MMD helpt organisaties sneller en slimmer de juiste mensen aan te nemen. Met een team van AI-recruiters automatiseren we het volledige recruitmentproces: van het vinden en benaderen van kandidaten tot het kwalificeren van de beste matches.</p>
     <p class="reveal in-view d3">Wij geloven dat traditioneel recruitment niet meer voldoet in een arbeidsmarkt waarin de beste kandidaten niet actief zoeken. Daarom zetten we AI in om proactief talent te bereiken, 24 uur per dag, 7 dagen per week.</p>
     <p class="reveal in-view d3">Onze aanpak vermindert handmatig werk, verkort de doorlooptijd van vacatures en maakt organisaties minder afhankelijk van externe recruitmentbureaus. Zo houd jij tijd over voor de gesprekken die er écht toe doen.</p>
@@ -355,10 +409,8 @@
 
 
 
-<section class="collab-section">
+<section class="collab-section" style="padding-bottom: 16px;">
   <div class="wrap">
-
-    <!-- Ook samenwerken? -->
     <div class="collab-top reveal">
       <div class="collab-heading">
         <span class="section-label" style="display:inline-block; font-size:11px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent-dark); background:rgba(201,148,62,0.10); border-radius:999px; padding:6px 16px; margin-bottom:16px;">Mijn verhaal</span>
@@ -368,6 +420,26 @@
         <p>Recruitment draait al lang niet meer om het binnenhalen van vacatures alleen. Alles draait nu om de juiste kandidaten bereiken voordat iemand anders dat doet. AI is daarbij niet het uiteindelijke doel, maar een deel van de oplossing. De technologie neemt het handmatige, tijdrovende en repetitieve werk over, zodat managers zich kunnen richten op echte gesprekken met potentiële kandidaten. Ook blijft er door de inzet van technologie veel meer tijd over voor andere taken die door de werkdruk worden uitgesteld.<br><br>Ik zag dat ik significant meer vacatures als uitzendondernemer invulde in 80% minder tijd! Door deze verandering ontstond de missie om bedrijven, bureaus en interim recruiters te helpen met het optimaliseren van hun wervingsprocessen. Sneller en efficiënter vinden en binden van kandidaten door middel van AI en algoritmes.</p>
       </div>
     </div>
+
+  </div>
+</section>
+
+<section class="logo-carousel-section" style="padding-top: 16px;">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="section-label">Vertrouwd door</span>
+      <h2>Enkele meest recente opdrachtgevers.</h2>
+    </div>
+
+    <div class="l-carousel" id="l-carousel">
+      <div class="l-track" id="l-track"></div>
+    </div>
+    <nav class="pagination" id="l-pagination" aria-label="Logo's paginering"></nav>
+  </div>
+</section>
+
+<section class="collab-section">
+  <div class="wrap">
 
     <!-- Foto rij 1: placeholder links, tekst rechts -->
     <div class="collab-photo-row reveal d2">
@@ -462,6 +534,7 @@
       <a href="index.html#hero">Uitdaging</a>
       <a href="index.html#probleem">Aanpak</a>
       <a href="index.html#resultaten">Resultaten</a>
+      <a href="diensten.html">Diensten</a>
       <a href="over-mmd.html">Over MMD</a>
       <a href="contact.html">Contact</a>
     </nav>
@@ -489,6 +562,121 @@
       burger.classList.remove('open');
       mobileMenu.classList.remove('open');
     });
+  });
+
+  const logosData = [
+    { name: "Anso Lift- en Roltrapreiniging", logo: "images/anso-logo-ebook.png" },
+    { name: "Besselink Elektrotechnische Groothandel", logo: "images/besselink-logo-ebook.png" },
+    { name: "Forward Engineering", logo: "images/forward-engineering-logo.png" },
+    { name: "Scheer & Foppen Installatietechniek", logo: "images/scheer-en-foppen-logo.png" },
+    { name: "Denned", logo: "images/denned-logo.png" },
+    { name: "Tegelbedrijf Bulten", logo: "images/bulten-logo.png" },
+    { name: "Van Ginkel Groep", logo: "images/van-ginkel-logo.png" },
+    { name: "Ziut", logo: "images/ziut-logo.png" },
+    { name: "Asito", logo: "images/asito-logo.png" },
+    { name: "Barnies Kipcorner", logo: "images/barnies-logo.png" },
+    { name: "HAPO", logo: "images/hapo-logo.png" },
+    { name: "Huisman ETech Experts", logo: "images/huisman-logo.png" },
+    { name: "EK Retail in Motion (voorheen InterEs / Euretco)", logo: "images/ek-retail-logo.png" },
+    { name: "Interovo Egg Group", logo: "images/interovo-logo.png" },
+    { name: "Scheerder Drankengroothandel", logo: "images/scheerder-logo.png" },
+    { name: "To Fix", logo: "images/tofix-logo.png" },
+    { name: "Voestalpine", logo: "images/voestalpine-logo.png" },
+    { name: "Yokogawa", logo: "images/yokogawa-logo.png" },
+  ];
+
+  const lTrack = document.getElementById('l-track');
+  const lPagination = document.getElementById('l-pagination');
+  const logoCarouselSection = document.getElementById('l-carousel');
+
+  function logoCardHTML(l) {
+    return `<div class="logo-card reveal in-view"><img src="${l.logo}" alt="${l.name}" loading="lazy"></div>`;
+  }
+
+  const totalLogos = logosData.length;
+  const logoTrackItems = totalLogos > 1
+    ? [logosData[totalLogos - 1], ...logosData, logosData[0]]
+    : logosData;
+
+  lTrack.innerHTML = logoTrackItems.map(logoCardHTML).join('');
+
+  let logoTrackIndex = totalLogos > 1 ? 1 : 0;
+  let logoIsAnimating = false;
+
+  function logoStepPercent() {
+    const first = lTrack.children[0];
+    const second = lTrack.children[1];
+    if (!first || !second) return 100;
+    const a = first.getBoundingClientRect().left;
+    const b = second.getBoundingClientRect().left;
+    const viewportWidth = lTrack.parentElement.getBoundingClientRect().width;
+    if (!viewportWidth) return 100;
+    return ((b - a) / viewportWidth) * 100;
+  }
+
+  function setLogoTrack(index, animate) {
+    const step = logoStepPercent();
+    lTrack.style.transition = animate ? 'transform .55s var(--ease)' : 'none';
+    lTrack.style.transform = `translateX(-${index * step}%)`;
+  }
+
+  function realLogoPage(index) {
+    return ((index - 1 + totalLogos) % totalLogos) + 1;
+  }
+
+  function renderLogoPagination() {
+    if (totalLogos <= 1) { lPagination.innerHTML = ''; return; }
+    const page = realLogoPage(logoTrackIndex);
+    let html = `<button class="page-btn nav-btn" id="l-prev" aria-label="Vorige">&larr; Vorige</button>`;
+    for (let p = 1; p <= totalLogos; p++) {
+      html += `<button class="page-btn ${p === page ? 'active' : ''}" data-page="${p}" aria-current="${p === page ? 'page' : 'false'}">${p}</button>`;
+    }
+    html += `<button class="page-btn nav-btn" id="l-next" aria-label="Volgende">Volgende &rarr;</button>`;
+    lPagination.innerHTML = html;
+
+    document.getElementById('l-prev').addEventListener('click', () => slideLogo(-1));
+    document.getElementById('l-next').addEventListener('click', () => slideLogo(1));
+    lPagination.querySelectorAll('[data-page]').forEach(btn => {
+      btn.addEventListener('click', () => goToLogoPage(parseInt(btn.getAttribute('data-page'), 10)));
+    });
+  }
+
+  function slideLogo(direction) {
+    if (logoIsAnimating || totalLogos <= 1) return;
+    logoIsAnimating = true;
+    logoTrackIndex += direction;
+    setLogoTrack(logoTrackIndex, true);
+    renderLogoPagination();
+  }
+
+  function goToLogoPage(page) {
+    if (totalLogos <= 1) return;
+    if (page === realLogoPage(logoTrackIndex)) return;
+    if (logoIsAnimating) return;
+    logoIsAnimating = true;
+    logoTrackIndex = page;
+    setLogoTrack(logoTrackIndex, true);
+    renderLogoPagination();
+  }
+
+  lTrack.addEventListener('transitionend', () => {
+    logoIsAnimating = false;
+    if (logoTrackIndex === logoTrackItems.length - 1) {
+      logoTrackIndex = 1;
+      setLogoTrack(logoTrackIndex, false);
+    } else if (logoTrackIndex === 0) {
+      logoTrackIndex = totalLogos;
+      setLogoTrack(logoTrackIndex, false);
+    }
+  });
+
+  setLogoTrack(logoTrackIndex, false);
+  renderLogoPagination();
+
+  let logoResizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(logoResizeTimer);
+    logoResizeTimer = setTimeout(() => setLogoTrack(logoTrackIndex, false), 150);
   });
 
   const revealObserver = new IntersectionObserver((entries) => {
