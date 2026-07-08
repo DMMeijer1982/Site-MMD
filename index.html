@@ -142,7 +142,7 @@
     border-top: 1px solid rgba(31,73,125,0.05);
     transition: max-height .4s var(--ease), opacity .4s var(--ease);
   }
-  .mobile-menu.open { max-height: 420px; opacity: 1; }
+  .mobile-menu.open { max-height: 700px; opacity: 1; }
   .mobile-menu-inner { display: flex; flex-direction: column; padding: 16px 24px; gap: 4px; }
   .mobile-menu-inner a {
     padding: 12px 0; font-size: 14px; font-weight: 500; color: rgba(31,73,125,0.8);
@@ -194,6 +194,7 @@
   .section-head { max-width: 640px; margin-bottom: 64px; }
   .section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-dark); }
   .section-head h2 { font-size: 32px; margin-top: 12px; }
+  .nowrap-desktop { white-space: nowrap; }
   .ps-grid {
     display: grid; grid-template-columns: 1fr; gap: 16px;
     align-items: stretch;
@@ -358,7 +359,7 @@
     .burger { display: flex; }
   }
   @media (max-width: 640px) {
-    .testimonials .section-head h2 { white-space: normal; }
+    .testimonials .section-head h2.nowrap-desktop { white-space: normal; }
   }
 </style>
 </head>
@@ -505,7 +506,7 @@
   <div class="wrap">
     <div class="section-head reveal" id="resultaten" style="max-width: 900px;">
       <span class="section-label">Het alternatief voor traditionele recruitment</span>
-      <h2 style="white-space: nowrap;">Wat klanten & kandidaten zeggen over de methode van MMD</h2>
+      <h2 class="nowrap-desktop">Wat klanten & kandidaten zeggen over de methode van MMD</h2>
     </div>
 
     <div class="t-carousel" id="t-carousel">
