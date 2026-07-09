@@ -129,7 +129,7 @@
 
   /* ── STATS ROW ── */
   .cs-stats { padding: 64px 0; background: #fff; border-top: 1px solid rgba(31,73,125,0.05); border-bottom: 1px solid rgba(31,73,125,0.05); }
-  .cs-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+  .cs-stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; }
   .cs-stat { text-align: center; }
   .cs-stat .number { font-size: 44px; font-weight: 700; color: var(--primary); letter-spacing: -0.04em; }
   .cs-stat .label { font-size: 14px; color: rgba(31,73,125,0.5); margin-top: 6px; font-weight: 500; }
@@ -164,7 +164,7 @@
   .footer-copy { font-size: 12px; color: rgba(31,73,125,0.4); }
 
   @media (min-width: 768px) {
-    .cs-stats-grid { gap: 48px; }
+    .cs-stats-grid { gap: 48px; grid-template-columns: repeat(4, 1fr); }
     .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
   }
   @media (min-width: 1024px) {
@@ -298,10 +298,14 @@
 <section class="cs-stats">
   <div class="wrap cs-stats-grid">
     <div class="cs-stat reveal">
+      <div class="number">13</div>
+      <div class="label">AI agents</div>
+    </div>
+    <div class="cs-stat reveal d1">
       <div class="number">33</div>
       <div class="label">Technisch Reinigingsspecialist</div>
     </div>
-    <div class="cs-stat reveal d1">
+    <div class="cs-stat reveal d2">
       <div class="number">10</div>
       <div class="label">Polijsters</div>
     </div>
