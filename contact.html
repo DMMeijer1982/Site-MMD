@@ -40,6 +40,10 @@
   .topbar .wrap { max-width: 1120px; margin: 0 auto; }
   .logo { font-size: 17px; font-weight: 600; letter-spacing: -0.03em; color: var(--primary); }
 
+  .simple-footer { padding: 24px; text-align: center; }
+  .simple-footer a { font-size: 13px; color: rgba(31,73,125,0.45); transition: color .3s var(--ease); }
+  .simple-footer a:hover { color: var(--primary); }
+
   .page {
     min-height: calc(100vh - 84px);
     display: flex; align-items: center; justify-content: center;
@@ -186,6 +190,10 @@
     </div>
   </div>
 </main>
+
+<footer class="simple-footer">
+  <a href="privacyverklaring.html">Privacyverklaring</a>
+</footer>
 
 <script>
   document.querySelectorAll('.reveal').forEach(el => el.classList.add('in-view'));
