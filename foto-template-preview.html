@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foto & Template Preview — Campagne Studio</title>
+<style>
+  :root{
+    --navy:#1B2A4A; --accent:#2F6FED; --accent-bg:#EAF1FE; --accent-text:#1D4FB0;
+    --bg:#F5F7FA; --surface:#FFFFFF; --surface-2:#F2F5FB; --border:#E1E6EF; --border-strong:#C7D0E0;
+    --text:#1E2430; --text-2:#5B6472; --text-muted:#8A93A3;
+    --green-bg:#E7F6EE; --green-text:#177A48; --radius:8px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);}
+  header{background:var(--navy);color:#fff;padding:22px 32px;}
+  header h1{margin:0;font-size:20px;}
+  header p{margin:6px 0 0;font-size:13px;color:#B9C4DE;}
+  .wrap{max-width:1900px;margin:0 auto;padding:22px 24px 40px;display:grid;grid-template-columns:minmax(380px,520px) 1fr;gap:22px;align-items:start;}
+  .col-settings{position:sticky;top:16px;max-height:calc(100vh - 32px);overflow-y:auto;padding-right:4px;}
+  .col-preview{min-width:0;}
+  @media (min-width:1500px){ .tmplgrid{grid-template-columns:repeat(3,1fr);} }
+  @media (max-width:1100px){ .wrap{grid-template-columns:1fr;} .col-settings{position:static;max-height:none;overflow:visible;} }
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:16px;}
+  label{display:block;font-size:12.5px;color:var(--text-2);margin-bottom:5px;font-weight:500;}
+  input[type=text]{width:100%;padding:9px 12px;border:1px solid var(--border-strong);border-radius:var(--radius);font-size:14px;font-family:inherit;margin-bottom:14px;background:#fff;color:var(--text);}
+  .flexrow{display:flex;align-items:center;gap:10px;}
+  .spacer{flex:1;}
+  button{font-family:inherit;font-size:13.5px;padding:9px 16px;border-radius:var(--radius);border:1px solid var(--border-strong);background:#fff;cursor:pointer;color:var(--text);}
+  button:hover{background:var(--surface-2);}
+  button.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500;}
+  button.primary:hover{background:#2560d6;}
+  button.submode.active{background:var(--accent-bg);border-color:var(--accent);color:var(--accent-text);font-weight:500;}
+  button:disabled{opacity:.4;cursor:not-allowed;}
+
+  .strip{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px;}
+  .slot{width:76px;height:76px;border-radius:10px;border:2px solid transparent;background:var(--surface-2);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;color:var(--text-muted);font-size:11px;text-align:center;}
+  .slot.filled{border-color:var(--border-strong);}
+  .slot.active{border-color:var(--accent);}
+  .slot img{width:100%;height:100%;object-fit:cover;}
+  .slot .del{position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:50%;background:rgba(30,36,48,.65);color:#fff;font-size:11px;line-height:18px;text-align:center;cursor:pointer;}
+
+  .logoRow{display:flex;align-items:center;gap:12px;margin-top:6px;}
+  .logoBox{width:120px;height:48px;border:1.5px dashed var(--border-strong);border-radius:8px;display:flex;align-items:center;justify-content:center;background:var(--surface-2);cursor:pointer;overflow:hidden;font-size:11px;color:var(--text-muted);}
+  .logoBox img{max-width:100%;max-height:100%;}
+
+  .formatrow{display:flex;gap:10px;margin-bottom:18px;}
+  .fmt{flex:1;border:1px solid var(--border);border-radius:10px;padding:12px 14px;cursor:pointer;font-size:13px;}
+  .fmt.active{border:2px solid var(--accent);background:var(--accent-bg);}
+  .fmt strong{display:block;font-size:13px;margin-bottom:2px;color:var(--text);}
+  .fmt span{color:var(--text-2);font-size:12px;}
+
+  .tmplgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:10px;}
+  .tmplcard{border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer;background:#fff;}
+  .tmplcard.active{border:2px solid var(--accent);}
+  .tmplcard canvas{display:block;width:100%;height:auto;background:var(--surface-2);}
+  .tmplcard .lbl{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;font-size:12.5px;font-weight:500;}
+  .tmplcard .lbl button{font-size:11px;padding:4px 8px;}
+  .tmplcard.disabled{opacity:.45;pointer-events:none;}
+  .hint{font-size:11.5px;color:var(--text-muted);margin:2px 0 0;}
+
+  .empty{padding:60px 20px;text-align:center;color:var(--text-muted);font-size:13.5px;}
+  .empty b{color:var(--text-2);}
+
+  .textfields{display:grid;grid-template-columns:1fr 1fr;gap:0 16px;}
+  .col-settings .formatrow{flex-direction:column;gap:8px;}
+  .col-settings .fmt{padding:10px 12px;}
+  .logoRow{flex-wrap:wrap;}
+  .colorgrid{display:grid;grid-template-columns:1fr;gap:8px;}
+  .colorfield{display:flex;align-items:center;gap:10px;border:1px solid var(--border);border-radius:10px;padding:8px 10px;}
+  .colorfield input[type=color]{width:44px;height:36px;border:1px solid var(--border-strong);border-radius:8px;padding:2px;background:#fff;cursor:pointer;flex:none;}
+  .colorfield strong{display:block;font-size:13px;}
+  .colorfield span{font-size:11.5px;color:var(--text-2);}
+  @media (max-width:760px){ .tmplgrid{grid-template-columns:1fr;} .textfields{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Foto &amp; Template Preview</h1>
+  <p>Losstaande tool uit Campagne Studio &middot; sectie 2 &middot; upload een klantfoto en bekijk 'm direct in alle 6 advertentiesjablonen, in het juiste Meta-formaat</p>
+</header>
+
+<div class="wrap">
+<div class="col-settings">
+
+  <div class="card">
+    <label>Advertentietekst voor in de sjablonen</label>
+    <div class="textfields">
+      <div>
+        <label style="margin-top:0">Label boven de kop</label>
+        <input type="text" id="txt-label" value="Vacature:">
+      </div>
+      <div>
+        <label style="margin-top:0">Kop / functietitel</label>
+        <input type="text" id="txt-kop" value="Lasser MIG/MAG">
+      </div>
+      <div>
+        <label style="margin-top:0">M/V</label>
+        <input type="text" id="txt-mv" value="M/V">
+      </div>
+      <div>
+        <label style="margin-top:0">Locatie</label>
+        <input type="text" id="txt-loc" value="Hilversum">
+      </div>
+      <div>
+        <label style="margin-top:0">Ondertekst (alle sjablonen)</label>
+        <textarea id="txt-sub" rows="3" style="width:100%;padding:9px 12px;border:1px solid var(--border-strong);border-radius:var(--radius);font-size:14px;font-family:inherit;margin-bottom:6px;resize:vertical;color:var(--text)">Herken jij jezelf hierin? Test jezelf hier.</textarea>
+        <div class="flexrow" style="margin-bottom:14px;gap:6px">
+          <button type="button" class="submode active" data-mode="text" style="font-size:12px;padding:5px 10px">Tekst</button>
+          <button type="button" class="submode" data-mode="bullets" style="font-size:12px;padding:5px 10px">Bulletpoints</button>
+          <span class="hint" style="margin:0">Bij bulletpoints: elke regel is één punt</span>
+        </div>
+      </div>
+      <div>
+        <label style="margin-top:0">Knoptekst</label>
+        <input type="text" id="txt-cta" value="Test jezelf hier">
+      </div>
+    </div>
+    <label>Logo van de klant (optioneel, PNG met transparantie werkt het best)</label>
+    <div class="logoRow">
+      <div class="logoBox" id="logoBox">+ Logo</div>
+      <button id="logoClear" style="display:none">Logo verwijderen</button>
+      <span class="hint">Zonder logo wordt de bedrijfsnaam getoond:</span>
+      <input type="text" id="txt-bedrijf" value="Bedrijfsnaam" style="width:180px;margin:0">
+    </div>
+    <input type="file" id="logoInput" accept="image/*" style="display:none">
+  </div>
+
+  <div class="card">
+    <label>Huisstijlkleuren</label>
+    <div class="colorgrid">
+      <div class="colorfield"><input type="color" id="col-primary" value="#EEB412"><div><strong>Hoofdkleur</strong><span>Band en zeshoek in Hexagon, bullets op foto</span></div></div>
+      <div class="colorfield"><input type="color" id="col-dark" value="#1B2A4A"><div><strong>Donker vlak</strong><span>Tekstvlak in beide Splits, koppen op wit</span></div></div>
+      <div class="colorfield"><input type="color" id="col-accent" value="#2F6FED"><div><strong>Knop / accent</strong><span>Knoppen en bullets in Split, Bullets en Foto achtergrond</span></div></div>
+    </div>
+    <div class="flexrow" style="margin-top:8px">
+      <span class="hint" style="margin:0">Tekst op de kleurvlakken wordt automatisch zwart of wit voor leesbaarheid.</span>
+      <span class="spacer"></span>
+      <button id="colReset">Standaard</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="flexrow" style="margin-bottom:12px">
+      <label style="margin:0">Foto's (max 5)</label>
+      <span class="spacer"></span>
+      <span id="counter" style="font-size:12px;color:var(--text-muted)">0 van 5 toegevoegd</span>
+    </div>
+    <div class="strip" id="strip"></div>
+    <input type="file" id="fileInput" accept="image/*" style="display:none">
+    <div id="focusRow" style="display:none;margin-top:10px">
+      <p id="focusStatus" class="hint" style="margin:0 0 8px"></p>
+      <div class="flexrow" style="flex-wrap:wrap">
+      <label style="margin:0;white-space:nowrap">Zoom</label>
+      <input type="range" id="zoomRange" min="50" max="300" value="100" step="5" style="width:160px">
+      <span id="zoomVal" style="font-size:12px;color:var(--text-2);min-width:42px">100%</span>
+      <button id="zoomReset">Reset</button>
+      <button id="focusManualBtn">Focuspunt handmatig instellen</button>
+      </div>
+    </div>
+    <div id="focusPanel" style="display:none;margin-top:12px">
+      <p class="hint" style="margin:0 0 8px">Klik op het punt dat centraal moet staan (bijv. het gezicht). Met de zoom-schuif hierboven vergroot of verklein je de foto rond dat punt; onder 100% wordt de open ruimte gevuld met de vervaagde foto.</p>
+      <div style="position:relative;display:inline-block;max-width:100%">
+        <img id="focusImg" style="max-width:520px;max-height:360px;display:block;border-radius:8px;cursor:crosshair">
+        <div id="focusMark" style="display:none;position:absolute;width:22px;height:22px;border:3px solid #2F6FED;border-radius:50%;background:rgba(47,111,237,.25);transform:translate(-50%,-50%);pointer-events:none"></div>
+      </div>
+      <div class="flexrow" style="margin-top:8px">
+        <button id="focusAuto">Terug naar automatisch</button>
+        <button id="focusClose">Sluiten</button>
+      </div>
+    </div>
+
+    <div class="formatrow" id="formatRow" style="display:none;margin-top:16px">
+      <div class="fmt active" id="fmt-losse" data-fmt="losse">
+        <strong>Losse advertenties</strong>
+        <span>Elke foto een eigen advertentie, ideaal om te testen</span>
+      </div>
+      <div class="fmt" id="fmt-carrousel" data-fmt="carrousel">
+        <strong>Carrousel</strong>
+        <span>Alle foto's in één advertentie, kandidaten swipen erdoorheen</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <label>Advertentieformaat (Meta / Facebook &amp; Instagram)</label>
+    <div class="formatrow" id="sizeRow" style="margin-bottom:6px">
+      <div class="fmt active" data-size="feed45">
+        <strong>Feed staand 4:5 — 1440 &times; 1800</strong>
+        <span>Aanbevolen voor losse feed-advertenties: vult het meeste mobiele scherm</span>
+      </div>
+      <div class="fmt" data-size="square">
+        <strong>Vierkant 1:1 — 1440 &times; 1440</strong>
+        <span>Verplicht voor carrousel; werkt ook in feed, Marketplace en rechterkolom</span>
+      </div>
+      <div class="fmt" data-size="link">
+        <strong>Liggend 1.91:1 — 1200 &times; 628</strong>
+        <span>Linkadvertenties, Messenger en rechterkolom (desktop)</span>
+      </div>
+    </div>
+    <p class="hint" id="sizeNote">Meta raadt voor feed-beeldadvertenties 1:1 of 4:5 aan (minimaal 1080 px breed, PNG of JPG, max 30 MB). Carrouselkaarten moeten 1:1 zijn.</p>
+  </div>
+
+</div><!-- /col-settings -->
+
+<div class="col-preview">
+  <div class="card" id="previewCard" style="margin-bottom:0">
+    <div class="empty" id="emptyState">Upload een eerste foto hierboven om de 6 sjablonen te zien.<br><b>Geen stockfoto's</b> — gebruik een echte foto van de klant.</div>
+    <div id="tmplWrap" style="display:none">
+      <div class="flexrow" style="margin-bottom:6px">
+        <label style="margin:0">Sjablonen voor <span id="activeLabel">foto 1</span></label>
+        <span class="spacer"></span>
+        <button class="primary" id="dlActive">Download geselecteerd sjabloon (PNG <span id="dlSizeLbl">1440&times;1800</span>)</button>
+      </div>
+      <p id="syncNote" style="display:none;font-size:12px;color:var(--text-muted);margin:-2px 0 12px">Deze foto volgt automatisch het sjabloon van foto 1 (carrousel-modus).</p>
+      <p class="hint">Klik op een sjabloon om het te selecteren. Elk sjabloon heeft ook een eigen downloadknop.</p>
+      <div class="tmplgrid" id="tmplGrid"></div>
+    </div>
+  </div>
+</div><!-- /col-preview -->
+
+</div>
+
+<script type="module">
+// Gezichtsherkenning in de browser (MediaPipe). Laadt via CDN; zonder internet valt de tool terug op een gecentreerde uitsnede.
+window.detectFaces = (async ()=>{
+  try{
+    const vis = await import('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14');
+    const fileset = await vis.FilesetResolver.forVisionTasks('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm');
+    const det = await vis.FaceDetector.createFromOptions(fileset, {
+      baseOptions:{ modelAssetPath:'https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite' },
+      runningMode:'IMAGE', minDetectionConfidence:0.5
+    });
+    return img=>{
+      const res = det.detect(img);
+      return res.detections.map(d=>d.boundingBox).map(b=>({x:b.originX,y:b.originY,w:b.width,h:b.height}));
+    };
+  }catch(e){ console.warn('Gezichtsherkenning niet beschikbaar:', e); return null; }
+})();
+</script>
+<script>
+const TEMPLATES = ['hexagon','split-h','split-v','overlay','achtergrond','bullets'];
+const TEMPLATE_LABELS = {
+  hexagon:'Hexagon', 'split-h':'Split horizontaal', 'split-v':'Split verticaal',
+  overlay:'Overlay', achtergrond:'Foto achtergrond', bullets:'Bullets'
+};
+const DEFAULT_COLORS = { primary:'#EEB412', dark:'#1B2A4A', accent:'#2F6FED' };
+let NAVY = DEFAULT_COLORS.dark, ACCENT = DEFAULT_COLORS.accent, YELLOW = DEFAULT_COLORS.primary;
+const GREY_TOP = '#EEEBE6', GREY_BOTTOM = '#CEC4B8', INK = '#1A1A1A';
+// Leesbare tekstkleur op een gekleurd vlak (zwart of wit), plus een zachte variant voor ondertekst.
+function luminance(hex){
+  const n=parseInt(hex.slice(1),16); const c=[(n>>16)&255,(n>>8)&255,n&255].map(v=>{v/=255; return v<=0.03928? v/12.92 : Math.pow((v+0.055)/1.055,2.4);});
+  return 0.2126*c[0]+0.7152*c[1]+0.0722*c[2];
+}
+function onColor(hex){ return luminance(hex) > 0.4 ? INK : '#FFFFFF'; }
+function onColorSoft(hex){ return luminance(hex) > 0.4 ? '#3A3F48' : '#D6DEEE'; }
+const colInputs = { primary:document.getElementById('col-primary'), dark:document.getElementById('col-dark'), accent:document.getElementById('col-accent') };
+function applyColors(){ YELLOW = colInputs.primary.value; NAVY = colInputs.dark.value; ACCENT = colInputs.accent.value; }
+Object.values(colInputs).forEach(i=>i.addEventListener('input', ()=>{ applyColors(); renderTemplateCards(); }));
+document.getElementById('colReset').addEventListener('click', ()=>{
+  colInputs.primary.value=DEFAULT_COLORS.primary; colInputs.dark.value=DEFAULT_COLORS.dark; colInputs.accent.value=DEFAULT_COLORS.accent;
+  applyColors(); renderTemplateCards();
+});
+const SIZES = {
+  feed45:{ w:1440, h:1800, label:'1440\u00d71800' },
+  square:{ w:1440, h:1440, label:'1440\u00d71440' },
+  link:  { w:1200, h:628,  label:'1200\u00d7628'  }
+};
+let sizeKey = 'feed45';
+function curSize(){ return SIZES[format==='carrousel' ? 'square' : sizeKey]; }
+const SANS = "Montserrat, 'Segoe UI', Helvetica, Arial, sans-serif";
+
+let photos = []; // {img, dataUrl, template}
+let activeIdx = -1;
+let format = 'losse';
+let logoImg = null;
+
+const strip = document.getElementById('strip');
+const fileInput = document.getElementById('fileInput');
+const counter = document.getElementById('counter');
+const formatRow = document.getElementById('formatRow');
+const emptyState = document.getElementById('emptyState');
+const tmplWrap = document.getElementById('tmplWrap');
+const tmplGrid = document.getElementById('tmplGrid');
+const activeLabel = document.getElementById('activeLabel');
+const syncNote = document.getElementById('syncNote');
+const logoBox = document.getElementById('logoBox');
+const logoInput = document.getElementById('logoInput');
+const logoClear = document.getElementById('logoClear');
+
+const F = {};
+['label','kop','mv','loc','sub','cta','bedrijf'].forEach(k=>{
+  F[k] = document.getElementById('txt-'+k);
+  F[k].addEventListener('input', renderTemplateCards);
+});
+let subMode = 'text'; // 'text' | 'bullets'
+document.querySelectorAll('.submode').forEach(b=>b.addEventListener('click', ()=>{
+  subMode=b.dataset.mode;
+  document.querySelectorAll('.submode').forEach(x=>x.classList.toggle('active', x===b));
+  renderTemplateCards();
+}));
+function texts(){
+  return { label:F.label.value, kop:F.kop.value, mv:F.mv.value, loc:F.loc.value,
+           sub:F.sub.value, subMode, cta:F.cta.value, bedrijf:F.bedrijf.value };
+}
+
+function effectiveTemplate(idx){
+  if(format==='carrousel' && idx>0 && photos[0]) return photos[0].template;
+  return photos[idx].template;
+}
+
+// ---------- logo ----------
+logoBox.addEventListener('click', ()=>logoInput.click());
+logoInput.addEventListener('change', e=>{
+  const file=e.target.files[0]; if(!file) return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    const img=new Image();
+    img.onload=()=>{
+      logoImg=img;
+      logoBox.innerHTML=''; const t=new Image(); t.src=ev.target.result; logoBox.appendChild(t);
+      logoClear.style.display='inline-block';
+      renderTemplateCards();
+    };
+    img.src=ev.target.result;
+  };
+  r.readAsDataURL(file); logoInput.value='';
+});
+logoClear.addEventListener('click', ()=>{
+  logoImg=null; logoBox.textContent='+ Logo'; logoClear.style.display='none'; renderTemplateCards();
+});
+
+// ---------- photo strip ----------
+function renderStrip(){
+  strip.innerHTML='';
+  for(let i=0;i<5;i++){
+    const slot=document.createElement('div');
+    slot.className='slot'+(photos[i]?' filled':'')+(i===activeIdx?' active':'');
+    if(photos[i]){
+      const img=document.createElement('img'); img.src=photos[i].dataUrl; slot.appendChild(img);
+      const del=document.createElement('div'); del.className='del'; del.textContent='\u00d7';
+      del.addEventListener('click', e=>{
+        e.stopPropagation();
+        photos[i]=undefined;
+        if(activeIdx===i){ activeIdx = photos.findIndex(p=>p); }
+        render();
+      });
+      slot.appendChild(del);
+    } else {
+      slot.textContent='+ Foto';
+      slot.style.color='var(--text-muted)';
+      slot.style.border='1.5px dashed var(--border-strong)';
+    }
+    slot.addEventListener('click', ()=>{
+      if(photos[i]){ activeIdx=i; render(); }
+      else { fileInput.dataset.slot=i; fileInput.click(); }
+    });
+    strip.appendChild(slot);
+  }
+  const filled = photos.filter(p=>p).length;
+  counter.textContent = filled+' van 5 toegevoegd';
+  formatRow.style.display = filled>=2 ? 'flex' : 'none';
+}
+
+fileInput.addEventListener('change', e=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const slotIdx = Number(fileInput.dataset.slot);
+  const reader = new FileReader();
+  reader.onload = ev=>{
+    const img = new Image();
+    img.onload = ()=>{
+      const p = { img, dataUrl: ev.target.result, template:'hexagon', focus:null, focusMode:'auto', detectState:'bezig', zoom:1 };
+      photos[slotIdx] = p;
+      activeIdx = slotIdx;
+      render();
+      detectFocus(p).then(()=>{ if(photos[slotIdx]===p) render(); });
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+  fileInput.value='';
+});
+
+document.getElementById('fmt-losse').addEventListener('click', ()=>{ format='losse'; render(); });
+document.getElementById('fmt-carrousel').addEventListener('click', ()=>{ format='carrousel'; render(); });
+
+// ---------- download ----------
+function downloadTemplate(t){
+  const sz=curSize(); const c=document.createElement('canvas'); c.width=sz.w; c.height=sz.h;
+  drawTemplate(c, photos[activeIdx].img, t, texts());
+  const link=document.createElement('a');
+  link.download = 'foto'+(activeIdx+1)+'-'+t+'-'+sz.w+'x'+sz.h+'.png';
+  link.href = c.toDataURL('image/png');
+  link.click();
+}
+document.getElementById('dlActive').addEventListener('click', ()=>{
+  if(activeIdx<0 || !photos[activeIdx]) return;
+  downloadTemplate(effectiveTemplate(activeIdx));
+});
+
+// ---------- focus UI ----------
+const focusRow=document.getElementById('focusRow'), focusStatus=document.getElementById('focusStatus');
+const focusPanel=document.getElementById('focusPanel'), focusImg=document.getElementById('focusImg'), focusMark=document.getElementById('focusMark');
+function renderFocusUI(){
+  const p = photos[activeIdx];
+  if(!p){ focusRow.style.display='none'; focusPanel.style.display='none'; return; }
+  focusRow.style.display='block';
+  zoomRange.value=Math.round((p.zoom||1)*100); zoomVal.textContent=zoomRange.value+'%';
+  const msg = {
+    'bezig':'Persoon zoeken in foto '+(activeIdx+1)+'…',
+    'gevonden':'Persoon gevonden — hoofd en bovenlichaam blijven in beeld.',
+    'niet-gevonden':'Geen persoon gevonden — gecentreerde uitsnede. Stel eventueel handmatig een focuspunt in.',
+    'geen-detectie':'Gezichtsherkenning niet beschikbaar (geen internet?) — gecentreerde uitsnede. Stel eventueel handmatig een focuspunt in.'
+  }[p.detectState];
+  focusStatus.textContent = p.focusMode==='manual' ? 'Handmatig focuspunt ingesteld — hoofd en bovenlichaam blijven in beeld.' : msg;
+  if(focusPanel.style.display!=='none'){
+    if(focusImg.src!==p.dataUrl) focusImg.src=p.dataUrl;
+    if(p.focus){
+      focusMark.style.display='block';
+      focusMark.style.left=(p.focus.headCx/p.img.width*100)+'%';
+      focusMark.style.top=(p.focus.headCy/p.img.height*100)+'%';
+    } else focusMark.style.display='none';
+  }
+}
+const zoomRange=document.getElementById('zoomRange'), zoomVal=document.getElementById('zoomVal');
+zoomRange.addEventListener('input', ()=>{
+  const p=photos[activeIdx]; if(!p) return;
+  p.zoom = Number(zoomRange.value)/100; zoomVal.textContent=zoomRange.value+'%';
+  renderTemplateCards();
+});
+document.getElementById('zoomReset').addEventListener('click', ()=>{
+  const p=photos[activeIdx]; if(!p) return;
+  p.zoom=1; zoomRange.value=100; zoomVal.textContent='100%'; renderTemplateCards();
+});
+document.getElementById('focusManualBtn').addEventListener('click', ()=>{ focusPanel.style.display='block'; renderFocusUI(); });
+document.getElementById('focusClose').addEventListener('click', ()=>{ focusPanel.style.display='none'; });
+document.getElementById('focusAuto').addEventListener('click', ()=>{
+  const p=photos[activeIdx]; if(!p) return;
+  p.focusMode='auto'; p.focus=null; p.detectState='bezig'; render();
+  detectFocus(p).then(render);
+});
+focusImg.addEventListener('click', e=>{
+  const p=photos[activeIdx]; if(!p) return;
+  const r=focusImg.getBoundingClientRect();
+  const fx=(e.clientX-r.left)/r.width*p.img.width, fy=(e.clientY-r.top)/r.height*p.img.height;
+  const fh=p.img.height*0.14, fw=fh*0.8;   // aangenomen hoofdgrootte
+  p.focus = focusFromFaces([{x:fx-fw/2,y:fy-fh/2,w:fw,h:fh}], p.img);
+  p.focusMode='manual';
+  render();
+});
+
+document.querySelectorAll('#sizeRow .fmt').forEach(el=>{
+  el.addEventListener('click', ()=>{ if(format==='carrousel') return; sizeKey=el.dataset.size; render(); });
+});
+function renderSizeRow(){
+  const eff = format==='carrousel' ? 'square' : sizeKey;
+  document.querySelectorAll('#sizeRow .fmt').forEach(el=>{
+    el.classList.toggle('active', el.dataset.size===eff);
+    el.style.opacity = (format==='carrousel' && el.dataset.size!=='square') ? '.45' : '1';
+    el.style.cursor = format==='carrousel' ? 'not-allowed' : 'pointer';
+  });
+  document.getElementById('sizeNote').textContent = format==='carrousel'
+    ? 'Carrousel gekozen: alle kaarten worden 1:1 (1440\u00d71440) gedownload, dat is verplicht voor Meta-carrousels.'
+    : 'Meta raadt voor feed-beeldadvertenties 1:1 of 4:5 aan (minimaal 1080 px breed, PNG of JPG, max 30 MB). Carrouselkaarten moeten 1:1 zijn.';
+  document.getElementById('dlSizeLbl').textContent = curSize().label;
+}
+
+function render(){
+  renderStrip();
+  renderSizeRow();
+  renderFocusUI();
+  document.getElementById('fmt-losse').classList.toggle('active', format==='losse');
+  document.getElementById('fmt-carrousel').classList.toggle('active', format==='carrousel');
+
+  const hasAny = photos.some(p=>p);
+  if(!hasAny || activeIdx<0 || !photos[activeIdx]){
+    emptyState.style.display='block';
+    tmplWrap.style.display='none';
+    return;
+  }
+  emptyState.style.display='none';
+  tmplWrap.style.display='block';
+  activeLabel.textContent = 'foto ' + (activeIdx+1);
+  syncNote.style.display = (format==='carrousel' && activeIdx>0) ? 'block' : 'none';
+  renderTemplateCards();
+}
+
+function renderTemplateCards(){
+  if(activeIdx<0 || !photos[activeIdx]) return;
+  tmplGrid.innerHTML='';
+  const followsFirst = format==='carrousel' && activeIdx>0;
+  const activeTemplate = effectiveTemplate(activeIdx);
+  const tx = texts();
+
+  TEMPLATES.forEach(t=>{
+    const card = document.createElement('div');
+    card.className='tmplcard'+(t===activeTemplate?' active':'')+(followsFirst?' disabled':'');
+    const canvas = document.createElement('canvas');
+    const sz=curSize(); canvas.width = sz.w; canvas.height = sz.h;
+    card.appendChild(canvas);
+    const lbl = document.createElement('div');
+    lbl.className='lbl';
+    lbl.innerHTML = '<span>'+TEMPLATE_LABELS[t]+'</span>';
+    const dlBtn = document.createElement('button');
+    dlBtn.textContent = 'Download PNG '+sz.label;
+    dlBtn.addEventListener('click', e=>{ e.stopPropagation(); downloadTemplate(t); });
+    lbl.appendChild(dlBtn);
+    card.appendChild(lbl);
+    card.addEventListener('click', ()=>{
+      if(followsFirst) return;
+      photos[activeIdx].template = t;
+      renderTemplateCards();
+    });
+    tmplGrid.appendChild(card);
+    drawTemplate(canvas, photos[activeIdx].img, t, tx);
+  });
+}
+
+// ---------- persoon in beeld houden ----------
+// focus = gebied (in foto-pixels) met hoofd(en) + torso. Minimaal MIN_VISIBLE (80%) hiervan moet in beeld zijn.
+const MIN_VISIBLE = 0.8;
+function focusFromFaces(faces, img){
+  if(!faces || !faces.length) return null;
+  const x0=Math.min(...faces.map(f=>f.x)), y0=Math.min(...faces.map(f=>f.y));
+  const x1=Math.max(...faces.map(f=>f.x+f.w)), y1=Math.max(...faces.map(f=>f.y+f.h));
+  const fw=x1-x0, fh=y1-y0;
+  return {
+    x: Math.max(0, x0-fw*0.9), y: Math.max(0, y0-fh*0.35),           // hoofd met wat ruimte erboven/ernaast
+    x2: Math.min(img.width, x1+fw*0.9), y2: Math.min(img.height, y1+fh*2.1), // torso eronder
+    headTop: Math.max(0, y0-fh*0.3), headBottom: Math.min(img.height, y1),
+    headCx:(x0+x1)/2, headCy:(y0+y1)/2
+  };
+}
+async function detectFocus(p){
+  const fn = await window.detectFaces;
+  if(!fn){ p.detectState='geen-detectie'; return; }
+  try{
+    const faces = fn(p.img);
+    if(p.focusMode==='auto'){ p.focus = focusFromFaces(faces, p.img); }
+    p.detectState = faces.length ? 'gevonden' : 'niet-gevonden';
+  }catch(e){ console.warn(e); p.detectState='geen-detectie'; }
+}
+function focusOf(img){
+  const p = photos[activeIdx];
+  return (p && p.img===img) ? p.focus : null;
+}
+// Vult (x,y,w,h) met de foto zonder vervorming.
+// Zonder focus: gewone gecentreerde 'cover'-uitsnede.
+// Met focus: de uitsnede wordt eerst verschoven richting de persoon. Past het hoofd+torso-gebied dan nog niet voor
+// minimaal 80% in beeld, dan wordt er NIET verder ingezoomd maar juist uitgezoomd: de foto wordt kleiner getoond
+// en de open ruimte wordt gevuld met een vervaagde versie van dezelfde foto. Zo blijft de scène herkenbaar.
+function coverDraw(ctx, img, x, y, w, h){
+  const ir = img.width/img.height, tr = w/h;
+  let sw,sh;
+  if(ir>tr){ sh=img.height; sw=sh*tr; } else { sw=img.width; sh=sw/tr; }
+  const f = focusOf(img);
+  const pz = photos[activeIdx] && photos[activeIdx].img===img ? (photos[activeIdx].zoom||1) : 1;
+  let sx, sy;
+  if(!f){
+    sw/=pz; sh/=pz;
+    sx=(img.width-sw)/2; sy=(img.height-sh)/2;
+  } else {
+    // 1) hoeveel moet er zichtbaar zijn? Zoom uit als de cover-uitsnede te klein is voor 80% van het focusgebied.
+    const fW=f.x2-f.x, fH=f.y2-f.y;
+    const k = Math.max(1, MIN_VISIBLE*fW/sw, MIN_VISIBLE*fH/sh);
+    sw*=k/pz; sh*=k/pz;   // handmatige zoom van de gebruiker erbovenop
+    // 2) positioneren: persoon horizontaal gecentreerd; verticaal het hoofd altijd volledig in beeld, torso zo veel mogelijk.
+    sx = f.headCx - sw/2;
+    sy = (f.y+f.y2)/2 - sh/2;
+    if(pz>1.001){ sy = f.headCy - sh/2; }      // bij inzoomen: rond het gekozen punt centreren
+    sy = Math.max(sy, f.y2 - sh);              // onderkant torso in beeld als het past
+    sy = Math.min(sy, f.headTop - sh*0.05);    // bovenkant hoofd altijd in beeld (prioriteit)
+    sy = Math.max(sy, f.headBottom - sh*0.95); // hoofd nooit onder de rand
+  }
+  // 3) begrenzen: past de uitsnede binnen de foto, dan binnen de randen houden; anders centreren op de foto.
+  sx = sw<=img.width ? Math.max(0, Math.min(sx, img.width-sw)) : (img.width-sw)/2;
+  sy = sh<=img.height ? Math.max(0, Math.min(sy, img.height-sh)) : Math.max(img.height-sh, Math.min(0, sy));
+  // 4) tekenen
+  const scale = w/sw;
+  ctx.save();
+  ctx.beginPath(); ctx.rect(x,y,w,h); ctx.clip();
+  if(sw>img.width+0.5 || sh>img.height+0.5){
+    // vervaagde achtergrond over het hele vlak
+    ctx.save();
+    ctx.filter='blur(22px) brightness(0.75)';
+    let bw,bh; if(ir>tr){ bh=img.height; bw=bh*tr; } else { bw=img.width; bh=bw/tr; }
+    ctx.drawImage(img, (img.width-bw)/2,(img.height-bh)/2,bw,bh, x-24,y-24,w+48,h+48);
+    ctx.restore();
+  }
+  // zichtbare deel van de foto (bron-rechthoek gesneden op de foto zelf)
+  const vx0=Math.max(0,sx), vy0=Math.max(0,sy), vx1=Math.min(img.width,sx+sw), vy1=Math.min(img.height,sy+sh);
+  ctx.drawImage(img, vx0,vy0,vx1-vx0,vy1-vy0, x+(vx0-sx)*scale, y+(vy0-sy)*scale, (vx1-vx0)*scale, (vy1-vy0)*scale);
+  ctx.restore();
+}
+function containDraw(ctx, img, x, y, w, h){
+  const s = Math.min(w/img.width, h/img.height);
+  const dw=img.width*s, dh=img.height*s;
+  ctx.drawImage(img, x, y+(h-dh)/2, dw, dh);
+}
+// Breekt één woord dat op zichzelf al te breed is (geen spaties, bijv. een lange functietitel-aaneenschrijving)
+// hard af op tekenniveau, zodat het nooit over de rand van het vlak heen loopt.
+function breakLongWord(ctx, word, maxWidth){
+  const out=[]; let cur='';
+  for(const ch of word){
+    const test=cur+ch;
+    if(ctx.measureText(test).width > maxWidth && cur){ out.push(cur); cur=ch; }
+    else cur=test;
+  }
+  if(cur) out.push(cur);
+  return out;
+}
+// Splits text into lines that fit maxWidth (uses the current ctx.font).
+function wrapLines(ctx, text, maxWidth){
+  const words = (text||'').split(' ');
+  let line=''; const lines=[];
+  words.forEach(w=>{
+    if(ctx.measureText(w).width > maxWidth){
+      // het woord alleen is al te breed: eerst de huidige regel afsluiten, dan het woord zelf hard afbreken
+      if(line){ lines.push(line); line=''; }
+      const parts = breakLongWord(ctx, w, maxWidth);
+      parts.forEach((p,i)=>{ if(i<parts.length-1) lines.push(p); else line=p; });
+      return;
+    }
+    const test = line ? line+' '+w : w;
+    if(ctx.measureText(test).width > maxWidth && line){ lines.push(line); line=w; }
+    else line=test;
+  });
+  if(line) lines.push(line);
+  return lines;
+}
+// Ondertekst-blok: als tekst (alinea) of als bulletpoints (één per regel). Font moet al gezet zijn op ctx.
+function layoutSub(ctx, tx, maxW, indent){
+  const raw = (tx.sub||'').split(/\r?\n/).map(l=>l.replace(/^[-•*]\s*/,'').trim()).filter(Boolean);
+  if(!raw.length) return [];
+  if(tx.subMode==='bullets') return raw.map(l=>({lines:wrapLines(ctx, l, maxW-indent), bullet:true}));
+  return [{lines:wrapLines(ctx, raw.join(' '), maxW), bullet:false}];
+}
+function subHeight(items, lh, gap){
+  return items.reduce((h,it)=>h+it.lines.length*lh, 0) + Math.max(0,items.length-1)*gap;
+}
+// Tekent het blok vanaf baseline y; geeft de baseline-positie na het blok terug (y + hoogte).
+function drawSub(ctx, items, x, y, lh, gap, indent, dot, align){
+  const prevAlign = ctx.textAlign;
+  items.forEach((it,i)=>{
+    if(it.bullet){
+      if(align==='center'){
+        ctx.textAlign='center';
+        it.lines.forEach((l,j)=>ctx.fillText((j===0?'\u2022  ':'')+l, x, y+j*lh));
+      } else {
+        ctx.textAlign='left';
+        const r = lh*0.19, txtColor = ctx.fillStyle;
+        ctx.fillStyle=dot; ctx.beginPath(); ctx.arc(x+r, y-lh*0.26, r, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle=txtColor;
+        it.lines.forEach((l,j)=>ctx.fillText(l, x+indent, y+j*lh));
+      }
+    } else {
+      ctx.textAlign=align||'left';
+      it.lines.forEach((l,j)=>ctx.fillText(l, x, y+j*lh));
+    }
+    y += it.lines.length*lh + (i<items.length-1?gap:0);
+  });
+  ctx.textAlign=prevAlign;
+  return y;
+}
+// Past de ondertekst in een gegeven hoogte: verkleint het font tot het past. Geeft {items, fs, lh, gap}.
+function fitSub(ctx, tx, maxW, maxH, startFs, minFs, weight){
+  let fs=startFs, items, lh, gap;
+  for(;;){
+    ctx.font=(weight||'')+' '+fs+'px '+SANS;
+    lh=Math.round(fs*1.4); gap=Math.round(fs*0.45);
+    items=layoutSub(ctx, tx, maxW, Math.round(fs*1.2));
+    if(subHeight(items, lh, gap) <= maxH || fs<=minFs) break;
+    fs-=1;
+  }
+  // Past het ook op de kleinste maat niet, dan regels aan het eind weglaten (nooit over andere tekst heen tekenen).
+  while(items.length && subHeight(items, lh, gap) > maxH){
+    const last = items[items.length-1];
+    if(last.lines.length>1) last.lines.pop(); else items.pop();
+  }
+  return {items, fs, lh, gap, indent:Math.round(fs*1.2)};
+}
+// Draws lines top-down from baseline y; returns the y just below the block.
+function drawLines(ctx, lines, x, y, lineHeight){
+  lines.forEach((l,i)=>ctx.fillText(l, x, y+i*lineHeight));
+  return y + lines.length*lineHeight;
+}
+function hexPath(ctx, cx, cy, r){
+  ctx.beginPath();
+  for(let i=0;i<6;i++){
+    const a = Math.PI/180*(60*i-90);
+    const px = cx+r*Math.cos(a), py=cy+r*Math.sin(a);
+    i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+  }
+  ctx.closePath();
+}
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+function drawButton(ctx, x, y, w, h, text, fill, color){
+  ctx.fillStyle=fill; roundRect(ctx,x,y,w,h,6); ctx.fill();
+  ctx.fillStyle=color; ctx.font='bold 26px '+SANS; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText(text, x+w/2, y+h/2+1);
+  ctx.textBaseline='alphabetic'; ctx.textAlign='left';
+}
+function drawPin(ctx, x, y, s){
+  // simple location pin, tip at (x,y)
+  ctx.fillStyle='#C8271F';
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.bezierCurveTo(x-s*0.9, y-s*1.1, x-s*0.75, y-s*2.1, x, y-s*2.1);
+  ctx.bezierCurveTo(x+s*0.75, y-s*2.1, x+s*0.9, y-s*1.1, x, y);
+  ctx.closePath(); ctx.fill();
+  ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(x, y-s*1.45, s*0.32, 0, Math.PI*2); ctx.fill();
+}
+
+// ---------- templates ----------
+function drawTemplate(canvas, img, type, tx){
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.textAlign='left'; ctx.textBaseline='alphabetic';
+  if(canvas.width/canvas.height > 1.4) drawLandscape(ctx, canvas.width, canvas.height, img, type, tx);
+  else drawTall(ctx, canvas.width, canvas.height, img, type, tx);
+}
+
+// Kop op maat: verklein tot hij in maxLines regels binnen maxW past. Zet ctx.font en geeft {lines, fs}.
+function fitHeadline(ctx, text, maxW, startFs, minFs, maxLines, weight, family){
+  let fs=startFs, lines;
+  for(;;){
+    ctx.font=weight+' '+fs+'px '+family;
+    lines = wrapLines(ctx, text, maxW);
+    const widest = Math.max(...lines.map(l=>ctx.measureText(l).width));
+    if((lines.length<=maxLines && widest<=maxW) || fs<=minFs) break;
+    fs-=2;
+  }
+  return {lines, fs};
+}
+function drawCtaHex(ctx, cx, cy, r, cta){
+  ctx.save();
+  ctx.shadowColor='rgba(0,0,0,.35)'; ctx.shadowBlur=r*0.17; ctx.shadowOffsetX=r*0.07; ctx.shadowOffsetY=r*0.07;
+  hexPath(ctx,cx,cy,r); ctx.fillStyle=YELLOW; ctx.fill();
+  ctx.restore();
+  hexPath(ctx,cx,cy,r*0.917); ctx.strokeStyle='#fff'; ctx.lineWidth=r*0.037; ctx.setLineDash([0,r*0.083]); ctx.lineCap='round'; ctx.stroke();
+  ctx.setLineDash([]); ctx.lineCap='butt';
+  const words = cta.trim().toUpperCase().split(/\s+/);
+  let l1, l2;
+  if(words.length===1){ l1=''; l2=words[0]; }
+  else { const cut=Math.ceil(words.length/2); l1=words.slice(0,cut).join(' '); l2=words.slice(cut).join(' '); }
+  ctx.fillStyle=onColor(YELLOW); ctx.textAlign='center';
+  let fs1=Math.round(r*0.28), fs2=Math.round(r*0.35);
+  ctx.font='400 '+fs1+'px '+SANS; while(ctx.measureText(l1).width>r*1.55 && fs1>10){ fs1-=1; ctx.font='400 '+fs1+'px '+SANS; }
+  ctx.font='800 '+fs2+'px '+SANS; while(ctx.measureText(l2).width>r*1.55 && fs2>12){ fs2-=1; ctx.font='800 '+fs2+'px '+SANS; }
+  if(l1){
+    ctx.font='400 '+fs1+'px '+SANS; ctx.fillText(l1, cx, cy-r*0.06);
+    ctx.font='800 '+fs2+'px '+SANS; ctx.fillText(l2, cx, cy+fs2-r*0.02);
+  } else {
+    ctx.font='800 '+fs2+'px '+SANS; ctx.fillText(l2, cx, cy+fs2*0.35);
+  }
+  ctx.textAlign='left';
+}
+
+// Tekstblok voor de split-sjablonen: kop -> ondertekst -> knop, netjes onder elkaar en verticaal gecentreerd in het vlak.
+function drawSplitText(ctx, ax, ay, aw, ah, tx, u){
+  const pad = 56*u, X = ax+pad, maxW = aw-2*pad;
+  // Bepaal de maten; past het blok niet in de hoogte, dan alles iets kleiner en opnieuw.
+  let sc = 1, L;
+  for(let i=0;i<12;i++){
+    const kopStart = Math.round(Math.min(56*u, aw*0.11)*sc), kopMin = Math.round(20*u*sc);
+    const {lines:kopLines, fs} = fitHeadline(ctx, tx.kop, maxW, kopStart, kopMin, 3, 'bold', 'Georgia, serif');
+    const KL = Math.round(fs*1.15), SFS = Math.round(Math.min(27*u, fs*0.5)*sc), SL = Math.round(SFS*1.4);
+    ctx.font=SFS+'px '+SANS; const SGAP=Math.round(SFS*0.45), SIND=Math.round(SFS*1.2);
+    const subItems = layoutSub(ctx, tx, maxW, SIND); const subH = subHeight(subItems, SL, SGAP);
+    const GAP = subItems.length ? Math.round(22*u*sc) : 0;
+    const BTN_FS = Math.round(Math.min(26*u, fs*0.48)*sc), BTN_H = Math.round(BTN_FS*2.4), BTN_GAP = Math.round(32*u*sc);
+    const blockH = kopLines.length*KL + GAP + subH + BTN_GAP + BTN_H;
+    L = {kopLines, fs, KL, SFS, SL, SGAP, SIND, subItems, subH, GAP, BTN_FS, BTN_H, BTN_GAP, blockH};
+    if(blockH <= ah - 2*Math.round(28*u)) break;
+    sc *= 0.9;
+  }
+  let y = ay + Math.max(28*u, (ah-L.blockH)/2) + L.KL*0.8;
+  ctx.textAlign='left'; ctx.fillStyle=onColor(NAVY); ctx.font='bold '+L.fs+'px Georgia, serif';
+  y = drawLines(ctx, L.kopLines, X, y, L.KL);
+  if(L.subItems.length){
+    y += L.GAP; ctx.font=L.SFS+'px '+SANS; ctx.fillStyle=onColorSoft(NAVY);
+    y = drawSub(ctx, L.subItems, X, y, L.SL, L.SGAP, L.SIND, ACCENT, 'left') - L.SL;
+  } else y -= L.KL;
+  y += L.BTN_GAP;
+  ctx.font='bold '+L.BTN_FS+'px '+SANS;
+  const bw = Math.min(maxW, Math.max(200*u*sc, ctx.measureText(tx.cta).width+72*u));
+  ctx.fillStyle=ACCENT; roundRect(ctx,X,y,bw,L.BTN_H,6*u); ctx.fill();
+  ctx.fillStyle=onColor(ACCENT); ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText(tx.cta, X+bw/2, y+L.BTN_H/2+1);
+  ctx.textBaseline='alphabetic'; ctx.textAlign='left';
+}
+function drawSplitH(ctx, W, H, img, tx, u, photoFrac){
+  const PH = Math.round(H*photoFrac);
+  coverDraw(ctx, img, 0,0,W,PH);
+  ctx.fillStyle=NAVY; ctx.fillRect(0,PH,W,H-PH);
+  drawSplitText(ctx, 0, PH, W, H-PH, tx, u);
+}
+function drawSplitV(ctx, W, H, img, tx, u, photoFrac){
+  const PW = Math.round(W*photoFrac);
+  coverDraw(ctx, img, 0,0,PW,H);
+  ctx.fillStyle=NAVY; ctx.fillRect(PW,0,W-PW,H);
+  drawSplitText(ctx, PW, 0, W-PW, H, tx, u);
+}
+
+// ---- Staand / vierkant (1:1 en 4:5): opbouw exact als voorbeeldbeeld 1 ----
+function drawTall(ctx, W, H, img, type, tx){
+  const u = W/1000; // schaal voor lettergroottes
+  if(type==='hexagon'){
+    const g = ctx.createLinearGradient(0,0,0,H);
+    g.addColorStop(0,GREY_TOP); g.addColorStop(1,GREY_BOTTOM);
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+    const BAND = W*0.28;
+    ctx.fillStyle=YELLOW; ctx.fillRect(0,0,W,BAND);
+    const px0=W*0.35, px1=W*0.985, ptop=BAND, pbot=H-W*0.145, apex=[(px0+px1)/2, W*0.07];
+    const photoPath=()=>{ ctx.beginPath(); ctx.moveTo(px0,pbot); ctx.lineTo(px0,ptop); ctx.lineTo(apex[0],apex[1]); ctx.lineTo(px1,ptop); ctx.lineTo(px1,pbot); ctx.closePath(); };
+    ctx.save(); photoPath(); ctx.clip();
+    coverDraw(ctx, img, px0, apex[1], px1-px0, pbot-apex[1]);
+    ctx.restore();
+    photoPath(); ctx.strokeStyle='#fff'; ctx.lineWidth=12*u; ctx.lineJoin='miter'; ctx.stroke();
+    // logo / bedrijfsnaam
+    if(logoImg) containDraw(ctx, logoImg, W*0.045, W*0.045, W*0.29, W*0.11);
+    else { ctx.fillStyle=onColor(YELLOW); ctx.font='600 '+Math.round(46*u)+'px '+SANS; ctx.fillText(tx.bedrijf, W*0.047, W*0.125); }
+    // linkerkolom
+    const LX=W*0.047, colW=W*0.29;
+    ctx.fillStyle=INK; ctx.font='300 '+Math.round(32*u)+'px '+SANS; ctx.textAlign='left';
+    ctx.fillText(tx.label.toUpperCase(), LX, W*0.345);
+    const {lines, fs} = fitHeadline(ctx, tx.kop.toUpperCase(), colW, Math.round(58*u), Math.round(26*u), 3, 'bold', SANS);
+    let y = drawLines(ctx, lines, LX, W*0.345+Math.round(64*u), Math.round(fs*1.12));
+    if(tx.mv){ ctx.font='300 '+Math.round(28*u)+'px '+SANS; ctx.textAlign='right'; ctx.fillText(tx.mv, LX+colW, y+2*u); ctx.textAlign='left'; y += 28*u; }
+    // ondertekst in de open ruimte tussen M/V en locatie
+    {
+      const top = y + 34*u, bottom = (tx.loc ? H-W*0.072-44*u : H-W*0.06);
+      const S = fitSub(ctx, tx, colW, bottom-top, Math.round(24*u), Math.round(13*u), '400');
+      ctx.font='400 '+S.fs+'px '+SANS; ctx.fillStyle=INK;
+      drawSub(ctx, S.items, LX, top+S.fs, S.lh, S.gap, S.indent, luminance(YELLOW)>0.5?INK:YELLOW, 'left');
+    }
+    // locatie
+    if(tx.loc){
+      const ly = H-W*0.072;
+      drawPin(ctx, LX+16*u, ly-8*u, 18*u);
+      ctx.fillStyle=INK; ctx.font='bold '+Math.round(28*u)+'px '+SANS;
+      ctx.fillText('Locatie:', LX+44*u, ly);
+      const lw=ctx.measureText('Locatie: ').width;
+      ctx.font='500 '+Math.round(28*u)+'px '+SANS; ctx.fillText(tx.loc.toUpperCase(), LX+44*u+lw, ly);
+    }
+    drawCtaHex(ctx, W*0.82, H-W*0.24, W*0.15, tx.cta);
+  }
+
+  else if(type==='split-h'){ drawSplitH(ctx, W, H, img, tx, u, 0.56); }
+  else if(type==='split-v'){ drawSplitV(ctx, W, H, img, tx, u, 0.5); }
+
+  else if(type==='overlay'){
+    coverDraw(ctx, img, 0,0,W,H);
+    const grad = ctx.createLinearGradient(0,H*0.5,0,H);
+    grad.addColorStop(0,'rgba(10,14,24,0)'); grad.addColorStop(1,'rgba(10,14,24,0.9)');
+    ctx.fillStyle=grad; ctx.fillRect(0,H*0.5,W,H*0.5);
+    const X=64*u, maxW=W-128*u, KL=Math.round(64*u), SL=Math.round(36*u);
+    const {lines:kopLines, fs} = fitHeadline(ctx, tx.kop, maxW, Math.round(58*u), Math.round(32*u), 3, 'bold', 'Georgia, serif');
+    const SFS=Math.round(26*u), SGAP=Math.round(SFS*0.45), SIND=Math.round(SFS*1.2);
+    ctx.font=SFS+'px '+SANS; const subItems = layoutSub(ctx, tx, maxW, SIND); const subH = subHeight(subItems, SL, SGAP);
+    let y = H-60*u - subH - 16*u - (kopLines.length-1)*KL;
+    ctx.fillStyle='#fff'; ctx.font='bold '+fs+'px Georgia, serif'; ctx.textAlign='left';
+    y = drawLines(ctx, kopLines, X, y, KL);
+    ctx.fillStyle='#E4E9F2'; ctx.font=SFS+'px '+SANS;
+    drawSub(ctx, subItems, X, y-KL+SL+16*u, SL, SGAP, SIND, luminance(YELLOW)<0.08?'#fff':YELLOW, 'left');
+  }
+
+  else if(type==='achtergrond'){
+    ctx.filter='blur('+Math.round(16*u)+'px) brightness(0.55)';
+    coverDraw(ctx, img, -40*u,-40*u,W+80*u,H+80*u);
+    ctx.filter='none';
+    const cw=W*0.82, ch=Math.min(H*0.4, W*0.5), cx=(W-cw)/2, cy=(H-ch)/2;
+    ctx.fillStyle='#fff'; roundRect(ctx, cx, cy, cw, ch, 24*u); ctx.fill();
+    ctx.textAlign='center';
+    const {lines:kopLines, fs} = fitHeadline(ctx, tx.kop, cw-80*u, Math.round(50*u), Math.round(30*u), 3, 'bold', 'Georgia, serif');
+    const KL=Math.round(58*u), SL=Math.round(34*u), GAP=Math.round(22*u), SFS=Math.round(25*u), SGAP=Math.round(SFS*0.45);
+    ctx.font=SFS+'px '+SANS; const subItems = layoutSub(ctx, tx, cw-80*u, 0); const subH = subHeight(subItems, SL, SGAP);
+    const blockH = kopLines.length*KL + GAP + subH;
+    let y = cy + (ch-blockH)/2 + KL*0.8;
+    ctx.font='bold '+fs+'px Georgia, serif'; ctx.fillStyle=NAVY;
+    y = drawLines(ctx, kopLines, W/2, y, KL);
+    ctx.font=SFS+'px '+SANS; ctx.fillStyle='#5B6472';
+    drawSub(ctx, subItems, W/2, y+GAP-KL+SL, SL, SGAP, 0, ACCENT, 'center');
+    ctx.textAlign='left';
+  }
+
+  else if(type==='bullets'){
+    const PH = Math.round(H*0.5);
+    coverDraw(ctx, img, 0,0,W,PH);
+    ctx.fillStyle='#fff'; ctx.fillRect(0,PH,W,H-PH);
+    const X=64*u, maxW=W-128*u;
+    const {lines:kopLines, fs} = fitHeadline(ctx, tx.kop, maxW, Math.round(46*u), Math.round(28*u), 2, 'bold', 'Georgia, serif');
+    ctx.fillStyle=NAVY; ctx.font='bold '+fs+'px Georgia, serif'; ctx.textAlign='left';
+    let y = drawLines(ctx, kopLines, X, PH+80*u, Math.round(54*u));
+    const btnTop = H-64*u-56*u;
+    const S = fitSub(ctx, tx, maxW, btnTop - (y+18*u) - 30*u, Math.round(28*u), Math.round(16*u), '');
+    ctx.font=S.fs+'px '+SANS; ctx.fillStyle='#333';
+    drawSub(ctx, S.items, X, y+18*u, S.lh, S.gap, S.indent, ACCENT, 'left');
+    ctx.font='bold '+Math.round(26*u)+'px '+SANS;
+    const bw = Math.max(280*u, ctx.measureText(tx.cta).width+72*u);
+    drawButtonScaled(ctx, X, H-64*u-56*u, bw, 64*u, tx.cta, ACCENT, onColor(ACCENT), u);
+  }
+}
+function drawButtonScaled(ctx, x, y, w, h, text, fill, color, u){
+  ctx.fillStyle=fill; roundRect(ctx,x,y,w,h,6*u); ctx.fill();
+  ctx.fillStyle=color; ctx.font='bold '+Math.round(26*u)+'px '+SANS; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText(text, x+w/2, y+h/2+1);
+  ctx.textBaseline='alphabetic'; ctx.textAlign='left';
+}
+
+// ---- Liggend 1.91:1 ----
+function drawLandscape(ctx, W, H, img, type, tx){
+  if(type==='hexagon'){
+    // Ondergrond: lichtgrijs verloop + gele band bovenaan (zoals voorbeeld foto 1)
+    const g = ctx.createLinearGradient(0,0,0,H);
+    g.addColorStop(0,GREY_TOP); g.addColorStop(1,GREY_BOTTOM);
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+    const BAND = 190;
+    ctx.fillStyle=YELLOW; ctx.fillRect(0,0,W,BAND);
+
+    // Foto in 'huis'-vorm: rechthoek met puntdak, witte rand
+    const px0=430, px1=1185, ptop=BAND, pbot=598, apex=[ (px0+px1)/2, 30 ];
+    const photoPath = ()=>{
+      ctx.beginPath();
+      ctx.moveTo(px0, pbot); ctx.lineTo(px0, ptop); ctx.lineTo(apex[0], apex[1]);
+      ctx.lineTo(px1, ptop); ctx.lineTo(px1, pbot); ctx.closePath();
+    };
+    ctx.save(); photoPath(); ctx.clip();
+    coverDraw(ctx, img, px0, apex[1], px1-px0, pbot-apex[1]);
+    ctx.restore();
+    photoPath(); ctx.strokeStyle='#fff'; ctx.lineWidth=10; ctx.lineJoin='miter'; ctx.stroke();
+
+    // Logo of bedrijfsnaam linksboven in de gele band
+    if(logoImg){
+      containDraw(ctx, logoImg, 50, 38, 340, 118);
+    } else {
+      ctx.fillStyle=onColor(YELLOW); ctx.font='600 42px '+SANS; ctx.textAlign='left';
+      ctx.fillText(tx.bedrijf, 52, 112);
+    }
+
+    // Linkerkolom: label, kop (uppercase, vet), M/V rechts uitgelijnd
+    const LX=52, colW=340;
+    ctx.fillStyle=INK; ctx.font='300 30px '+SANS; ctx.textAlign='left';
+    ctx.fillText(tx.label.toUpperCase(), LX, 262);
+    // Kop: begin op 52px en verklein tot alles in max 3 regels binnen de kolom past
+    let kfs=52, kopLines;
+    for(;;){
+      ctx.font='bold '+kfs+'px '+SANS;
+      kopLines = wrapLines(ctx, tx.kop.toUpperCase(), colW);
+      const widest = Math.max(...kopLines.map(l=>ctx.measureText(l).width));
+      if((kopLines.length<=3 && widest<=colW) || kfs<=24) break;
+      kfs-=2;
+    }
+    let y = drawLines(ctx, kopLines, LX, 322, Math.round(kfs*1.12));
+    if(tx.mv){
+      ctx.font='300 28px '+SANS; ctx.textAlign='right';
+      ctx.fillText(tx.mv, LX+colW, y+2);
+      ctx.textAlign='left'; y += 28;
+    }
+    // ondertekst tussen M/V en locatie
+    {
+      const top = y + 26, bottom = tx.loc ? 566-40 : H-40;
+      const S = fitSub(ctx, tx, colW, bottom-top, 20, 12, '400');
+      ctx.font='400 '+S.fs+'px '+SANS; ctx.fillStyle=INK;
+      drawSub(ctx, S.items, LX, top+S.fs, S.lh, S.gap, S.indent, luminance(YELLOW)>0.5?INK:YELLOW, 'left');
+    }
+
+    // Locatie linksonder met pin
+    if(tx.loc){
+      drawPin(ctx, LX+16, 566, 18);
+      ctx.fillStyle=INK; ctx.font='bold 26px '+SANS;
+      ctx.fillText('Locatie:', LX+44, 574);
+      const lw = ctx.measureText('Locatie: ').width;
+      ctx.font='500 26px '+SANS;
+      ctx.fillText(tx.loc.toUpperCase(), LX+44+lw, 574);
+    }
+
+    // CTA-hexagon rechtsonder, geel met gestippelde witte rand + schaduw
+    const cx=1015, cy=492, r=108;
+    ctx.save();
+    ctx.shadowColor='rgba(0,0,0,.35)'; ctx.shadowBlur=18; ctx.shadowOffsetX=8; ctx.shadowOffsetY=8;
+    hexPath(ctx,cx,cy,r); ctx.fillStyle=YELLOW; ctx.fill();
+    ctx.restore();
+    hexPath(ctx,cx,cy,r-9); ctx.strokeStyle='#fff'; ctx.lineWidth=4; ctx.setLineDash([0,9]); ctx.lineCap='round'; ctx.stroke();
+    ctx.setLineDash([]); ctx.lineCap='butt';
+    // knoptekst: eerste deel licht, laatste deel vet (zoals 'DOE HIER / DE TEST')
+    const words = tx.cta.trim().toUpperCase().split(/\s+/);
+    let l1, l2;
+    if(words.length===1){ l1=''; l2=words[0]; }
+    else { const cut=Math.ceil(words.length/2); l1=words.slice(0,cut).join(' '); l2=words.slice(cut).join(' '); }
+    ctx.fillStyle=onColor(YELLOW); ctx.textAlign='center';
+    let fs1=30, fs2=38;
+    ctx.font='400 '+fs1+'px '+SANS; while(ctx.measureText(l1).width>r*1.55 && fs1>16){ fs1-=2; ctx.font='400 '+fs1+'px '+SANS; }
+    ctx.font='800 '+fs2+'px '+SANS; while(ctx.measureText(l2).width>r*1.55 && fs2>18){ fs2-=2; ctx.font='800 '+fs2+'px '+SANS; }
+    if(l1){
+      ctx.font='400 '+fs1+'px '+SANS; ctx.fillText(l1, cx, cy-6);
+      ctx.font='800 '+fs2+'px '+SANS; ctx.fillText(l2, cx, cy+fs2-2);
+    } else {
+      ctx.font='800 '+fs2+'px '+SANS; ctx.fillText(l2, cx, cy+fs2*0.35);
+    }
+    ctx.textAlign='left';
+  }
+
+  else if(type==='split-h'){ drawSplitH(ctx, W, H, img, tx, W/1000, 0.55); }
+  else if(type==='split-v'){ drawSplitV(ctx, W, H, img, tx, W/1000, 0.5); }
+
+  else if(type==='overlay'){
+    coverDraw(ctx, img, 0,0,W,H);
+    const grad = ctx.createLinearGradient(0,H*0.4,0,H);
+    grad.addColorStop(0,'rgba(10,14,24,0)'); grad.addColorStop(1,'rgba(10,14,24,0.9)');
+    ctx.fillStyle=grad; ctx.fillRect(0,H*0.4,W,H*0.6);
+    const X=64, maxW=W-128, KL=64, SL=36;
+    ctx.font='bold 56px Georgia, serif';
+    const kopLines = wrapLines(ctx, tx.kop, maxW);
+    ctx.font='26px '+SANS; const SGAP=12, SIND=31;
+    const subItems = layoutSub(ctx, tx, maxW, SIND); const subH = subHeight(subItems, SL, SGAP);
+    let y = H-56 - subH - 16 - (kopLines.length-1)*KL;
+    ctx.fillStyle='#fff'; ctx.font='bold 56px Georgia, serif';
+    y = drawLines(ctx, kopLines, X, y, KL);
+    ctx.fillStyle='#E4E9F2'; ctx.font='26px '+SANS;
+    drawSub(ctx, subItems, X, y-KL+SL+16, SL, SGAP, SIND, luminance(YELLOW)<0.08?'#fff':YELLOW, 'left');
+  }
+
+  else if(type==='achtergrond'){
+    ctx.filter='blur(14px) brightness(0.55)';
+    coverDraw(ctx, img, -30,-30,W+60,H+60);
+    ctx.filter='none';
+    const cw=W*0.62, ch=H*0.5, cx=(W-cw)/2, cy=(H-ch)/2;
+    ctx.fillStyle='#fff'; roundRect(ctx, cx, cy, cw, ch, 20); ctx.fill();
+    ctx.textAlign='center';
+    ctx.fillStyle=NAVY; ctx.font='bold 48px Georgia, serif';
+    const kopLines = wrapLines(ctx, tx.kop, cw-80);
+    ctx.font='24px '+SANS; const KL=56, SL=32, GAP=22, SGAP=11;
+    const subItems = layoutSub(ctx, tx, cw-80, 0); const subH = subHeight(subItems, SL, SGAP);
+    const blockH = kopLines.length*KL + GAP + subH;
+    let y = cy + (ch-blockH)/2 + KL*0.8;
+    ctx.font='bold 48px Georgia, serif'; ctx.fillStyle=NAVY;
+    y = drawLines(ctx, kopLines, W/2, y, KL);
+    ctx.font='24px '+SANS; ctx.fillStyle='#5B6472';
+    drawSub(ctx, subItems, W/2, y+GAP-KL+SL, SL, SGAP, 0, ACCENT, 'center');
+    ctx.textAlign='left';
+  }
+
+  else if(type==='bullets'){
+    const PW = W*0.42;
+    coverDraw(ctx, img, 0,0,PW,H);
+    ctx.fillStyle='#fff'; ctx.fillRect(PW,0,W-PW,H);
+    const X=PW+56, maxW=W-PW-112;
+    ctx.fillStyle=NAVY; ctx.font='bold 44px Georgia, serif'; ctx.textAlign='left';
+    const kopLines = wrapLines(ctx, tx.kop, maxW);
+    let y = drawLines(ctx, kopLines, X, 110, 52);
+    const S = fitSub(ctx, tx, maxW, (H-64-56) - (y+30) - 30, 26, 15, '');
+    ctx.font=S.fs+'px '+SANS; ctx.fillStyle='#333';
+    drawSub(ctx, S.items, X, y+30, S.lh, S.gap, S.indent, ACCENT, 'left');
+    ctx.font='bold 26px '+SANS;
+    const bw = Math.max(280, ctx.measureText(tx.cta).width+72);
+    drawButton(ctx, X, H-64-56, bw, 64, tx.cta, ACCENT, onColor(ACCENT));
+  }
+}
+
+render();
+</script>
+</body>
+</html>
