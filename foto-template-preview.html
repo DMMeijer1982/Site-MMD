@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
+<meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Foto & Template Preview — Campagne Studio</title>
@@ -71,6 +72,23 @@
   .colorfield input[type=color]{width:44px;height:36px;border:1px solid var(--border-strong);border-radius:8px;padding:2px;background:#fff;cursor:pointer;flex:none;}
   .colorfield strong{display:block;font-size:13px;}
   .colorfield span{font-size:11.5px;color:var(--text-2);}
+  .hxdetails{margin-top:12px;border:1px solid var(--border);border-radius:10px;padding:10px 12px;background:var(--surface-2);}
+  .hxdetails summary{cursor:pointer;font-size:13px;font-weight:600;color:var(--text);}
+  .hxgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
+  .hxgrid .colorfield{background:#fff;padding:6px 8px;gap:8px;}
+  .hxgrid .colorfield input[type=color]{width:38px;height:32px;}
+  .hxgrid .colorfield strong{font-size:12.5px;}
+  .hxgrid .colorfield span{font-size:11px;}
+  .hxgrid .colorfield.off{opacity:.45;}
+  .hxgrid .colorfield .chk{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-2);margin-top:2px;cursor:pointer;}
+  .hxgrid .colorfield .chk input{margin:0;}
+  .presetrow,.savedrow{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 2px;}
+  .preset{display:flex;align-items:center;gap:6px;padding:5px 9px 5px 6px;font-size:12px;border-radius:999px;}
+  .preset .sw{display:inline-flex;border-radius:50%;overflow:hidden;width:22px;height:22px;border:1px solid var(--border-strong);flex:none;}
+  .preset .sw i{flex:1;display:block;}
+  .preset .x{margin-left:2px;color:var(--text-muted);font-size:13px;line-height:1;cursor:pointer;}
+  .schemeform{display:flex;gap:6px;margin-top:8px;}
+  .schemeform input[type=text]{margin:0;padding:6px 10px;font-size:13px;}
   @media (max-width:760px){ .tmplgrid{grid-template-columns:1fr;} .textfields{grid-template-columns:1fr;} }
 </style>
 </head>
@@ -129,10 +147,30 @@
 
   <div class="card">
     <label>Huisstijlkleuren</label>
-    <div class="colorgrid">
-      <div class="colorfield"><input type="color" id="col-primary" value="#EEB412"><div><strong>Hoofdkleur</strong><span>Band en zeshoek in Hexagon, bullets op foto</span></div></div>
+    <div class="hint" style="margin:0 0 4px">Kies een kant-en-klaar schema of stel je eigen kleuren samen:</div>
+    <div class="presetrow" id="presetRow"></div>
+    <div class="savedrow" id="savedRow"></div>
+    <div class="colorgrid" style="margin-top:10px">
+      <div class="colorfield"><input type="color" id="col-primary" value="#EEB412"><div><strong>Hoofdkleur</strong><span>Band en zeshoek in Hexagon (apart aan te passen hieronder), balk en bullets in de andere sjablonen</span></div></div>
       <div class="colorfield"><input type="color" id="col-dark" value="#1B2A4A"><div><strong>Donker vlak</strong><span>Tekstvlak in beide Splits, koppen op wit</span></div></div>
       <div class="colorfield"><input type="color" id="col-accent" value="#2F6FED"><div><strong>Knop / accent</strong><span>Knoppen en bullets in Split, Bullets en Foto achtergrond</span></div></div>
+    </div>
+
+    <details class="hxdetails" id="hxDetails" open>
+      <summary>Hexagon-sjabloon: alle kleuren samenstellen</summary>
+      <div class="hxgrid">
+        <div class="colorfield"><input type="color" id="col-hxband" value="#EEB412"><div><strong>Band bovenin</strong><span>Volgt Hoofdkleur</span></div></div>
+        <div class="colorfield"><input type="color" id="col-hxhex" value="#EEB412"><div><strong>Zeshoek-knop</strong><span>Volgt Hoofdkleur</span></div></div>
+        <div class="colorfield"><input type="color" id="col-hxbgtop" value="#EEEBE6"><div><strong>Achtergrond (boven)</strong><span>Het beige vlak</span></div></div>
+        <div class="colorfield" id="fld-hxbgbottom"><input type="color" id="col-hxbgbottom" value="#CEC4B8"><div><strong>Achtergrond (onder)</strong><label class="chk"><input type="checkbox" id="chk-hxgrad" checked> Kleurverloop</label></div></div>
+        <div class="colorfield" id="fld-hxtext"><input type="color" id="col-hxtext" value="#1A1A1A"><div><strong>Tekstkleur</strong><label class="chk"><input type="checkbox" id="chk-hxauto" checked> Automatisch</label></div></div>
+        <div class="colorfield"><input type="color" id="col-hxframe" value="#FFFFFF"><div><strong>Rand</strong><span>Om foto en zeshoek</span></div></div>
+      </div>
+    </details>
+
+    <div class="schemeform" id="schemeForm">
+      <input type="text" id="schemeName" placeholder="Naam van je schema, bijv. Klantnaam" maxlength="40">
+      <button id="schemeSave">Bewaar schema</button>
     </div>
     <div class="flexrow" style="margin-top:8px">
       <span class="hint" style="margin:0">Tekst op de kleurvlakken wordt automatisch zwart of wit voor leesbaarheid.</span>
@@ -246,8 +284,10 @@ const TEMPLATE_LABELS = {
   overlay:'Overlay', achtergrond:'Foto achtergrond', bullets:'Bullets'
 };
 const DEFAULT_COLORS = { primary:'#EEB412', dark:'#1B2A4A', accent:'#2F6FED' };
+const DEFAULT_HX = { band:'#EEB412', hex:'#EEB412', bgTop:'#EEEBE6', bgBottom:'#CEC4B8', grad:true, autoText:true, text:'#1A1A1A', frame:'#FFFFFF' };
 let NAVY = DEFAULT_COLORS.dark, ACCENT = DEFAULT_COLORS.accent, YELLOW = DEFAULT_COLORS.primary;
-const GREY_TOP = '#EEEBE6', GREY_BOTTOM = '#CEC4B8', INK = '#1A1A1A';
+const HX = Object.assign({}, DEFAULT_HX);   // kleuren van het Hexagon-sjabloon
+const INK = '#1A1A1A';
 // Leesbare tekstkleur op een gekleurd vlak (zwart of wit), plus een zachte variant voor ondertekst.
 function luminance(hex){
   const n=parseInt(hex.slice(1),16); const c=[(n>>16)&255,(n>>8)&255,n&255].map(v=>{v/=255; return v<=0.03928? v/12.92 : Math.pow((v+0.055)/1.055,2.4);});
@@ -255,13 +295,121 @@ function luminance(hex){
 }
 function onColor(hex){ return luminance(hex) > 0.4 ? INK : '#FFFFFF'; }
 function onColorSoft(hex){ return luminance(hex) > 0.4 ? '#3A3F48' : '#D6DEEE'; }
+function mixHex(a,b){
+  const pa=parseInt(a.slice(1),16), pb=parseInt(b.slice(1),16);
+  const ch=(sh)=>Math.round((((pa>>sh)&255)+((pb>>sh)&255))/2);
+  return '#'+[16,8,0].map(sh=>ch(sh).toString(16).padStart(2,'0')).join('');
+}
+// Hexagon-hulpfuncties: tekst blijft leesbaar op de gekozen achtergrond
+function hxBgMid(){ return HX.grad ? mixHex(HX.bgTop, HX.bgBottom) : HX.bgTop; }
+function hxBgBottom(){ return HX.grad ? HX.bgBottom : HX.bgTop; }
+function hxText(){ return HX.autoText ? onColor(hxBgMid()) : HX.text; }
+function hxDot(){ return pickOn(HX.band, hxBgMid(), hxText(), 2); }
+
 const colInputs = { primary:document.getElementById('col-primary'), dark:document.getElementById('col-dark'), accent:document.getElementById('col-accent') };
-function applyColors(){ YELLOW = colInputs.primary.value; NAVY = colInputs.dark.value; ACCENT = colInputs.accent.value; }
-Object.values(colInputs).forEach(i=>i.addEventListener('input', ()=>{ applyColors(); renderTemplateCards(); }));
-document.getElementById('colReset').addEventListener('click', ()=>{
-  colInputs.primary.value=DEFAULT_COLORS.primary; colInputs.dark.value=DEFAULT_COLORS.dark; colInputs.accent.value=DEFAULT_COLORS.accent;
-  applyColors(); renderTemplateCards();
+const hxInputs = {
+  band:document.getElementById('col-hxband'), hex:document.getElementById('col-hxhex'),
+  bgTop:document.getElementById('col-hxbgtop'), bgBottom:document.getElementById('col-hxbgbottom'),
+  text:document.getElementById('col-hxtext'), frame:document.getElementById('col-hxframe')
+};
+const chkGrad=document.getElementById('chk-hxgrad'), chkAuto=document.getElementById('chk-hxauto');
+let bandTouched=false, hexTouched=false;   // volgt Hoofdkleur zolang de gebruiker het niet zelf aanpast
+
+function applyColors(){
+  YELLOW = colInputs.primary.value; NAVY = colInputs.dark.value; ACCENT = colInputs.accent.value;
+  HX.band=hxInputs.band.value; HX.hex=hxInputs.hex.value;
+  HX.bgTop=hxInputs.bgTop.value; HX.bgBottom=hxInputs.bgBottom.value;
+  HX.text=hxInputs.text.value; HX.frame=hxInputs.frame.value;
+  HX.grad=chkGrad.checked; HX.autoText=chkAuto.checked;
+  document.getElementById('fld-hxbgbottom').classList.toggle('off', !HX.grad);
+  document.getElementById('fld-hxtext').classList.toggle('off', HX.autoText);
+  hxInputs.bgBottom.disabled=!HX.grad; hxInputs.text.disabled=HX.autoText;
+}
+function colorsChanged(){ applyColors(); renderTemplateCards(); }
+colInputs.primary.addEventListener('input', ()=>{
+  if(!bandTouched) hxInputs.band.value=colInputs.primary.value;
+  if(!hexTouched) hxInputs.hex.value=colInputs.primary.value;
+  colorsChanged();
 });
+colInputs.dark.addEventListener('input', colorsChanged);
+colInputs.accent.addEventListener('input', colorsChanged);
+hxInputs.band.addEventListener('input', ()=>{ bandTouched=true; colorsChanged(); });
+hxInputs.hex.addEventListener('input', ()=>{ hexTouched=true; colorsChanged(); });
+['bgTop','bgBottom','text','frame'].forEach(k=>hxInputs[k].addEventListener('input', colorsChanged));
+chkGrad.addEventListener('change', colorsChanged);
+chkAuto.addEventListener('change', colorsChanged);
+
+// ----- schema's: kant-en-klaar + eigen (bewaard in de browser) -----
+const PRESETS = [
+  { name:'Standaard',  s:{ primary:'#EEB412', dark:'#1B2A4A', accent:'#2F6FED', bgTop:'#EEEBE6', bgBottom:'#CEC4B8' } },
+  { name:'Zorg',       s:{ primary:'#0F7C7A', dark:'#0B3C5D', accent:'#F28C28', bgTop:'#EAF4F3', bgBottom:'#C7DEDC' } },
+  { name:'Techniek',   s:{ primary:'#1D4ED8', dark:'#0F172A', accent:'#F59E0B', bgTop:'#EEF2F7', bgBottom:'#CBD5E1' } },
+  { name:'Fris roze',  s:{ primary:'#F6C1D9', dark:'#2B2B2B', accent:'#111111', bgTop:'#FBF3F6', bgBottom:'#EBD5DE' } },
+  { name:'Groen',      s:{ primary:'#2E7D32', dark:'#1B3A2A', accent:'#F9A825', bgTop:'#F1F5EC', bgBottom:'#D3DCC4' } },
+  { name:'Rood',       s:{ primary:'#D32F2F', dark:'#222831', accent:'#D32F2F', bgTop:'#F3F1F0', bgBottom:'#D9D4D1' } }
+];
+function getScheme(){
+  return { primary:colInputs.primary.value, dark:colInputs.dark.value, accent:colInputs.accent.value,
+           hxband:hxInputs.band.value, hxhex:hxInputs.hex.value, bgTop:hxInputs.bgTop.value, bgBottom:hxInputs.bgBottom.value,
+           grad:chkGrad.checked, autoText:chkAuto.checked, text:hxInputs.text.value, frame:hxInputs.frame.value };
+}
+function setScheme(c){
+  const v=(x,d)=>/^#[0-9a-fA-F]{6}$/.test(x||'') ? x : d;
+  colInputs.primary.value=v(c.primary,DEFAULT_COLORS.primary);
+  colInputs.dark.value=v(c.dark,DEFAULT_COLORS.dark);
+  colInputs.accent.value=v(c.accent,DEFAULT_COLORS.accent);
+  hxInputs.band.value=v(c.hxband, colInputs.primary.value);
+  hxInputs.hex.value=v(c.hxhex, colInputs.primary.value);
+  bandTouched = hxInputs.band.value.toLowerCase()!==colInputs.primary.value.toLowerCase();
+  hexTouched  = hxInputs.hex.value.toLowerCase()!==colInputs.primary.value.toLowerCase();
+  hxInputs.bgTop.value=v(c.bgTop,DEFAULT_HX.bgTop);
+  hxInputs.bgBottom.value=v(c.bgBottom,DEFAULT_HX.bgBottom);
+  chkGrad.checked = c.grad!==false;
+  chkAuto.checked = c.autoText!==false;
+  hxInputs.text.value=v(c.text,DEFAULT_HX.text);
+  hxInputs.frame.value=v(c.frame,DEFAULT_HX.frame);
+  colorsChanged();
+}
+function swatchHTML(c){ return '<span class="sw"><i style="background:'+c.primary+'"></i><i style="background:'+c.dark+'"></i><i style="background:'+c.accent+'"></i><i style="background:'+(c.bgBottom||c.bgTop||'#ccc')+'"></i></span>'; }
+const SCHEME_KEY='mmd_kleurschemas_v1';
+function loadSaved(){ try{ const a=JSON.parse(localStorage.getItem(SCHEME_KEY)||'[]'); return Array.isArray(a)?a:[]; }catch(e){ return null; } }
+function storeSaved(a){ try{ localStorage.setItem(SCHEME_KEY, JSON.stringify(a)); return true; }catch(e){ return false; } }
+function renderSchemes(){
+  const pr=document.getElementById('presetRow'); pr.innerHTML='';
+  PRESETS.forEach(pz=>{
+    const b=document.createElement('button'); b.className='preset'; b.type='button';
+    b.innerHTML=swatchHTML(pz.s)+'<span>'+pz.name+'</span>';
+    b.addEventListener('click', ()=>setScheme(pz.s));
+    pr.appendChild(b);
+  });
+  const sr=document.getElementById('savedRow'); sr.innerHTML='';
+  const saved=loadSaved();
+  document.getElementById('schemeForm').style.display = saved===null ? 'none' : 'flex';
+  (saved||[]).forEach((sc,i)=>{
+    const b=document.createElement('button'); b.className='preset'; b.type='button';
+    b.innerHTML=swatchHTML(sc.c)+'<span></span><span class="x" title="Verwijder dit schema">\u00d7</span>';
+    b.querySelector('span:nth-of-type(2)').textContent=sc.name;
+    b.addEventListener('click', e=>{
+      if(e.target.classList.contains('x')){ const a=loadSaved()||[]; a.splice(i,1); storeSaved(a); renderSchemes(); return; }
+      setScheme(sc.c);
+    });
+    sr.appendChild(b);
+  });
+}
+document.getElementById('schemeSave').addEventListener('click', ()=>{
+  const inp=document.getElementById('schemeName'); const name=inp.value.trim();
+  if(!name){ inp.focus(); return; }
+  const a=loadSaved()||[]; const c=getScheme();
+  const ex=a.findIndex(x=>x.name.toLowerCase()===name.toLowerCase());
+  if(ex>=0) a[ex]={name,c}; else a.push({name,c});
+  if(storeSaved(a.slice(-12))){ inp.value=''; renderSchemes(); }
+});
+document.getElementById('colReset').addEventListener('click', ()=>{
+  setScheme({ primary:DEFAULT_COLORS.primary, dark:DEFAULT_COLORS.dark, accent:DEFAULT_COLORS.accent,
+              bgTop:DEFAULT_HX.bgTop, bgBottom:DEFAULT_HX.bgBottom, grad:true, autoText:true, text:DEFAULT_HX.text, frame:DEFAULT_HX.frame });
+});
+renderSchemes();
+applyColors();
 const SIZES = {
   feed45:{ w:1440, h:1800, label:'1440\u00d71800' },
   square:{ w:1440, h:1440, label:'1440\u00d71440' },
@@ -710,14 +858,15 @@ function drawButton(ctx, x, y, w, h, text, fill, color){
   ctx.fillText(text, x+w/2, y+h/2+1);
   ctx.textBaseline='alphabetic'; ctx.textAlign='left';
 }
-function drawPin(ctx, x, y, s){
-  // simple location pin, tip at (x,y)
+function drawPin(ctx, x, y, s, outline){
+  // simple location pin, tip at (x,y). outline = witte rand voor donkere achtergronden
   ctx.fillStyle='#C8271F';
   ctx.beginPath();
   ctx.moveTo(x, y);
   ctx.bezierCurveTo(x-s*0.9, y-s*1.1, x-s*0.75, y-s*2.1, x, y-s*2.1);
   ctx.bezierCurveTo(x+s*0.75, y-s*2.1, x+s*0.9, y-s*1.1, x, y);
   ctx.closePath(); ctx.fill();
+  if(outline){ ctx.strokeStyle='#FFFFFF'; ctx.lineWidth=Math.max(1.5,s*0.12); ctx.stroke(); }
   ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(x, y-s*1.45, s*0.32, 0, Math.PI*2); ctx.fill();
 }
 
@@ -745,15 +894,15 @@ function fitHeadline(ctx, text, maxW, startFs, minFs, maxLines, weight, family){
 function drawCtaHex(ctx, cx, cy, r, cta){
   ctx.save();
   ctx.shadowColor='rgba(0,0,0,.35)'; ctx.shadowBlur=r*0.17; ctx.shadowOffsetX=r*0.07; ctx.shadowOffsetY=r*0.07;
-  hexPath(ctx,cx,cy,r); ctx.fillStyle=YELLOW; ctx.fill();
+  hexPath(ctx,cx,cy,r); ctx.fillStyle=HX.hex; ctx.fill();
   ctx.restore();
-  hexPath(ctx,cx,cy,r*0.917); ctx.strokeStyle='#fff'; ctx.lineWidth=r*0.037; ctx.setLineDash([0,r*0.083]); ctx.lineCap='round'; ctx.stroke();
+  hexPath(ctx,cx,cy,r*0.917); ctx.strokeStyle=HX.frame; ctx.lineWidth=r*0.037; ctx.setLineDash([0,r*0.083]); ctx.lineCap='round'; ctx.stroke();
   ctx.setLineDash([]); ctx.lineCap='butt';
   const words = cta.trim().toUpperCase().split(/\s+/);
   let l1, l2;
   if(words.length===1){ l1=''; l2=words[0]; }
   else { const cut=Math.ceil(words.length/2); l1=words.slice(0,cut).join(' '); l2=words.slice(cut).join(' '); }
-  ctx.fillStyle=onColor(YELLOW); ctx.textAlign='center';
+  ctx.fillStyle=onColor(HX.hex); ctx.textAlign='center';
   let fs1=Math.round(r*0.28), fs2=Math.round(r*0.35);
   ctx.font='400 '+fs1+'px '+SANS; while(ctx.measureText(l1).width>r*1.55 && fs1>10){ fs1-=1; ctx.font='400 '+fs1+'px '+SANS; }
   ctx.font='800 '+fs2+'px '+SANS; while(ctx.measureText(l2).width>r*1.55 && fs2>12){ fs2-=1; ctx.font='800 '+fs2+'px '+SANS; }
@@ -767,49 +916,224 @@ function drawCtaHex(ctx, cx, cy, r, cta){
 }
 
 // Tekstblok voor de split-sjablonen: kop -> ondertekst -> knop, netjes onder elkaar en verticaal gecentreerd in het vlak.
-function drawSplitText(ctx, ax, ay, aw, ah, tx, u){
-  const pad = 56*u, X = ax+pad, maxW = aw-2*pad;
-  // Bepaal de maten; past het blok niet in de hoogte, dan alles iets kleiner en opnieuw.
-  let sc = 1, L;
-  for(let i=0;i<12;i++){
-    const kopStart = Math.round(Math.min(56*u, aw*0.11)*sc), kopMin = Math.round(20*u*sc);
-    const {lines:kopLines, fs} = fitHeadline(ctx, tx.kop, maxW, kopStart, kopMin, 3, 'bold', 'Georgia, serif');
-    const KL = Math.round(fs*1.15), SFS = Math.round(Math.min(27*u, fs*0.5)*sc), SL = Math.round(SFS*1.4);
-    ctx.font=SFS+'px '+SANS; const SGAP=Math.round(SFS*0.45), SIND=Math.round(SFS*1.2);
-    const subItems = layoutSub(ctx, tx, maxW, SIND); const subH = subHeight(subItems, SL, SGAP);
-    const GAP = subItems.length ? Math.round(22*u*sc) : 0;
-    const BTN_FS = Math.round(Math.min(26*u, fs*0.48)*sc), BTN_H = Math.round(BTN_FS*2.4), BTN_GAP = Math.round(32*u*sc);
-    const blockH = kopLines.length*KL + GAP + subH + BTN_GAP + BTN_H;
-    L = {kopLines, fs, KL, SFS, SL, SGAP, SIND, subItems, subH, GAP, BTN_FS, BTN_H, BTN_GAP, blockH};
-    if(blockH <= ah - 2*Math.round(28*u)) break;
-    sc *= 0.9;
+// =====================================================================
+// Gedeelde tekstlaag voor sjablonen 2 t/m 6. Zelfde velden als Hexagon:
+// logo/bedrijfsnaam, label, kop, M/V, ondertekst, knop en locatie met pin.
+// =====================================================================
+function contrast(a,b){ const l1=luminance(a), l2=luminance(b); return (Math.max(l1,l2)+0.05)/(Math.min(l1,l2)+0.05); }
+function pickOn(color, bg, fallback, min){ return contrast(color,bg) >= (min||3) ? color : fallback; }
+
+function drawLocation(ctx, ax, bottom, loc, fs, maxW, color, center, outline){
+  const city = loc.toUpperCase();
+  // Eerst "Locatie: PLAATS" proberen (tot 80% van de gewenste maat); past het niet, dan zonder "Locatie:" en pas daarna verder krimpen.
+  let f=fs, prefix=true, w1=0, w2, pinS, pinW, gap, total;
+  const measure=()=>{
+    ctx.font='bold '+f+'px '+SANS; w1 = prefix ? ctx.measureText('Locatie: ').width : 0;
+    ctx.font='500 '+f+'px '+SANS; w2 = ctx.measureText(city).width;
+    pinS=f*0.62; pinW=pinS*1.8; gap=f*0.35; total=pinW+gap+w1+w2;
+  };
+  measure();
+  while(total>maxW && f>Math.round(fs*0.8)){ f=Math.max(Math.round(fs*0.8), Math.round(f*0.95)); measure(); if(f<=Math.round(fs*0.8)) break; }
+  if(total>maxW){ prefix=false; f=fs; measure(); while(total>maxW && f>12){ f=Math.round(f*0.95); measure(); } }
+  const x = center ? ax-total/2 : ax;
+  const base = bottom - Math.round(f*0.18);
+  drawPin(ctx, x+pinW/2, base, pinS, outline);
+  ctx.textAlign='left'; ctx.fillStyle=color;
+  if(prefix){ ctx.font='bold '+f+'px '+SANS; ctx.fillText('Locatie:', x+pinW+gap, base); }
+  ctx.font='500 '+f+'px '+SANS; ctx.fillText(city, x+pinW+gap+w1, base);
+}
+
+function drawBrand(ctx, ax, top, maxW, h, fs, name, color, center, plate){
+  if(logoImg){
+    const padP = plate ? Math.round(h*0.12) : 0;
+    const innerH = h-2*padP, boxW = Math.min(maxW*0.6, h*4)-2*padP;
+    const s = Math.min(boxW/logoImg.width, innerH/logoImg.height), dw=logoImg.width*s, dh=logoImg.height*s;
+    const px = center ? ax-(dw+2*padP)/2 : ax;
+    if(plate){ ctx.fillStyle='#FFFFFF'; roundRect(ctx, px, top, dw+2*padP, h, Math.round(h*0.14)); ctx.fill(); }
+    ctx.drawImage(logoImg, px+padP, top+(h-dh)/2, dw, dh);
+  } else {
+    let f=fs;
+    ctx.font='600 '+f+'px '+SANS;
+    while(ctx.measureText(name).width>maxW && f>12){ f-=1; ctx.font='600 '+f+'px '+SANS; }
+    ctx.fillStyle=color; ctx.textAlign=center?'center':'left';
+    ctx.fillText(name, ax, top+h*0.8);
   }
-  let y = ay + Math.max(28*u, (ah-L.blockH)/2) + L.KL*0.8;
-  ctx.textAlign='left'; ctx.fillStyle=onColor(NAVY); ctx.font='bold '+L.fs+'px Georgia, serif';
-  y = drawLines(ctx, L.kopLines, X, y, L.KL);
-  if(L.subItems.length){
-    y += L.GAP; ctx.font=L.SFS+'px '+SANS; ctx.fillStyle=onColorSoft(NAVY);
-    y = drawSub(ctx, L.subItems, X, y, L.SL, L.SGAP, L.SIND, ACCENT, 'left') - L.SL;
-  } else y -= L.KL;
-  y += L.BTN_GAP;
-  ctx.font='bold '+L.BTN_FS+'px '+SANS;
-  const bw = Math.min(maxW, Math.max(200*u*sc, ctx.measureText(tx.cta).width+72*u));
-  ctx.fillStyle=ACCENT; roundRect(ctx,X,y,bw,L.BTN_H,6*u); ctx.fill();
-  ctx.fillStyle=onColor(ACCENT); ctx.textAlign='center'; ctx.textBaseline='middle';
-  ctx.fillText(tx.cta, X+bw/2, y+L.BTN_H/2+1);
-  ctx.textBaseline='alphabetic'; ctx.textAlign='left';
 }
-function drawSplitH(ctx, W, H, img, tx, u, photoFrac){
-  const PH = Math.round(H*photoFrac);
-  coverDraw(ctx, img, 0,0,W,PH);
-  ctx.fillStyle=NAVY; ctx.fillRect(0,PH,W,H-PH);
-  drawSplitText(ctx, 0, PH, W, H-PH, tx, u);
+
+// Meet alle onderdelen op schaal sc. parts = welke onderdelen in dit blok horen.
+function measureStack(ctx, tx, o, parts, maxW, sc){
+  const u=o.u*sc, has=k=>parts.includes(k), m={u};
+  m.G=Math.round(20*u);
+  const bname=(tx.bedrijf||'').trim();
+  m.brand = has('brand') && (!!logoImg || !!bname);
+  m.brandH = m.brand ? Math.round((logoImg?64:38)*u) : 0;
+  m.brandFs = Math.round(34*u);
+  const lab=(tx.label||'').trim().toUpperCase();
+  m.label = has('label') && lab ? lab : '';
+  m.labelFs = Math.round(24*u); m.labelH = m.label ? Math.round(m.labelFs*1.5) : 0;
+  if(has('kop') && (tx.kop||'').trim()){
+    const k = fitHeadline(ctx, tx.kop, maxW, Math.max(16,Math.round(Math.min(o.kopStart*u, maxW*0.14))), Math.max(14,Math.round(18*u)), 3, 'bold', o.kopFont);
+    m.kopLines=k.lines; m.kopFs=k.fs;
+  } else { m.kopLines=[]; m.kopFs=Math.round(o.kopStart*u*0.6); }
+  m.kopLH=Math.round(m.kopFs*1.15); m.kopH=m.kopLines.length*m.kopLH;
+  m.mv = has('mv') && (tx.mv||'').trim() ? tx.mv.trim() : '';
+  m.mvFs = Math.max(13, Math.round(Math.min(28*u, m.kopFs*0.55))); m.mvH = m.mv ? Math.round(m.mvFs*1.5) : 0;
+  m.SFS = Math.max(13, Math.round(Math.min(o.subFs*u, Math.max(m.kopFs*0.55, 15*u))));
+  m.SL=Math.round(m.SFS*1.4); m.SGAP=Math.round(m.SFS*0.45); m.SIND=Math.round(m.SFS*1.2);
+  if(has('sub')){ ctx.font=m.SFS+'px '+SANS; m.subItems=layoutSub(ctx, tx, maxW, o.align==='center'?0:m.SIND); } else m.subItems=[];
+  m.subH = subHeight(m.subItems, m.SL, m.SGAP);
+  m.btn = has('button') && (tx.cta||'').trim() ? tx.cta.trim() : '';
+  m.btnFs=Math.round(26*u); m.btnH = m.btn ? Math.round(m.btnFs*2.4) : 0;
+  m.loc = has('loc') && (tx.loc||'').trim() ? tx.loc.trim() : '';
+  m.locFs=Math.round(26*u); m.locH = m.loc ? Math.round(m.locFs*1.5) : 0;
+  let mid=0;
+  if(m.labelH) mid += m.labelH + Math.round(4*u);
+  mid += m.kopH;
+  if(m.mvH) mid += Math.round(4*u) + m.mvH;
+  if(m.subH) mid += m.G + m.subH;
+  if(m.btnH) mid += Math.round(m.G*1.3) + m.btnH;
+  m.midH=mid;
+  m.total = m.brandH + (m.brandH&&mid ? m.G : 0) + mid + (m.locH&&(mid||m.brandH) ? m.G : 0) + m.locH;
+  return m;
 }
-function drawSplitV(ctx, W, H, img, tx, u, photoFrac){
-  const PW = Math.round(W*photoFrac);
-  coverDraw(ctx, img, 0,0,PW,H);
-  ctx.fillStyle=NAVY; ctx.fillRect(PW,0,W-PW,H);
-  drawSplitText(ctx, PW, 0, W-PW, H, tx, u);
+
+// Tekent een tekstblok in rechthoek r. Brand staat bovenaan, locatie onderaan, de rest staat daartussen.
+function drawStack(ctx, r, tx, o, parts){
+  const padX=(o.padX==null?56:o.padX)*o.u, padY=(o.padY==null?40:o.padY)*o.u;
+  const maxW=r.w-2*padX, availH=r.h-2*padY, center=o.align==='center';
+  // Begin iets groter dan standaard zodat ruime vlakken goed gevuld worden, en krimp tot het past.
+  let sc=o.maxScale||1.3, m;
+  for(let i=0;i<24;i++){ m=measureStack(ctx, tx, o, parts, maxW, sc); if(m.total<=availH) break; sc*=0.94; }
+  // Past het ook op de kleinste maat niet, laat dan de laatste ondertekstregels weg (nooit tekst over tekst).
+  while(m.total>availH && m.subItems.length){
+    const last=m.subItems[m.subItems.length-1];
+    if(last.lines.length>1) last.lines.pop(); else m.subItems.pop();
+    const old=m.subH; m.subH=subHeight(m.subItems, m.SL, m.SGAP);
+    m.total-=(old-m.subH); m.midH-=(old-m.subH);
+    if(!m.subItems.length){ m.total-=m.G; m.midH-=m.G; }
+  }
+  const al = center?'center':'left';
+  const X=r.x+padX, ax=center ? r.x+r.w/2 : X;
+  const top=r.y+padY, bottom=r.y+r.h-padY;
+  if(m.brand) drawBrand(ctx, ax, top, maxW, m.brandH, m.brandFs, (tx.bedrijf||'').trim(), o.brandFg||o.fg, center, !!o.logoPlate);
+  if(m.loc) drawLocation(ctx, ax, bottom, m.loc, m.locFs, maxW, o.fg, center, !!o.dark);
+  const midTop = top + m.brandH + (m.brandH ? m.G : 0);
+  const midBottom = bottom - m.locH - (m.locH ? m.G : 0);
+  let y = o.valign==='bottom' ? midBottom-m.midH : midTop + Math.max(0,(midBottom-midTop-m.midH)/2);
+  ctx.textBaseline='alphabetic';
+  if(m.label){
+    ctx.textAlign=al; ctx.font='300 '+m.labelFs+'px '+SANS; ctx.fillStyle=o.labelColor||o.fg;
+    ctx.fillText(m.label, ax, y+m.labelFs); y+=m.labelH+Math.round(4*m.u);
+  }
+  if(m.kopLines.length){
+    ctx.textAlign=al; ctx.font='bold '+m.kopFs+'px '+o.kopFont; ctx.fillStyle=o.fg;
+    drawLines(ctx, m.kopLines, ax, y+Math.round(m.kopLH*0.8), m.kopLH); y+=m.kopH;
+  }
+  if(m.mv){
+    y+=Math.round(4*m.u); ctx.textAlign=al; ctx.font='300 '+m.mvFs+'px '+SANS; ctx.fillStyle=o.soft;
+    ctx.fillText(m.mv, ax, y+Math.round(m.mvFs*1.05)); y+=m.mvH;
+  }
+  if(m.subItems.length){
+    y+=m.G; ctx.font=m.SFS+'px '+SANS; ctx.fillStyle=o.soft;
+    drawSub(ctx, m.subItems, ax, y+Math.round(m.SL*0.78), m.SL, m.SGAP, center?0:m.SIND, o.dot, al); y+=m.subH;
+  }
+  if(m.btn){
+    y+=Math.round(m.G*1.3);
+    let bf=m.btnFs; ctx.font='bold '+bf+'px '+SANS;
+    while(ctx.measureText(m.btn).width+Math.round(48*m.u)>maxW && bf>12){ bf-=1; ctx.font='bold '+bf+'px '+SANS; }
+    const bw=Math.min(maxW, ctx.measureText(m.btn).width+Math.round(72*m.u)), bx=center?ax-bw/2:X;
+    ctx.fillStyle=ACCENT; roundRect(ctx, bx, y, bw, m.btnH, Math.round(6*m.u)); ctx.fill();
+    ctx.fillStyle=onColor(ACCENT); ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(m.btn, bx+bw/2, y+m.btnH/2+1); ctx.textBaseline='alphabetic';
+  }
+  ctx.textAlign='left';
+}
+
+// Twee kolommen naast elkaar, voor brede lage vlakken (bijv. Split horizontaal op 1200x628).
+function twoCol(ctx, r, tx, o, leftParts, rightParts, split){
+  const lw=Math.round(r.w*split);
+  drawStack(ctx, {x:r.x, y:r.y, w:lw, h:r.h}, tx, o, leftParts);
+  drawStack(ctx, {x:r.x+lw, y:r.y, w:r.w-lw, h:r.h}, tx, Object.assign({}, o, {padX:40}), rightParts);
+}
+
+const ALL_PARTS = ['brand','label','kop','mv','sub','button','loc'];
+const SERIF = 'Georgia, serif';
+
+// Sjablonen 2 t/m 6 voor zowel staand/vierkant als liggend.
+function drawShared(ctx, W, H, img, type, tx){
+  const wide = W/H > 1.4, u = W/1000, WHITE='#FFFFFF', DARKBG='#0A0E18', primary=YELLOW;
+
+  if(type==='split-h' || type==='split-v'){
+    const bg=NAVY, fg=onColor(bg);
+    const o={u, align:'left', kopFont:SERIF, kopStart:56, subFs:27, fg, soft:onColorSoft(bg),
+             labelColor:pickOn(primary,bg,fg,3), dot:pickOn(ACCENT,bg,fg,2), brandFg:fg, logoPlate:true, dark:luminance(bg)<0.4};
+    if(type==='split-h'){
+      const PH=Math.round(H*(wide?0.5:0.52));
+      coverDraw(ctx, img, 0,0,W,PH);
+      ctx.fillStyle=bg; ctx.fillRect(0,PH,W,H-PH);
+      ctx.fillStyle=primary; ctx.fillRect(0,PH,W,Math.round(10*u));
+      const r={x:0,y:PH,w:W,h:H-PH};
+      if(r.w/r.h>1.9) twoCol(ctx, r, tx, o, ['label','kop','mv','sub'], ['brand','button','loc'], 0.6);
+      else drawStack(ctx, r, tx, o, ALL_PARTS);
+    } else {
+      const PW=Math.round(W*(wide?0.45:0.5));
+      coverDraw(ctx, img, 0,0,PW,H);
+      ctx.fillStyle=bg; ctx.fillRect(PW,0,W-PW,H);
+      ctx.fillStyle=primary; ctx.fillRect(PW,0,Math.round(10*u),H);
+      drawStack(ctx, {x:PW,y:0,w:W-PW,h:H}, tx, o, ALL_PARTS);
+    }
+  }
+
+  else if(type==='overlay'){
+    coverDraw(ctx, img, 0,0,W,H);
+    const gh = Math.round(H*(wide?0.72:0.64));
+    let g=ctx.createLinearGradient(0,H-gh,0,H);
+    g.addColorStop(0,'rgba(10,14,24,0)'); g.addColorStop(0.32,'rgba(10,14,24,0.72)'); g.addColorStop(1,'rgba(10,14,24,0.95)');
+    ctx.fillStyle=g; ctx.fillRect(0,H-gh,W,gh);
+    const th=Math.round(H*0.22);
+    g=ctx.createLinearGradient(0,0,0,th); g.addColorStop(0,'rgba(10,14,24,0.6)'); g.addColorStop(1,'rgba(10,14,24,0)');
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,th);
+    const o={u, align:'left', kopFont:SERIF, kopStart:wide?50:58, subFs:26, fg:WHITE, soft:'#E4E9F2',
+             labelColor:pickOn(primary,DARKBG,WHITE,3), dot:pickOn(primary,DARKBG,WHITE,3), brandFg:WHITE, logoPlate:true, dark:true, valign:'bottom', padX:56, padY:44, maxScale:1.0};
+    drawStack(ctx, {x:0,y:0,w:W,h:th}, tx, Object.assign({}, o, {valign:'top', padY:28}), ['brand']);
+    const r={x:0,y:H-gh,w:W,h:gh};
+    if(wide) twoCol(ctx, r, tx, o, ['label','kop','mv','sub'], ['button','loc'], 0.6);
+    else drawStack(ctx, r, tx, o, ['label','kop','mv','sub','button','loc']);
+  }
+
+  else if(type==='achtergrond'){
+    ctx.filter='blur('+Math.round(16*u)+'px) brightness(0.55)';
+    coverDraw(ctx, img, -40*u,-40*u,W+80*u,H+80*u);
+    ctx.filter='none';
+    const cw=Math.round(W*(wide?0.7:0.84)), ch=Math.round(H*(wide?0.84:(H/W>1.1?0.62:0.72)));
+    const cx=Math.round((W-cw)/2), cy=Math.round((H-ch)/2), rad=Math.round(24*u);
+    ctx.fillStyle=WHITE; roundRect(ctx, cx, cy, cw, ch, rad); ctx.fill();
+    ctx.save(); roundRect(ctx, cx, cy, cw, ch, rad); ctx.clip();
+    ctx.fillStyle=primary; ctx.fillRect(cx, cy, cw, Math.round(14*u)); ctx.restore();
+    const soft='#4A5361';
+    const o={u, align:'center', kopFont:SERIF, kopStart:50, subFs:25, fg:NAVY, soft,
+             labelColor:pickOn(primary,WHITE,soft,3), dot:pickOn(ACCENT,WHITE,NAVY,2.5), brandFg:NAVY, padX:48, padY:44};
+    drawStack(ctx, {x:cx,y:cy,w:cw,h:ch}, tx, o, ALL_PARTS);
+  }
+
+  else if(type==='bullets'){
+    const soft='#333333';
+    const o={u, align:'left', kopFont:SERIF, kopStart:46, subFs:28, fg:NAVY, soft,
+             labelColor:pickOn(primary,WHITE,'#4A5361',3), dot:pickOn(ACCENT,WHITE,NAVY,2.5), brandFg:NAVY, padX:56, padY:40};
+    if(wide){
+      const PW=Math.round(W*0.42);
+      coverDraw(ctx, img, 0,0,PW,H);
+      ctx.fillStyle=WHITE; ctx.fillRect(PW,0,W-PW,H);
+      ctx.fillStyle=primary; ctx.fillRect(PW,0,Math.round(10*u),H);
+      drawStack(ctx, {x:PW,y:0,w:W-PW,h:H}, tx, o, ALL_PARTS);
+    } else {
+      const PH=Math.round(H*0.46);
+      coverDraw(ctx, img, 0,0,W,PH);
+      ctx.fillStyle=WHITE; ctx.fillRect(0,PH,W,H-PH);
+      ctx.fillStyle=primary; ctx.fillRect(0,PH,W,Math.round(10*u));
+      drawStack(ctx, {x:0,y:PH,w:W,h:H-PH}, tx, o, ALL_PARTS);
+    }
+  }
 }
 
 // ---- Staand / vierkant (1:1 en 4:5): opbouw exact als voorbeeldbeeld 1 ----
@@ -817,22 +1141,22 @@ function drawTall(ctx, W, H, img, type, tx){
   const u = W/1000; // schaal voor lettergroottes
   if(type==='hexagon'){
     const g = ctx.createLinearGradient(0,0,0,H);
-    g.addColorStop(0,GREY_TOP); g.addColorStop(1,GREY_BOTTOM);
+    g.addColorStop(0,HX.bgTop); g.addColorStop(1,hxBgBottom());
     ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
     const BAND = W*0.28;
-    ctx.fillStyle=YELLOW; ctx.fillRect(0,0,W,BAND);
+    ctx.fillStyle=HX.band; ctx.fillRect(0,0,W,BAND);
     const px0=W*0.35, px1=W*0.985, ptop=BAND, pbot=H-W*0.145, apex=[(px0+px1)/2, W*0.07];
     const photoPath=()=>{ ctx.beginPath(); ctx.moveTo(px0,pbot); ctx.lineTo(px0,ptop); ctx.lineTo(apex[0],apex[1]); ctx.lineTo(px1,ptop); ctx.lineTo(px1,pbot); ctx.closePath(); };
     ctx.save(); photoPath(); ctx.clip();
     coverDraw(ctx, img, px0, apex[1], px1-px0, pbot-apex[1]);
     ctx.restore();
-    photoPath(); ctx.strokeStyle='#fff'; ctx.lineWidth=12*u; ctx.lineJoin='miter'; ctx.stroke();
+    photoPath(); ctx.strokeStyle=HX.frame; ctx.lineWidth=12*u; ctx.lineJoin='miter'; ctx.stroke();
     // logo / bedrijfsnaam
     if(logoImg) containDraw(ctx, logoImg, W*0.045, W*0.045, W*0.29, W*0.11);
-    else { ctx.fillStyle=onColor(YELLOW); ctx.font='600 '+Math.round(46*u)+'px '+SANS; ctx.fillText(tx.bedrijf, W*0.047, W*0.125); }
+    else { ctx.fillStyle=onColor(HX.band); ctx.font='600 '+Math.round(46*u)+'px '+SANS; ctx.fillText(tx.bedrijf, W*0.047, W*0.125); }
     // linkerkolom
     const LX=W*0.047, colW=W*0.29;
-    ctx.fillStyle=INK; ctx.font='300 '+Math.round(32*u)+'px '+SANS; ctx.textAlign='left';
+    ctx.fillStyle=hxText(); ctx.font='300 '+Math.round(32*u)+'px '+SANS; ctx.textAlign='left';
     ctx.fillText(tx.label.toUpperCase(), LX, W*0.345);
     const {lines, fs} = fitHeadline(ctx, tx.kop.toUpperCase(), colW, Math.round(58*u), Math.round(26*u), 3, 'bold', SANS);
     let y = drawLines(ctx, lines, LX, W*0.345+Math.round(64*u), Math.round(fs*1.12));
@@ -841,14 +1165,14 @@ function drawTall(ctx, W, H, img, type, tx){
     {
       const top = y + 34*u, bottom = (tx.loc ? H-W*0.072-44*u : H-W*0.06);
       const S = fitSub(ctx, tx, colW, bottom-top, Math.round(24*u), Math.round(13*u), '400');
-      ctx.font='400 '+S.fs+'px '+SANS; ctx.fillStyle=INK;
-      drawSub(ctx, S.items, LX, top+S.fs, S.lh, S.gap, S.indent, luminance(YELLOW)>0.5?INK:YELLOW, 'left');
+      ctx.font='400 '+S.fs+'px '+SANS; ctx.fillStyle=hxText();
+      drawSub(ctx, S.items, LX, top+S.fs, S.lh, S.gap, S.indent, hxDot(), 'left');
     }
     // locatie
     if(tx.loc){
       const ly = H-W*0.072;
       drawPin(ctx, LX+16*u, ly-8*u, 18*u);
-      ctx.fillStyle=INK; ctx.font='bold '+Math.round(28*u)+'px '+SANS;
+      ctx.fillStyle=hxText(); ctx.font='bold '+Math.round(28*u)+'px '+SANS;
       ctx.fillText('Locatie:', LX+44*u, ly);
       const lw=ctx.measureText('Locatie: ').width;
       ctx.font='500 '+Math.round(28*u)+'px '+SANS; ctx.fillText(tx.loc.toUpperCase(), LX+44*u+lw, ly);
@@ -856,60 +1180,7 @@ function drawTall(ctx, W, H, img, type, tx){
     drawCtaHex(ctx, W*0.82, H-W*0.24, W*0.15, tx.cta);
   }
 
-  else if(type==='split-h'){ drawSplitH(ctx, W, H, img, tx, u, 0.56); }
-  else if(type==='split-v'){ drawSplitV(ctx, W, H, img, tx, u, 0.5); }
-
-  else if(type==='overlay'){
-    coverDraw(ctx, img, 0,0,W,H);
-    const grad = ctx.createLinearGradient(0,H*0.5,0,H);
-    grad.addColorStop(0,'rgba(10,14,24,0)'); grad.addColorStop(1,'rgba(10,14,24,0.9)');
-    ctx.fillStyle=grad; ctx.fillRect(0,H*0.5,W,H*0.5);
-    const X=64*u, maxW=W-128*u, KL=Math.round(64*u), SL=Math.round(36*u);
-    const {lines:kopLines, fs} = fitHeadline(ctx, tx.kop, maxW, Math.round(58*u), Math.round(32*u), 3, 'bold', 'Georgia, serif');
-    const SFS=Math.round(26*u), SGAP=Math.round(SFS*0.45), SIND=Math.round(SFS*1.2);
-    ctx.font=SFS+'px '+SANS; const subItems = layoutSub(ctx, tx, maxW, SIND); const subH = subHeight(subItems, SL, SGAP);
-    let y = H-60*u - subH - 16*u - (kopLines.length-1)*KL;
-    ctx.fillStyle='#fff'; ctx.font='bold '+fs+'px Georgia, serif'; ctx.textAlign='left';
-    y = drawLines(ctx, kopLines, X, y, KL);
-    ctx.fillStyle='#E4E9F2'; ctx.font=SFS+'px '+SANS;
-    drawSub(ctx, subItems, X, y-KL+SL+16*u, SL, SGAP, SIND, luminance(YELLOW)<0.08?'#fff':YELLOW, 'left');
-  }
-
-  else if(type==='achtergrond'){
-    ctx.filter='blur('+Math.round(16*u)+'px) brightness(0.55)';
-    coverDraw(ctx, img, -40*u,-40*u,W+80*u,H+80*u);
-    ctx.filter='none';
-    const cw=W*0.82, ch=Math.min(H*0.4, W*0.5), cx=(W-cw)/2, cy=(H-ch)/2;
-    ctx.fillStyle='#fff'; roundRect(ctx, cx, cy, cw, ch, 24*u); ctx.fill();
-    ctx.textAlign='center';
-    const {lines:kopLines, fs} = fitHeadline(ctx, tx.kop, cw-80*u, Math.round(50*u), Math.round(30*u), 3, 'bold', 'Georgia, serif');
-    const KL=Math.round(58*u), SL=Math.round(34*u), GAP=Math.round(22*u), SFS=Math.round(25*u), SGAP=Math.round(SFS*0.45);
-    ctx.font=SFS+'px '+SANS; const subItems = layoutSub(ctx, tx, cw-80*u, 0); const subH = subHeight(subItems, SL, SGAP);
-    const blockH = kopLines.length*KL + GAP + subH;
-    let y = cy + (ch-blockH)/2 + KL*0.8;
-    ctx.font='bold '+fs+'px Georgia, serif'; ctx.fillStyle=NAVY;
-    y = drawLines(ctx, kopLines, W/2, y, KL);
-    ctx.font=SFS+'px '+SANS; ctx.fillStyle='#5B6472';
-    drawSub(ctx, subItems, W/2, y+GAP-KL+SL, SL, SGAP, 0, ACCENT, 'center');
-    ctx.textAlign='left';
-  }
-
-  else if(type==='bullets'){
-    const PH = Math.round(H*0.5);
-    coverDraw(ctx, img, 0,0,W,PH);
-    ctx.fillStyle='#fff'; ctx.fillRect(0,PH,W,H-PH);
-    const X=64*u, maxW=W-128*u;
-    const {lines:kopLines, fs} = fitHeadline(ctx, tx.kop, maxW, Math.round(46*u), Math.round(28*u), 2, 'bold', 'Georgia, serif');
-    ctx.fillStyle=NAVY; ctx.font='bold '+fs+'px Georgia, serif'; ctx.textAlign='left';
-    let y = drawLines(ctx, kopLines, X, PH+80*u, Math.round(54*u));
-    const btnTop = H-64*u-56*u;
-    const S = fitSub(ctx, tx, maxW, btnTop - (y+18*u) - 30*u, Math.round(28*u), Math.round(16*u), '');
-    ctx.font=S.fs+'px '+SANS; ctx.fillStyle='#333';
-    drawSub(ctx, S.items, X, y+18*u, S.lh, S.gap, S.indent, ACCENT, 'left');
-    ctx.font='bold '+Math.round(26*u)+'px '+SANS;
-    const bw = Math.max(280*u, ctx.measureText(tx.cta).width+72*u);
-    drawButtonScaled(ctx, X, H-64*u-56*u, bw, 64*u, tx.cta, ACCENT, onColor(ACCENT), u);
-  }
+  else { drawShared(ctx, W, H, img, type, tx); }
 }
 function drawButtonScaled(ctx, x, y, w, h, text, fill, color, u){
   ctx.fillStyle=fill; roundRect(ctx,x,y,w,h,6*u); ctx.fill();
@@ -923,10 +1194,10 @@ function drawLandscape(ctx, W, H, img, type, tx){
   if(type==='hexagon'){
     // Ondergrond: lichtgrijs verloop + gele band bovenaan (zoals voorbeeld foto 1)
     const g = ctx.createLinearGradient(0,0,0,H);
-    g.addColorStop(0,GREY_TOP); g.addColorStop(1,GREY_BOTTOM);
+    g.addColorStop(0,HX.bgTop); g.addColorStop(1,hxBgBottom());
     ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
     const BAND = 190;
-    ctx.fillStyle=YELLOW; ctx.fillRect(0,0,W,BAND);
+    ctx.fillStyle=HX.band; ctx.fillRect(0,0,W,BAND);
 
     // Foto in 'huis'-vorm: rechthoek met puntdak, witte rand
     const px0=430, px1=1185, ptop=BAND, pbot=598, apex=[ (px0+px1)/2, 30 ];
@@ -938,19 +1209,19 @@ function drawLandscape(ctx, W, H, img, type, tx){
     ctx.save(); photoPath(); ctx.clip();
     coverDraw(ctx, img, px0, apex[1], px1-px0, pbot-apex[1]);
     ctx.restore();
-    photoPath(); ctx.strokeStyle='#fff'; ctx.lineWidth=10; ctx.lineJoin='miter'; ctx.stroke();
+    photoPath(); ctx.strokeStyle=HX.frame; ctx.lineWidth=10; ctx.lineJoin='miter'; ctx.stroke();
 
     // Logo of bedrijfsnaam linksboven in de gele band
     if(logoImg){
       containDraw(ctx, logoImg, 50, 38, 340, 118);
     } else {
-      ctx.fillStyle=onColor(YELLOW); ctx.font='600 42px '+SANS; ctx.textAlign='left';
+      ctx.fillStyle=onColor(HX.band); ctx.font='600 42px '+SANS; ctx.textAlign='left';
       ctx.fillText(tx.bedrijf, 52, 112);
     }
 
     // Linkerkolom: label, kop (uppercase, vet), M/V rechts uitgelijnd
     const LX=52, colW=340;
-    ctx.fillStyle=INK; ctx.font='300 30px '+SANS; ctx.textAlign='left';
+    ctx.fillStyle=hxText(); ctx.font='300 30px '+SANS; ctx.textAlign='left';
     ctx.fillText(tx.label.toUpperCase(), LX, 262);
     // Kop: begin op 52px en verklein tot alles in max 3 regels binnen de kolom past
     let kfs=52, kopLines;
@@ -971,14 +1242,14 @@ function drawLandscape(ctx, W, H, img, type, tx){
     {
       const top = y + 26, bottom = tx.loc ? 566-40 : H-40;
       const S = fitSub(ctx, tx, colW, bottom-top, 20, 12, '400');
-      ctx.font='400 '+S.fs+'px '+SANS; ctx.fillStyle=INK;
-      drawSub(ctx, S.items, LX, top+S.fs, S.lh, S.gap, S.indent, luminance(YELLOW)>0.5?INK:YELLOW, 'left');
+      ctx.font='400 '+S.fs+'px '+SANS; ctx.fillStyle=hxText();
+      drawSub(ctx, S.items, LX, top+S.fs, S.lh, S.gap, S.indent, hxDot(), 'left');
     }
 
     // Locatie linksonder met pin
     if(tx.loc){
       drawPin(ctx, LX+16, 566, 18);
-      ctx.fillStyle=INK; ctx.font='bold 26px '+SANS;
+      ctx.fillStyle=hxText(); ctx.font='bold 26px '+SANS;
       ctx.fillText('Locatie:', LX+44, 574);
       const lw = ctx.measureText('Locatie: ').width;
       ctx.font='500 26px '+SANS;
@@ -989,16 +1260,16 @@ function drawLandscape(ctx, W, H, img, type, tx){
     const cx=1015, cy=492, r=108;
     ctx.save();
     ctx.shadowColor='rgba(0,0,0,.35)'; ctx.shadowBlur=18; ctx.shadowOffsetX=8; ctx.shadowOffsetY=8;
-    hexPath(ctx,cx,cy,r); ctx.fillStyle=YELLOW; ctx.fill();
+    hexPath(ctx,cx,cy,r); ctx.fillStyle=HX.hex; ctx.fill();
     ctx.restore();
-    hexPath(ctx,cx,cy,r-9); ctx.strokeStyle='#fff'; ctx.lineWidth=4; ctx.setLineDash([0,9]); ctx.lineCap='round'; ctx.stroke();
+    hexPath(ctx,cx,cy,r-9); ctx.strokeStyle=HX.frame; ctx.lineWidth=4; ctx.setLineDash([0,9]); ctx.lineCap='round'; ctx.stroke();
     ctx.setLineDash([]); ctx.lineCap='butt';
     // knoptekst: eerste deel licht, laatste deel vet (zoals 'DOE HIER / DE TEST')
     const words = tx.cta.trim().toUpperCase().split(/\s+/);
     let l1, l2;
     if(words.length===1){ l1=''; l2=words[0]; }
     else { const cut=Math.ceil(words.length/2); l1=words.slice(0,cut).join(' '); l2=words.slice(cut).join(' '); }
-    ctx.fillStyle=onColor(YELLOW); ctx.textAlign='center';
+    ctx.fillStyle=onColor(HX.hex); ctx.textAlign='center';
     let fs1=30, fs2=38;
     ctx.font='400 '+fs1+'px '+SANS; while(ctx.measureText(l1).width>r*1.55 && fs1>16){ fs1-=2; ctx.font='400 '+fs1+'px '+SANS; }
     ctx.font='800 '+fs2+'px '+SANS; while(ctx.measureText(l2).width>r*1.55 && fs2>18){ fs2-=2; ctx.font='800 '+fs2+'px '+SANS; }
@@ -1011,61 +1282,7 @@ function drawLandscape(ctx, W, H, img, type, tx){
     ctx.textAlign='left';
   }
 
-  else if(type==='split-h'){ drawSplitH(ctx, W, H, img, tx, W/1000, 0.55); }
-  else if(type==='split-v'){ drawSplitV(ctx, W, H, img, tx, W/1000, 0.5); }
-
-  else if(type==='overlay'){
-    coverDraw(ctx, img, 0,0,W,H);
-    const grad = ctx.createLinearGradient(0,H*0.4,0,H);
-    grad.addColorStop(0,'rgba(10,14,24,0)'); grad.addColorStop(1,'rgba(10,14,24,0.9)');
-    ctx.fillStyle=grad; ctx.fillRect(0,H*0.4,W,H*0.6);
-    const X=64, maxW=W-128, KL=64, SL=36;
-    ctx.font='bold 56px Georgia, serif';
-    const kopLines = wrapLines(ctx, tx.kop, maxW);
-    ctx.font='26px '+SANS; const SGAP=12, SIND=31;
-    const subItems = layoutSub(ctx, tx, maxW, SIND); const subH = subHeight(subItems, SL, SGAP);
-    let y = H-56 - subH - 16 - (kopLines.length-1)*KL;
-    ctx.fillStyle='#fff'; ctx.font='bold 56px Georgia, serif';
-    y = drawLines(ctx, kopLines, X, y, KL);
-    ctx.fillStyle='#E4E9F2'; ctx.font='26px '+SANS;
-    drawSub(ctx, subItems, X, y-KL+SL+16, SL, SGAP, SIND, luminance(YELLOW)<0.08?'#fff':YELLOW, 'left');
-  }
-
-  else if(type==='achtergrond'){
-    ctx.filter='blur(14px) brightness(0.55)';
-    coverDraw(ctx, img, -30,-30,W+60,H+60);
-    ctx.filter='none';
-    const cw=W*0.62, ch=H*0.5, cx=(W-cw)/2, cy=(H-ch)/2;
-    ctx.fillStyle='#fff'; roundRect(ctx, cx, cy, cw, ch, 20); ctx.fill();
-    ctx.textAlign='center';
-    ctx.fillStyle=NAVY; ctx.font='bold 48px Georgia, serif';
-    const kopLines = wrapLines(ctx, tx.kop, cw-80);
-    ctx.font='24px '+SANS; const KL=56, SL=32, GAP=22, SGAP=11;
-    const subItems = layoutSub(ctx, tx, cw-80, 0); const subH = subHeight(subItems, SL, SGAP);
-    const blockH = kopLines.length*KL + GAP + subH;
-    let y = cy + (ch-blockH)/2 + KL*0.8;
-    ctx.font='bold 48px Georgia, serif'; ctx.fillStyle=NAVY;
-    y = drawLines(ctx, kopLines, W/2, y, KL);
-    ctx.font='24px '+SANS; ctx.fillStyle='#5B6472';
-    drawSub(ctx, subItems, W/2, y+GAP-KL+SL, SL, SGAP, 0, ACCENT, 'center');
-    ctx.textAlign='left';
-  }
-
-  else if(type==='bullets'){
-    const PW = W*0.42;
-    coverDraw(ctx, img, 0,0,PW,H);
-    ctx.fillStyle='#fff'; ctx.fillRect(PW,0,W-PW,H);
-    const X=PW+56, maxW=W-PW-112;
-    ctx.fillStyle=NAVY; ctx.font='bold 44px Georgia, serif'; ctx.textAlign='left';
-    const kopLines = wrapLines(ctx, tx.kop, maxW);
-    let y = drawLines(ctx, kopLines, X, 110, 52);
-    const S = fitSub(ctx, tx, maxW, (H-64-56) - (y+30) - 30, 26, 15, '');
-    ctx.font=S.fs+'px '+SANS; ctx.fillStyle='#333';
-    drawSub(ctx, S.items, X, y+30, S.lh, S.gap, S.indent, ACCENT, 'left');
-    ctx.font='bold 26px '+SANS;
-    const bw = Math.max(280, ctx.measureText(tx.cta).width+72);
-    drawButton(ctx, X, H-64-56, bw, 64, tx.cta, ACCENT, onColor(ACCENT));
-  }
+  else { drawShared(ctx, W, H, img, type, tx); }
 }
 
 render();
