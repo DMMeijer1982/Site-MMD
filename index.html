@@ -376,8 +376,10 @@
       <div class="has-dropdown">
         <a href="diensten.html" style="display: inline-flex; align-items: center; gap: 4px;">Diensten<svg width="10" height="10" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:0.6;"><path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="underline"></span></a>
         <div class="dropdown">
-          <a href="extern-ai-recruitmentteam.html">Extern AI recruitmentteam</a>
-          <a href="eigen-ai-recruitmentteam.html">Eigen AI recruitmentteam</a>
+          <a href="extern-ai-recruitmentteam.html">MMD Voor Jou</a>
+          <a href="cursus-op-locatie.html">MMD Met Jou</a>
+          <a href="zelf-cursus.html">MMD Online Cursus</a>
+          <a href="implementatie.html">MMD Implementatie</a>
         </div>
       </div>
       <div class="has-dropdown">
@@ -385,6 +387,7 @@
         <div class="dropdown">
           <a href="anso-lift-en-roltrapreinigingen.html">Anso Lift- en Roltrapreiniging</a>
           <a href="besselink-electro.html">Besselink Electro</a>
+          <a href="finantouch.html">Finantouch</a>
         </div>
       </div>
       <a href="over-mmd.html">Over MMD<span class="underline"></span></a>
@@ -402,11 +405,14 @@
       <a href="#probleem">Aanpak</a>
       <a href="#resultaten">Resultaten</a>
       <a href="diensten.html">Diensten</a>
-      <a href="extern-ai-recruitmentteam.html" style="padding-left: 24px; font-size: 14px; opacity: 0.75;">↳ Extern AI recruitmentteam</a>
-      <a href="eigen-ai-recruitmentteam.html" style="padding-left: 24px; font-size: 14px; opacity: 0.75;">↳ Eigen AI recruitmentteam</a>
+      <a href="extern-ai-recruitmentteam.html" style="padding-left: 24px; font-size: 14px; opacity: 0.75;">↳ MMD Voor Jou</a>
+      <a href="cursus-op-locatie.html" style="padding-left: 24px; font-size: 14px; opacity: 0.75;">↳ MMD Met Jou</a>
+      <a href="zelf-cursus.html" style="padding-left: 24px; font-size: 14px; opacity: 0.75;">↳ MMD Online Cursus</a>
+      <a href="implementatie.html" style="padding-left: 24px; font-size: 14px; opacity: 0.75;">↳ MMD Implementatie</a>
       <span class="mobile-label">Succesverhalen</span>
       <a href="anso-lift-en-roltrapreinigingen.html" style="padding-left: 24px; font-size: 14px; opacity: 0.75;">↳ Anso Lift- en Roltrapreiniging</a>
       <a href="besselink-electro.html" style="padding-left: 24px; font-size: 14px; opacity: 0.75;">↳ Besselink Electro</a>
+      <a href="finantouch.html" style="padding-left: 24px; font-size: 14px; opacity: 0.75;">↳ Finantouch</a>
       <a href="over-mmd.html">Over MMD</a>
       <a href="contact.html">Contact</a>
       <a href="https://calendly.com/mauricemeijerdigital-info/30min" target="_blank" rel="noopener" class="btn btn-primary">Plan een gesprek</a>
@@ -540,7 +546,7 @@
       <a href="contact.html">Contact</a>
       <a href="privacyverklaring.html">Privacyverklaring</a>
     </nav>
-    <div class="footer-copy">[© Jaar Naam praktijk — alle rechten voorbehouden]</div>
+    <div class="footer-copy">© 2026 Maurice Meijer Digital — alle rechten voorbehouden</div>
   </div>
 </footer>
 
@@ -585,11 +591,12 @@
   // ---------- Testimonials carousel (infinite slide, geen begin of einde) ----------
   // Voeg hier eenvoudig meer testimonials toe — de carousel schaalt automatisch mee.
   const testimonialsData = [
+    { quote: "Via de gebruikelijke kanalen hadden we al verschillende pogingen ondernomen om een geschikte kandidaat te vinden, maar zonder het gewenste resultaat. Door het snelle schakelen en praktische adviezen waren we binnen een week live. Deze manier van werven blijkt voor ons niet alleen sneller, maar ook aanzienlijk kostenefficiënter dan traditionele recruitmenttrajecten.", name: "Anita Stok", role: "Eigenaresse van Finantouch, Heteren", photo: "images/anita.png", link: "finantouch.html" },
     { quote: "We zijn nu iets langer dan een week bezig met het werven. De stroom aan kandidaten is dusdanig groot dat we diverse posities hebben kunnen invullen. We hadden verwacht dat deze aanpak zou werken, maar niet op deze snelheid. We zijn dan ook verbaasd over de resultaten. Naar verwachting starten aanstaande maand de eerste nieuwe medewerkers al bij ons.", name: "Dirk Hänseler", role: "Operationeel directeur bij ANSO Lift- & Roltrapreiniging", photo: "images/dirk.png" },
-    { type: "proof", image: "images/dirk-inbox-proof.png", name: "Dirk Hänseler", role: "Operationeel directeur bij ANSO Lift- & Roltrapreiniging", title: "55 kandidaten in 2 weken voor 3 vacatures" },
     { quote: "Maurice heeft op zijn effectieve manier via social media contact met mij gekregen. Na een fijn telefoongesprek ben ik bij hem op gesprek geweest en ben ik enthousiast geworden voor mijn huidige functie. Het was altijd fijn samenwerken. Maurice weet iedereen in beweging te krijgen.", name: "Erwin Mulder", role: "Salesmanager bij Besselink Import / Export B.V. Heteren", photo: "images/erwin.png", link: "besselink-electro.html" },
-    { type: "proof", image: "images/erwin-inbox-proof.png", name: "Erwin Mulder", role: "Salesmanager bij Besselink Import / Export B.V. Heteren", title: "80+ kandidaten in 1 maand voor 5 vacatures", link: "besselink-electro.html" },
     { quote: "Maurice staat zeer dicht bij zijn cliënten en is iemand die gemaakte afspraken nakomt. Hij bereid zijn werk met zorg voor en neemt de tijd en moeite om zijn cliënten zo goed mogelijk te bedienen. Maurice is iemand die zijn cliënten niet in het ongewisse laat. Ik kan mensen die opzoek zijn naar een goede recruiter aanraden om met Maurice in contact te treden.", name: "Alexsander Vermeulen", role: "Interim Procurement Professional / Consultant / Ondernemer", photo: "images/alexander.png" },
+    { type: "proof", image: "images/dirk-inbox-proof.png", name: "Dirk Hänseler", role: "Operationeel directeur bij ANSO Lift- & Roltrapreiniging", title: "55 kandidaten in 2 weken voor 3 vacatures" },
+    { type: "proof", image: "images/erwin-inbox-proof.png", name: "Erwin Mulder", role: "Salesmanager bij Besselink Import / Export B.V. Heteren", title: "80+ kandidaten in 1 maand voor 5 vacatures", link: "besselink-electro.html" },
     // Onderstaande ruimtes zijn nog niet ingevuld en daarom verborgen (hidden: true).
     // Vul quote/name/role in en zet hidden op false (of verwijder de regel) om ze te tonen.
     { quote: "[Testimonial quote hier — wat de klant ervaren heeft.]", name: "[Naam]", role: "[Functie / praktijk]", hidden: true },
