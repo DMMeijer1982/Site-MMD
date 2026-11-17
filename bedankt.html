@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+<title>Bedankt — Maurice Meijer Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+  :root {
+    --primary: #1F497D;
+    --primary-dark: #163A63;
+    --primary-light: #2E5F9E;
+    --accent: #C9943E;
+    --accent-dark: #AD7C2E;
+    --accent-light: #DBAE63;
+    --surface: #F5F6F8;
+    --ease: cubic-bezier(0.2, 0, 0, 1);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Roboto', sans-serif;
+    background: var(--surface);
+    color: var(--primary);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+  h1, h2 { font-weight: 600; letter-spacing: -0.03em; line-height: 1.08; }
+  a { text-decoration: none; }
+  ::selection { background: var(--accent); color: #fff; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  .topbar { padding: 28px 24px; }
+  .topbar .wrap { max-width: 1120px; margin: 0 auto; }
+  .logo { font-size: 17px; font-weight: 600; letter-spacing: -0.03em; color: var(--primary); }
+
+  .simple-footer { padding: 24px; text-align: center; }
+  .simple-footer a { font-size: 13px; color: rgba(31,73,125,0.45); transition: color .3s var(--ease); }
+  .simple-footer a:hover { color: var(--primary); }
+
+  .page {
+    min-height: calc(100vh - 84px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 40px 24px 80px;
+  }
+  .layout {
+    width: 100%; max-width: 1120px;
+    display: grid; grid-template-columns: 1fr; gap: 56px; align-items: center;
+  }
+
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+  .reveal.in-view { opacity: 1; transform: translateY(0); }
+  .d1 { transition-delay: .08s; } .d2 { transition-delay: .16s; } .d3 { transition-delay: .24s; }
+
+  .eyebrow {
+    display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent-dark); background: rgba(201,148,62,0.10); border-radius: 999px; padding: 6px 16px; margin-bottom: 24px;
+  }
+  .headline { font-size: 32px; margin-bottom: 20px; }
+  .headline .highlight { color: var(--accent); }
+  .sub { font-size: 16px; color: rgba(31,73,125,0.6); line-height: 1.65; max-width: 480px; margin-bottom: 8px; }
+
+  .panel {
+    background: #fff; border-radius: 24px; padding: 36px;
+    box-shadow: 0 4px 24px -4px rgba(31,73,125,0.10);
+    border: 1px solid rgba(31,73,125,0.05);
+  }
+
+  .check { width: 64px; height: 64px; border-radius: 50%; background: rgba(201,148,62,0.12); display: flex; align-items: center; justify-content: center; margin-bottom: 24px; }
+  .check svg { width: 30px; height: 30px; stroke: var(--accent-dark); fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+  .btn {
+    display: inline-block; margin-top: 24px; background: var(--accent); color: #fff; font-size: 15px; font-weight: 600;
+    border-radius: 999px; padding: 16px 32px; box-shadow: 0 8px 20px -6px rgba(201,148,62,0.45);
+    transition: background-color .3s var(--ease), transform .3s var(--ease);
+  }
+  .btn:hover { background: var(--accent-dark); transform: translateY(-1px); }
+  .panel h2 { font-size: 20px; margin-bottom: 24px; letter-spacing: -0.02em; }
+  .steps { list-style: none; display: grid; gap: 22px; }
+  .steps li { display: flex; gap: 16px; align-items: flex-start; }
+  .steps .num { flex: none; width: 32px; height: 32px; border-radius: 50%; background: var(--primary); color: #fff; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+  .steps strong { display: block; font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+  .steps span.t { font-size: 14px; color: rgba(31,73,125,0.6); line-height: 1.55; }
+
+  @media (min-width: 1024px) {
+    .layout { grid-template-columns: 1fr 1fr; gap: 80px; }
+    .headline { font-size: 40px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap"><a href="index.html" class="logo">Maurice Meijer Digital</a></div>
+</div>
+
+<main class="page">
+  <div class="layout">
+    <div>
+      <div class="check reveal in-view"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+      <h1 class="headline reveal in-view d1"><span class="highlight">Bedankt!</span> Je aanvraag is binnen.</h1>
+      <p class="sub reveal in-view d2">We hebben je gegevens ontvangen en ons systeem gaat ermee aan de slag.</p>
+      <a href="index.html#resultaten" class="btn reveal in-view d3">Terug naar de website</a>
+    </div>
+
+    <div>
+      <div class="reveal in-view d3">
+        <div class="panel">
+          <h2>Wat gebeurt er nu?</h2>
+          <ol class="steps">
+            <li><span class="num">1</span><div><strong>Je aanvraag is binnen</strong><span class="t">Je gegevens zijn veilig aangekomen bij MMD.</span></div></li>
+            <li><span class="num">2</span><div><strong>We bevestigen je aanvraag telefonisch</strong><span class="t">We reageren doorgaans dezelfde werkdag.</span></div></li>
+            <li><span class="num">3</span><div><strong>We bepalen samen de volgende stap</strong><span class="t">Zo weet je snel waar je aan toe bent.</span></div></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="simple-footer">
+  <a href="privacyverklaring.html">Privacyverklaring</a>
+</footer>
+
+<script>
+  document.querySelectorAll('.reveal').forEach(el => el.classList.add('in-view'));
+</script>
+
+</body>
+</html>
